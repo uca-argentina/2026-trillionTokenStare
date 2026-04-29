@@ -1,20 +1,16 @@
 Class {
 	#name : 'DiceMockTest',
-	#superclass : 'TestCase',
+	#superclass : 'ProjectTestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
 DiceMockTest >> test001whenDiceIsCreatedWithLessThan4SidesThenIsNotValid [
-	
-	self 
-	  should: [ DiceMock withSides: 3 ] 
-	  raise: Error   
-	  withExceptionDo: [ :error |
-		 self 
-		   assert: error messageText
-		   equals: 'The dice must have at least 4 sides' ]
+
+	self
+		should: [ DiceMock withSides: 3 ]
+		raiseErrorWithMessageText: 'The dice must have at least 4 sides'
 ]
 
 { #category : 'tests' }
@@ -34,13 +30,11 @@ DiceMockTest >> test003WhenPreloadedDiceThrowsValueAboveNumberOfSidesThenNotVali
 	| dice |
 	dice := DiceMock withSides: 6 andSequence: #( 7 ).
 
+
 	self
 		should: [ dice throw ]
-		raise: Error
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: 'Dice must throw a value less or equal number of sides' ]
+		raiseErrorWithMessageText:
+		'Dice must throw a value less or equal number of sides'
 ]
 
 { #category : 'tests' }
@@ -51,9 +45,5 @@ DiceMockTest >> test004WhenPreloadedDiceThrowsValueLessThanOneThenNotValid [
 
 	self
 		should: [ dice throw ]
-		raise: Error
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: 'Dice must throw a value of at least 1' ]
+		raiseErrorWithMessageText: 'Dice must throw a value of at least 1'
 ]

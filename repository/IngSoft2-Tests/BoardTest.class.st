@@ -1,6 +1,6 @@
 Class {
 	#name : 'BoardTest',
-	#superclass : 'TestCase',
+	#superclass : 'ProjectTestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
@@ -16,28 +16,18 @@ BoardTest >> test001whenTheBoardIsCreatedThenTheBoardExists [
 
 { #category : 'tests' }
 BoardTest >> test002ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
-	self 
-	  should: [ Board withSquares: 0 ] 
-	  raise: Error   
-	  withExceptionDo: [ :error |
-		 self 
-		   assert: error messageText
-		   equals: 'The board must have at least 1 square.' ]
-	.
-	
+
+	self
+		should: [ Board withSquares: 0 ]
+		raiseErrorWithMessageText: 'The board must have at least 1 square.'
 ]
 
 { #category : 'tests' }
 BoardTest >> test003whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
-	self 
-	  should: [ Board withShips: 1 ] 
-	  raise: Error   
-	  withExceptionDo: [ :error |
-		 self 
-		   assert: error messageText
-		   equals: 'The board must have at least 2 ships.' ]
-	.
-	
+
+	self
+		should: [ Board withShips: 1 ]
+		raiseErrorWithMessageText: 'The board must have at least 2 ships.'
 ]
 
 { #category : 'tests' }
