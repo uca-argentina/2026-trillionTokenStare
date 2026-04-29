@@ -62,7 +62,14 @@ Board class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool:
 { #category : 'initialization' }
 Board >> initializeWithSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
 
-	squares := numberOfSquares .
-	ships := numberOfShips.
-	dicePool := aDicePool.
+	squares := numberOfSquares.
+	ships := OrderedCollection new.
+	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
+	dicePool := aDicePool
+]
+
+{ #category : 'accessing' }
+Board >> ships [
+
+	^ ships
 ]

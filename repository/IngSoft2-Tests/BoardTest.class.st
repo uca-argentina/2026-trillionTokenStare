@@ -44,3 +44,17 @@ BoardTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVa
 		shouldnt: [ Board withSquares: 10 andShips: 2 andDicePool: dicePool ]
 		raise: Error
 ]
+
+{ #category : 'tests' }
+BoardTest >> test005BoardIsCreatedWithShipObjects [
+
+	| preloadedDice dicePool board ships|
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	board := Board withSquares: 10 andShips: 2 andDicePool: dicePool.
+	ships := OrderedCollection new.
+	1 to: 2 do: [ :i | ships add: (Spaceship withName: i) ].
+
+	self assert: (board ships) size equals: (ships) size.
+	
+]
