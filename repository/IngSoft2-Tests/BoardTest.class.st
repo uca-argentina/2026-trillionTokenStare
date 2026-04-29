@@ -26,3 +26,22 @@ BoardTest >> test002ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 	.
 	
 ]
+
+{ #category : 'tests' }
+BoardTest >> test003whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
+	self 
+	  should: [ Board withShips: 1 ] 
+	  raise: Error   
+	  withExceptionDo: [ :error |
+		 self 
+		   assert: error messageText
+		   equals: 'The board must have at least 2 ships.' ]
+	.
+	
+]
+
+{ #category : 'tests' }
+BoardTest >> test004whenBoardCreatedWithMoreThan1SquareAndMoreThan2ShipsThenIsValid [
+
+	self shouldnt: [ Board withSquares: 10 andShips: 2 ] raise: Error
+]
