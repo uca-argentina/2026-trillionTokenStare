@@ -1,8 +1,7 @@
 Class {
 	#name : 'DiceMock',
-	#superclass : 'Object',
+	#superclass : 'Dice',
 	#instVars : [
-		'sides',
 		'sequence',
 		'index'
 	],

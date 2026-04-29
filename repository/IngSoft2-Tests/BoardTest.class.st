@@ -31,7 +31,16 @@ BoardTest >> test003whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 ]
 
 { #category : 'tests' }
-BoardTest >> test004whenBoardCreatedWithMoreThan1SquareAndMoreThan2ShipsThenIsValid [
+BoardTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
 
-	self shouldnt: [ Board withSquares: 10 andShips: 2 ] raise: Error
+	| preloadedDice1 preloadedDice2 dicePool |
+	preloadedDice1 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
+	preloadedDice2 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
+	dicePool := DicePool withDice: {
+			            preloadedDice1.
+			            preloadedDice2 }.
+
+	self
+		shouldnt: [ Board withSquares: 10 andShips: 2 andDicePool: dicePool ]
+		raise: Error
 ]
