@@ -1,6 +1,9 @@
 Class {
 	#name : 'BoardTest',
 	#superclass : 'ProjectTestCase',
+	#instVars : [
+		'listOfShips'
+	],
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
@@ -46,15 +49,16 @@ BoardTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVa
 ]
 
 { #category : 'tests' }
-BoardTest >> test005BoardIsCreatedWithShipObjects [
+BoardTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 
-	| preloadedDice dicePool board ships|
+	| preloadedDice dicePool board |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 10 andShips: 2 andDicePool: dicePool.
-	ships := OrderedCollection new.
-	1 to: 2 do: [ :i | ships add: (Spaceship withName: i) ].
 
-	self assert: (board ships) size equals: (ships) size.
-	
+	listOfShips := {
+		               (Spaceship withName: 1 andPosition: 1).
+		               (Spaceship withName: 2 andPosition: 1) } asOrderedCollection .
+		
+	self assert: board ships equals: listOfShips 
 ]

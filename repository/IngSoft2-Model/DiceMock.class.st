@@ -9,7 +9,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 DiceMock class >> withSides: numberOfSides [
 
 	numberOfSides < 4 ifTrue: [
@@ -17,7 +17,7 @@ DiceMock class >> withSides: numberOfSides [
 	^ self new initializeWithSides: numberOfSides andSequence: #(1)
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 DiceMock class >> withSides: numberOfSides andSequence: aSequence [
 
 	numberOfSides < 4 ifTrue: [
@@ -46,14 +46,14 @@ DiceMock >> throw [
 	^ value
 ]
 
-{ #category : 'initialization' }
+{ #category : 'validation' }
 DiceMock >> validateThrowIsInsideRange: value [
 
 	value > sides ifTrue: [
 		self error: 'Dice must throw a value less or equal number of sides' ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'validation' }
 DiceMock >> validateThrowIsPositive: value [
 
 	value > 0 ifFalse: [

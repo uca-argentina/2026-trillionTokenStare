@@ -8,7 +8,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 Dice class >> withSides: numberOfSides [
 
 	numberOfSides < 4 ifTrue: [

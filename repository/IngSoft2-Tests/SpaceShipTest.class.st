@@ -1,12 +1,12 @@
 Class {
-	#name : 'SpaceShip',
+	#name : 'SpaceShipTest',
 	#superclass : 'ProjectTestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
-SpaceShip >> test001ShipStartsInPositon1 [
+SpaceShipTest >> test001ShipStartsInPositon1 [
 | ship |
 
 	ship := Spaceship withName: 'ship1'.
@@ -14,7 +14,7 @@ SpaceShip >> test001ShipStartsInPositon1 [
 ]
 
 { #category : 'tests' }
-SpaceShip >> test002ShipMovesWhenToldTo [
+SpaceShipTest >> test002ShipMovesWhenToldTo [
 | ship |
 
 	ship := Spaceship withName: 'Ship1'.

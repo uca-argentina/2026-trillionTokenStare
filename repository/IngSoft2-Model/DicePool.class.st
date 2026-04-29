@@ -8,7 +8,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'validation' }
 DicePool class >> validateCollectionOfDice: aCollectionOfDice [
 
 	aCollectionOfDice isCollection ifFalse: [
@@ -17,7 +17,7 @@ DicePool class >> validateCollectionOfDice: aCollectionOfDice [
 		ifFalse: [ self error: 'Dice pool initializes with a collection of dice' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'creation' }
 DicePool class >> withDice: aCollectionOfDice [
 
 	self validateCollectionOfDice: aCollectionOfDice.
@@ -30,7 +30,7 @@ DicePool >> initializeWithDice: aCollectionOfDice [
 	dice := aCollectionOfDice
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 DicePool >> throw [
 
 	| sumOfAllDiceThrown |
