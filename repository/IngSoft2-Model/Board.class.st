@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'squares',
 		'ships',
-		'dicePool'
+		'dicePool',
+		'playersTurn'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -59,17 +60,50 @@ Board class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool:
 		  andDicePool: aDicePool
 ]
 
+{ #category : 'accessing' }
+Board >> gameIsOver [
+
+	
+	^ ships anySatisfy: [ :aShip | aShip position >= squares].
+]
+
 { #category : 'initialization' }
 Board >> initializeWithSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
 
 	squares := numberOfSquares.
 	ships := OrderedCollection new.
 	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
-	dicePool := aDicePool
+	dicePool := aDicePool.
+	playersTurn := 1
+]
+
+{ #category : 'behaviour' }
+Board >> nextTurn [
+
+	| diceValue |
+	self validateIfGameIsOver.
+	diceValue := dicePool throw.
+	(ships at: playersTurn) move: diceValue.
+	playersTurn := playersTurn % ships size + 1
 ]
 
 { #category : 'accessing' }
 Board >> ships [
 
 	^ ships
+]
+
+{ #category : 'validation' }
+Board >> validateIfGameIsOver [
+
+	self gameIsOver ifTrue: [
+		self error: 'Game is over, no more turns allowed' ]
+]
+
+{ #category : 'accessing' }
+Board >> whoWon [
+
+	self gameIsOver ifFalse: [ self error: 'Game isnt over' ].
+
+	^ ships detect: [ :aShip | aShip position >= squares ]
 ]
