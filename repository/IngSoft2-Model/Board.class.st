@@ -60,7 +60,7 @@ Board class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool:
 		  andDicePool: aDicePool
 ]
 
-{ #category : 'accessing' }
+{ #category : 'boolean' }
 Board >> gameIsOver [
 
 	
@@ -77,13 +77,26 @@ Board >> initializeWithSquares: numberOfSquares andShips: numberOfShips andDiceP
 	playersTurn := 1
 ]
 
+{ #category : 'accessing' }
+Board >> locateSpaceShip: aSpaceShip [ 
+	| aSpaceShipPosition |
+	aSpaceShipPosition :=  (ships detect: [ :ship | ship name = aSpaceShip ] ifNone: [self error: 'The selected SpaceShip is not on the board']).
+	^aSpaceShipPosition position.
+	
+]
+
 { #category : 'behaviour' }
 Board >> nextTurn [
 
-	| diceValue |
+	| diceValue aShip aPosition |
 	self validateIfGameIsOver.
 	diceValue := dicePool throw.
-	(ships at: playersTurn) move: diceValue.
+	aShip := (ships at: playersTurn).
+	aPosition := aShip position.
+	((aPosition + diceValue) <= squares)
+	   ifFalse: [ aShip move: (squares - aPosition) ]
+	   ifTrue: [ aShip move: diceValue ]
+	.
 	playersTurn := playersTurn % ships size + 1
 ]
 

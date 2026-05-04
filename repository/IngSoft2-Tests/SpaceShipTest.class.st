@@ -21,3 +21,12 @@ SpaceShipTest >> test002ShipMovesWhenToldTo [
 	ship move: 3. 
 	self assert: ship position equals: 4 .
 ]
+
+{ #category : 'tests' }
+SpaceShipTest >> test003ShipMovesASquareWhenToldTo [
+| ship |
+
+	ship := Spaceship withName: 'Ship1'.
+	1 to: 3 do: [ :turn | ship moveOneSquare ]. 
+	self assert: ship position equals: 4 .
+]

@@ -171,3 +171,47 @@ BoardTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 
 	self assert: board whoWon equals: (Spaceship withName: 1 andPosition: 9)
 ]
+
+{ #category : 'tests' }
+BoardTest >> test013whenTheSpaceShipReachsTheLastSquareThenItAdvancesNoMore [
+
+	| preloadedDice dicePool board |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	board := Board withSquares: 11 andShips: 4 andDicePool: dicePool.
+
+	1 to: 10 do: [ :turn | 
+		board nextTurn ].
+
+	self assert: board whoWon equals: (Spaceship withName: 2 andPosition: 11)
+]
+
+{ #category : 'tests' }
+BoardTest >> test014whenYouAskForASpaceShipPositionThenYouGetAResponse [ 
+
+	| preloadedDice dicePool board |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	board := Board withSquares: 11 andShips: 4 andDicePool: dicePool.
+
+	1 to: 10 do: [ :turn | 
+		board nextTurn ].
+
+	self assert: (board locateSpaceShip: 1 ) equals: 4
+]
+
+{ #category : 'tests' }
+BoardTest >> test015whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [ 
+
+	| preloadedDice dicePool board |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	board := Board withSquares: 11 andShips: 4 andDicePool: dicePool.
+
+	1 to: 10 do: [ :turn | 
+		board nextTurn ].
+
+	
+	self should: [ board locateSpaceShip: 5 ] raiseErrorWithMessageText: 'The selected SpaceShip is not on the board'
+
+]

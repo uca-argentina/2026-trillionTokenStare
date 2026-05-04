@@ -42,6 +42,11 @@ Spaceship >> move: anAmmountOfSquares [
 	
 ]
 
+{ #category : 'changing state' }
+Spaceship >> moveOneSquare [
+	position := position + 1.
+]
+
 { #category : 'accessing' }
 Spaceship >> name [
 	^ name.
