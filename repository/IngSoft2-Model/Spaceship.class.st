@@ -37,14 +37,9 @@ Spaceship >> initializeWithName: aName andPosition: aPosition [
 ]
 
 { #category : 'changing state' }
-Spaceship >> move: anAmmountOfSquares [
-	position := position + anAmmountOfSquares.
-	
-]
+Spaceship >> moves: anAmmountOfSquares until: endOfBoard [
 
-{ #category : 'changing state' }
-Spaceship >> moveOneSquare [
-	position := position + 1.
+	position := position + anAmmountOfSquares min: endOfBoard
 ]
 
 { #category : 'accessing' }

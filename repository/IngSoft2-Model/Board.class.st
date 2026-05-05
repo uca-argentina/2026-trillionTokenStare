@@ -88,15 +88,11 @@ Board >> locateSpaceShip: aSpaceShip [
 { #category : 'behaviour' }
 Board >> nextTurn [
 
-	| diceValue aShip aPosition |
+	| diceValue aShip |
 	self validateIfGameIsOver.
 	diceValue := dicePool throw.
-	aShip := (ships at: playersTurn).
-	aPosition := aShip position.
-	((aPosition + diceValue) <= squares)
-	   ifFalse: [ aShip move: (squares - aPosition) ]
-	   ifTrue: [ aShip move: diceValue ]
-	.
+	aShip := ships at: playersTurn.
+	aShip moves: diceValue until: squares.
 	playersTurn := playersTurn % ships size + 1
 ]
 

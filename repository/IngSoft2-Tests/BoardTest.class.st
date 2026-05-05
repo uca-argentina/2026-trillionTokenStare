@@ -9,16 +9,7 @@ Class {
 }
 
 { #category : 'tests' }
-BoardTest >> test001whenTheBoardIsCreatedThenTheBoardExists [
-	| board |
-	board := Board new.
-	self assert: (board isMemberOf: Board).
-
-	
-]
-
-{ #category : 'tests' }
-BoardTest >> test002ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
+BoardTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
 	self
 		should: [ Board withSquares: 0 ]
@@ -26,11 +17,24 @@ BoardTest >> test002ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 ]
 
 { #category : 'tests' }
-BoardTest >> test003whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
+BoardTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 
 	self
 		should: [ Board withShips: 1 ]
 		raiseErrorWithMessageText: 'The board must have at least 2 ships.'
+]
+
+{ #category : 'tests' }
+BoardTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
+
+	| preloadedDice dicePool |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+
+
+	self
+		shouldnt: [ Board withSquares: 10 andShips: 2 andDicePool: dicePool ]
+		raise: Error
 ]
 
 { #category : 'tests' }
@@ -42,10 +46,7 @@ BoardTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVa
 	dicePool := DicePool withDice: {
 			            preloadedDice1.
 			            preloadedDice2 }.
-
-	self
-		shouldnt: [ Board withSquares: 10 andShips: 2 andDicePool: dicePool ]
-		raise: Error
+	Board withSquares: 10 andShips: 2 andDicePool: dicePool
 ]
 
 { #category : 'tests' }
@@ -112,7 +113,7 @@ BoardTest >> test008TwoPlayerPlaysTwoTimesEach [
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 10 andShips: 2 andDicePool: dicePool.
 
-	(1 to: 4) do: [ :turn | board nextTurn ].
+	1 to: 4 do: [ :turn | board nextTurn ].
 
 	listOfShips := {
 		               (Spaceship withName: 1 andPosition: 9).
@@ -130,7 +131,7 @@ BoardTest >> test009IfASpaceshipReachTheLastSquareItWins [
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 9 andShips: 2 andDicePool: dicePool.
 
-	(1 to: 3) do: [ :turn | board nextTurn ].
+	1 to: 3 do: [ :turn | board nextTurn ].
 
 	self assert: board gameIsOver 
 ]
@@ -143,7 +144,7 @@ BoardTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 9 andShips: 2 andDicePool: dicePool.
 
-	(1 to: 3) do: [ :turn | board nextTurn ].
+	1 to: 3 do: [ :turn | board nextTurn ].
 
 	self should: [ board nextTurn ] raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
@@ -167,23 +168,9 @@ BoardTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 9 andShips: 2 andDicePool: dicePool.
 
-	(1 to: 3) do: [ :turn | board nextTurn ].
+	1 to: 3 do: [ :turn | board nextTurn ].
 
 	self assert: board whoWon equals: (Spaceship withName: 1 andPosition: 9)
-]
-
-{ #category : 'tests' }
-BoardTest >> test013whenTheSpaceShipReachsTheLastSquareThenItAdvancesNoMore [
-
-	| preloadedDice dicePool board |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	board := Board withSquares: 11 andShips: 4 andDicePool: dicePool.
-
-	1 to: 10 do: [ :turn | 
-		board nextTurn ].
-
-	self assert: board whoWon equals: (Spaceship withName: 2 andPosition: 11)
 ]
 
 { #category : 'tests' }

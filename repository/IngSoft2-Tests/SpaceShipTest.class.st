@@ -18,15 +18,15 @@ SpaceShipTest >> test002ShipMovesWhenToldTo [
 | ship |
 
 	ship := Spaceship withName: 'Ship1'.
-	ship move: 3. 
+	ship moves: 3 until: 10. 
 	self assert: ship position equals: 4 .
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test003ShipMovesASquareWhenToldTo [
+SpaceShipTest >> test003WhenSipMovesOutsideOfRangeThenItDefaultsItsPositionToRange [
 | ship |
 
 	ship := Spaceship withName: 'Ship1'.
-	1 to: 3 do: [ :turn | ship moveOneSquare ]. 
-	self assert: ship position equals: 4 .
+	ship moves: 12 until: 10. 
+	self assert: ship position equals: 10 .
 ]
