@@ -37,9 +37,18 @@ Spaceship >> initializeWithName: aName andPosition: aPosition [
 ]
 
 { #category : 'changing state' }
+Spaceship >> landsOn: aSquare [
+
+	^ aSquare applyEffectTo: self
+]
+
+{ #category : 'changing state' }
 Spaceship >> moves: anAmmountOfSquares until: endOfBoard [
 
-	position := position + anAmmountOfSquares min: endOfBoard
+	| newPosition |
+	newPosition := position + anAmmountOfSquares min: endOfBoard.
+
+	^ self class withName: name andPosition: newPosition
 ]
 
 { #category : 'accessing' }

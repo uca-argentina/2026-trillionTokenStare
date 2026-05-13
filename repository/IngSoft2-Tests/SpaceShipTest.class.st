@@ -15,18 +15,18 @@ SpaceShipTest >> test001ShipStartsInPositon1 [
 
 { #category : 'tests' }
 SpaceShipTest >> test002ShipMovesWhenToldTo [
-| ship |
 
+	| ship shipNewPosition |
 	ship := Spaceship withName: 'Ship1'.
-	ship moves: 3 until: 10. 
-	self assert: ship position equals: 4 .
+	shipNewPosition := ship moves: 3 until: 10.
+	self assert: shipNewPosition position equals: 4
 ]
 
 { #category : 'tests' }
 SpaceShipTest >> test003WhenSipMovesOutsideOfRangeThenItDefaultsItsPositionToRange [
-| ship |
 
+	| ship shipNewPosition |
 	ship := Spaceship withName: 'Ship1'.
-	ship moves: 12 until: 10. 
-	self assert: ship position equals: 10 .
+	shipNewPosition := ship moves: 12 until: 10.
+	self assert: shipNewPosition position equals: 10
 ]
