@@ -28,3 +28,15 @@ EffectSquareTest >> test002WhenSpaceshipLandsOnWormholeThenMovesBack4Squares [
 	self assert: updatedShip position equals: 1.
 	
 ]
+
+{ #category : 'tests' }
+EffectSquareTest >> test003WhenSpaceshipLandsOnSpeedUpSquareThenMovesForward4Squares [
+
+	| speedUpSquare aShip updatedShip|
+	speedUpSquare := Speedup onBoardSize: 10.
+	aShip := Spaceship withName: 'spaceship' andPosition: 5.
+	updatedShip := aShip landsOn: speedUpSquare. 
+	
+	self assert: updatedShip position equals: 9.
+	
+]
