@@ -43,7 +43,16 @@ Spaceship >> landsOn: aSquare [
 ]
 
 { #category : 'changing state' }
-Spaceship >> moves: anAmmountOfSquares until: endOfBoard [
+Spaceship >> movesBackward: anAmmountOfSquares [
+
+	| newPosition |
+	newPosition := position - anAmmountOfSquares max: 1.
+
+	^ self class withName: name andPosition: newPosition
+]
+
+{ #category : 'changing state' }
+Spaceship >> movesForward: anAmmountOfSquares until: endOfBoard [
 
 	| newPosition |
 	newPosition := position + anAmmountOfSquares min: endOfBoard.

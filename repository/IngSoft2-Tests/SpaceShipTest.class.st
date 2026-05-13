@@ -18,7 +18,7 @@ SpaceShipTest >> test002ShipMovesWhenToldTo [
 
 	| ship shipNewPosition |
 	ship := Spaceship withName: 'Ship1'.
-	shipNewPosition := ship moves: 3 until: 10.
+	shipNewPosition := ship movesForward: 3 until: 10.
 	self assert: shipNewPosition position equals: 4
 ]
 
@@ -27,6 +27,6 @@ SpaceShipTest >> test003WhenSipMovesOutsideOfRangeThenItDefaultsItsPositionToRan
 
 	| ship shipNewPosition |
 	ship := Spaceship withName: 'Ship1'.
-	shipNewPosition := ship moves: 12 until: 10.
+	shipNewPosition := ship movesForward: 12 until: 10.
 	self assert: shipNewPosition position equals: 10
 ]

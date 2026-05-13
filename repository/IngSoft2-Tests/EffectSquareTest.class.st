@@ -16,3 +16,15 @@ EffectSquareTest >> test001WhenSpaceshipLandsOnNormalSquareNoEffectIsApplied [
 	self assert: updatedShip position equals: 5.
 	
 ]
+
+{ #category : 'tests' }
+EffectSquareTest >> test002WhenSpaceshipLandsOnWormholeThenMovesBack4Squares [
+
+	| wormholeSquare aShip updatedShip|
+	wormholeSquare := Wormhole new.
+	aShip := Spaceship withName: 'spaceship' andPosition: 5.
+	updatedShip := aShip landsOn: wormholeSquare. 
+	
+	self assert: updatedShip position equals: 1.
+	
+]

@@ -91,7 +91,7 @@ Board >> nextTurn [
 	| diceValue shipIntTurn|
 	self validateIfGameIsOver.
 	diceValue := dicePool throw.
-	shipIntTurn := (ships at: playersTurn) moves: diceValue until: squares.
+	shipIntTurn := (ships at: playersTurn) movesForward: diceValue until: squares.
 	ships at: playersTurn put: shipIntTurn.
 	playersTurn := playersTurn % ships size + 1
 ]
