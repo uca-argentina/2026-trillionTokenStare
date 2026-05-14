@@ -8,6 +8,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'accessing' }
+Speedup class >> default [
+
+	^ self new
+]
+
 { #category : 'as yet unclassified' }
 Speedup >> applyEffectTo: aShip [
 

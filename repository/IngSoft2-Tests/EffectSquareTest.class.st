@@ -9,7 +9,7 @@ Class {
 EffectSquareTest >> test001WhenSpaceshipLandsOnNormalSquareNoEffectIsApplied [
 
 	| noEffectSquare aShip updatedShip|
-	noEffectSquare := Square new.
+	noEffectSquare := Square default .
 	aShip := Spaceship withName: 'spaceship' andPosition: 5.
 	updatedShip := aShip landsOn: noEffectSquare. 
 	
@@ -21,7 +21,7 @@ EffectSquareTest >> test001WhenSpaceshipLandsOnNormalSquareNoEffectIsApplied [
 EffectSquareTest >> test002WhenSpaceshipLandsOnWormholeThenMovesBack4Squares [
 
 	| wormholeSquare aShip updatedShip|
-	wormholeSquare := Wormhole new.
+	wormholeSquare := Wormhole default .
 	aShip := Spaceship withName: 'spaceship' andPosition: 5.
 	updatedShip := aShip landsOn: wormholeSquare. 
 	
@@ -33,7 +33,7 @@ EffectSquareTest >> test002WhenSpaceshipLandsOnWormholeThenMovesBack4Squares [
 EffectSquareTest >> test003WhenSpaceshipLandsOnSpeedUpSquareThenMovesForward4Squares [
 
 	| speedUpSquare aShip updatedShip|
-	speedUpSquare := Speedup new.
+	speedUpSquare := Speedup default .
 	aShip := Spaceship withName: 'spaceship' andPosition: 5.
 	updatedShip := aShip landsOn: speedUpSquare. 
 	
@@ -76,7 +76,7 @@ EffectSquareTest >> test005GameLoadedWithOneWormholeWorksAsEspected [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := Board
+	board := Game
 		         usingSquares: preloadedSquares
 		         andShips: 2
 		         andDicePool: dicePool.
@@ -105,7 +105,7 @@ EffectSquareTest >> test006GameLoadedWithOneSpeedUpWorksAsEspected [
 			                    Square.
 			                    Square.
 			                    Square }.
-	board := Board
+	board := Game
 		         usingSquares: preloadedSquares
 		         andShips: 2
 		         andDicePool: dicePool.
@@ -118,4 +118,22 @@ EffectSquareTest >> test006GameLoadedWithOneSpeedUpWorksAsEspected [
 		                  asOrderedCollection.
 
 	self assert: board ships equals: finalPositions
+]
+
+{ #category : 'tests' }
+EffectSquareTest >> test007Moonwalk [
+
+	| moonwalkSquare aShip anotherShip updatedShip finalPositions |
+	moonwalkSquare := Moonwalk default.
+	aShip := Spaceship withName: 'spaceship1' andPosition: 3.
+	anotherShip := Spaceship withName: 'spaceship2' andPosition: 4.
+	updatedShip := aShip landsOn: moonwalkSquare. 
+	
+	finalPositions := {
+		                  (Spaceship withName: 'spaceship1' andPosition: 3).
+		                  (Spaceship withName: 'spaceship2' andPosition: 1) }
+		                  asOrderedCollection.
+	
+	self assert: updatedShip position equals: 9.
+	
 ]

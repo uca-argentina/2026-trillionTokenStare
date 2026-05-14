@@ -5,6 +5,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'accessing' }
+Wormhole class >> default [
+
+	^ self new
+]
+
 { #category : 'as yet unclassified' }
 Wormhole >> applyEffectTo: aShip [
 
