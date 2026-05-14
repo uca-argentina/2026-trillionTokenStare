@@ -15,10 +15,12 @@ Board class >> withSquares: aListOfSquares [
 ]
 
 { #category : 'as yet unclassified' }
-Board >> applyEffectsOf: shipInTurn to: intermediateShips [
+Board >> applyEffectsOf: certainShip to: listOfShips [
 
-	^ intermediateShips collect: [ :ship |
-		  (squares at: shipInTurn position) applyEffectTo: ship ]
+	| square |
+	square := squares at: certainShip position.
+
+	^ listOfShips collect: [ :ship | square applyEffectTo: ship ]
 ]
 
 { #category : 'initialization' }
