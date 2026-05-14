@@ -2,10 +2,10 @@ Class {
 	#name : 'Game',
 	#superclass : 'Object',
 	#instVars : [
-		'squares',
 		'ships',
 		'dicePool',
-		'playersTurn'
+		'playersTurn',
+		'board'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -83,13 +83,13 @@ Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: 
 Game >> gameIsOver [
 
 	
-	^ ships anySatisfy: [ :aShip | (squares shipInsideBoard: aShip) not ].
+	^ ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ].
 ]
 
 { #category : 'initialization' }
 Game >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePool: aDicePool [
 
-	squares := aSqarePool createBoard.
+	board := aSqarePool createBoard.
 	ships := OrderedCollection new.
 	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
 	dicePool := aDicePool.
@@ -114,7 +114,7 @@ Game >> nextTurn [
 	| diceValue updatedShips |
 	self validateIfGameIsOver.
 	diceValue := dicePool throw.
-	updatedShips := squares shipInTurn: playersTurn movesForward: diceValue andAffects: ships .
+	updatedShips := board shipInTurn: playersTurn movesForward: diceValue andAffects: ships .
 	ships := updatedShips.
 	
 	playersTurn := playersTurn % ships size + 1
@@ -138,5 +138,5 @@ Game >> whoWon [
 
 	self gameIsOver ifFalse: [ self error: 'Game isnt over' ].
 
-	^ ships detect: [ :aShip | (squares shipInsideBoard: aShip) not ]
+	^ ships detect: [ :aShip | (board shipInsideBoard: aShip) not ]
 ]
