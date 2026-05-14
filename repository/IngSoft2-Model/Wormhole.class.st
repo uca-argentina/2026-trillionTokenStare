@@ -6,13 +6,15 @@ Class {
 }
 
 { #category : 'accessing' }
-Wormhole class >> default [
+Wormhole class >> defaultAt: squareNumber [
 
-	^ self new
+	^ self new initializeAt: squareNumber 
 ]
 
 { #category : 'as yet unclassified' }
 Wormhole >> applyEffectTo: aShip [
 
-	^ aShip movesBackward: 4
+	^ aShip position = number
+		  ifTrue: [ ^ aShip movesBackward: 4. ]
+		  ifFalse: [ ^ aShip ].
 ]

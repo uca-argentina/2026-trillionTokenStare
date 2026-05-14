@@ -9,13 +9,15 @@ Class {
 }
 
 { #category : 'accessing' }
-Speedup class >> default [
+Speedup class >> defaultAt: squareNumber [
 
-	^ self new
+	^ self new initializeAt: squareNumber
 ]
 
 { #category : 'as yet unclassified' }
 Speedup >> applyEffectTo: aShip [
 
-	^ aShip movesForward: 4
+	^ aShip position = number
+		  ifTrue: [ ^ aShip movesForward: 4. ]
+		  ifFalse: [ ^ aShip ].
 ]

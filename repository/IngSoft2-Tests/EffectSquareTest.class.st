@@ -9,7 +9,7 @@ Class {
 EffectSquareTest >> test001WhenSpaceshipLandsOnNormalSquareNoEffectIsApplied [
 
 	| noEffectSquare aShip updatedShip|
-	noEffectSquare := Square default .
+	noEffectSquare := Square defaultAt: 1 .
 	aShip := Spaceship withName: 'spaceship' andPosition: 5.
 	updatedShip := aShip landsOn: noEffectSquare. 
 	
@@ -21,7 +21,7 @@ EffectSquareTest >> test001WhenSpaceshipLandsOnNormalSquareNoEffectIsApplied [
 EffectSquareTest >> test002WhenSpaceshipLandsOnWormholeThenMovesBack4Squares [
 
 	| wormholeSquare aShip updatedShip|
-	wormholeSquare := Wormhole default .
+	wormholeSquare := Wormhole defaultAt:5 .
 	aShip := Spaceship withName: 'spaceship' andPosition: 5.
 	updatedShip := aShip landsOn: wormholeSquare. 
 	
@@ -33,7 +33,7 @@ EffectSquareTest >> test002WhenSpaceshipLandsOnWormholeThenMovesBack4Squares [
 EffectSquareTest >> test003WhenSpaceshipLandsOnSpeedUpSquareThenMovesForward4Squares [
 
 	| speedUpSquare aShip updatedShip|
-	speedUpSquare := Speedup default .
+	speedUpSquare := Speedup defaultAt:5 .
 	aShip := Spaceship withName: 'spaceship' andPosition: 5.
 	updatedShip := aShip landsOn: speedUpSquare. 
 	
@@ -61,79 +61,4 @@ EffectSquareTest >> test004effectPool [
 	squareList := mockEffectPool createBoard.
 
 	self deny: true
-]
-
-{ #category : 'tests' }
-EffectSquareTest >> test005GameLoadedWithOneWormholeWorksAsEspected [
-
-	| preloadedDice preloadedSquares dicePool board finalPositions |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 2 3 3 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Wormhole }.
-	board := Game
-		         usingSquares: preloadedSquares
-		         andShips: 2
-		         andDicePool: dicePool.
-
-	1 to: 3 do: [ :turn | board nextTurn ].
-
-	finalPositions := {
-		                  (Spaceship withName: 1 andPosition: 2).
-		                  (Spaceship withName: 2 andPosition: 4) }
-		                  asOrderedCollection.
-
-	self assert: board ships equals: finalPositions
-]
-
-{ #category : 'tests' }
-EffectSquareTest >> test006GameLoadedWithOneSpeedUpWorksAsEspected [
-
-	| preloadedDice preloadedSquares dicePool board finalPositions |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
-			                    Square.
-			                    Speedup.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square }.
-	board := Game
-		         usingSquares: preloadedSquares
-		         andShips: 2
-		         andDicePool: dicePool.
-
-	1 to: 2 do: [ :turn | board nextTurn ].
-
-	finalPositions := {
-		                  (Spaceship withName: 1 andPosition: 6).
-		                  (Spaceship withName: 2 andPosition: 4) }
-		                  asOrderedCollection.
-
-	self assert: board ships equals: finalPositions
-]
-
-{ #category : 'tests' }
-EffectSquareTest >> test007Moonwalk [
-
-	| moonwalkSquare aShip anotherShip updatedShip finalPositions |
-	moonwalkSquare := Moonwalk default.
-	aShip := Spaceship withName: 'spaceship1' andPosition: 3.
-	anotherShip := Spaceship withName: 'spaceship2' andPosition: 4.
-	updatedShip := aShip landsOn: moonwalkSquare. 
-	
-	finalPositions := {
-		                  (Spaceship withName: 'spaceship1' andPosition: 3).
-		                  (Spaceship withName: 'spaceship2' andPosition: 1) }
-		                  asOrderedCollection.
-	
-	self assert: updatedShip position equals: 9.
-	
 ]

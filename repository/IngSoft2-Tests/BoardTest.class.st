@@ -58,26 +58,34 @@ BoardTest >> test003 [
 ]
 
 { #category : 'tests' }
-BoardTest >> test004 [
+BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 
-	| preloadedSquares board ship finalPosition |
+	| preloadedSquares board ships updatedShips finalPositions |
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
 			                    Square.
-			                    Speedup.
 			                    Square.
 			                    Square.
 			                    Square.
-			                    Wormhole }.
+			                    Square.
+			                    Square }.
 	board := preloadedSquares createBoard.
-	ship := Spaceship withName: 'ship' andPosition: 2.
+	ships := {
+		         (Spaceship withName: '1' andPosition: 1).
+		         (Spaceship withName: '2' andPosition: 3) }.
 
-	finalPosition := Spaceship withName: 'ship' andPosition: 6.
-	
-	self assert: (board shipLandsOnSquare: ship) equals: finalPosition
+
+	updatedShips := board shipInTurn: 1 movesForward: 2 andAffects: ships.
+
+	finalPositions := {
+		                  (Spaceship withName: '1' andPosition: 3).
+		                  (Spaceship withName: '2' andPosition: 3) }.
+
+
+	self assert: updatedShips equals: finalPositions 
 ]
 
 { #category : 'tests' }
-BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
+BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
@@ -86,7 +94,7 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 			                    Square.
 			                    Square.
 			                    Square.
-			                    Wormhole }.
+			                    Square }.
 	board := preloadedSquares createBoard.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
@@ -101,4 +109,60 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 
 
 	self assert: updatedShips equals: finalPositions 
+]
+
+{ #category : 'tests' }
+BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
+
+	| preloadedSquares board ships updatedShips finalPositions |
+	preloadedSquares := MockSquarePool withPreloadedSquares: {
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Wormhole }.
+	board := preloadedSquares createBoard.
+	ships := {
+		         (Spaceship withName: '1' andPosition: 5).
+		         (Spaceship withName: '2' andPosition: 3) }.
+
+
+	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+
+	finalPositions := {
+		                  (Spaceship withName: '1' andPosition: 2).
+		                  (Spaceship withName: '2' andPosition: 3) }.
+
+
+	self assert: updatedShips equals: finalPositions 
+]
+
+{ #category : 'tests' }
+BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
+
+	| preloadedSquares board ships updatedShips finalPositions |
+	preloadedSquares := MockSquarePool withPreloadedSquares: {
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Moonwalk .
+			                    Square }.
+	board := preloadedSquares createBoard.
+	ships := {
+		         (Spaceship withName: '1' andPosition: 4).
+		         (Spaceship withName: '2' andPosition: 4).
+		         (Spaceship withName: '3' andPosition: 4) }.
+
+
+	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+
+	finalPositions := {
+		                  (Spaceship withName: '1' andPosition: 5).
+		                  (Spaceship withName: '2' andPosition: 1).
+		                  (Spaceship withName: '3' andPosition: 1) }.
+
+
+	self assert: updatedShips equals: finalPositions
 ]

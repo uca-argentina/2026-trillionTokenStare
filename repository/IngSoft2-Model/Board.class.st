@@ -14,6 +14,15 @@ Board class >> withSquares: aListOfSquares [
 	^ self new initializeWithSquares: aListOfSquares
 ]
 
+{ #category : 'as yet unclassified' }
+Board >> applyEffectsOf: shipInTurn to: intermediateShips [
+
+	^ intermediateShips collect: [ :ship |
+		  (self shipInsideBoard: shipInTurn)
+			  ifTrue: [ (squares at: shipInTurn position) applyEffectTo: ship ]
+			  ifFalse: [ ship ] ]
+]
+
 { #category : 'initialization' }
 Board >> initializeWithSquares: aListOfSquares [
 
@@ -23,26 +32,22 @@ Board >> initializeWithSquares: aListOfSquares [
 { #category : 'as yet unclassified' }
 Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
 
-	| shipInTurn updatedShips |
-	updatedShips := allShips deepCopy.
+	| shipInTurn intermediateShips finalShips |
+	'Copy of the original ship positions'.
+	intermediateShips := allShips deepCopy.
+	'Ship in turn moves according to dice roll'.
 	shipInTurn := allShips at: playerTurn.
 	shipInTurn := shipInTurn movesForward: diceValue.
-	shipInTurn := self shipLandsOnSquare: shipInTurn.
-	updatedShips at: playerTurn put: shipInTurn.
+	'New position is stored at the intermediate ship positions collection'.
+	intermediateShips at: playerTurn put: shipInTurn.
+	'apply effects on all the ships according to where the ship in turn landed'.
+	finalShips := self applyEffectsOf: shipInTurn to: intermediateShips.
 
-	^ updatedShips
+	^ finalShips
 ]
 
 { #category : 'as yet unclassified' }
 Board >> shipInsideBoard: aShip [
 
 	^ aShip position <= squares size
-]
-
-{ #category : 'as yet unclassified' }
-Board >> shipLandsOnSquare: aShip [
-
-	^ (self shipInsideBoard: aShip)
-		  ifTrue: [ aShip landsOn: (squares at: aShip position) ]
-		  ifFalse: [ ^ aShip ]
 ]

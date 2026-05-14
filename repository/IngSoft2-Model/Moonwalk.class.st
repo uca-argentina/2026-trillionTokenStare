@@ -9,13 +9,22 @@ Class {
 }
 
 { #category : 'accessing' }
-Moonwalk class >> default [
+Moonwalk class >> defaultAt: squareNumber [
 
-	^ self new initializeWithBacktrack: 3
+	^ self new initializeAt: squareNumber WithBacktrack: 3
+]
+
+{ #category : 'as yet unclassified' }
+Moonwalk >> applyEffectTo: aShip [
+	
+	^ aShip position = number
+		  ifTrue: [ ^ aShip ]
+		  ifFalse: [ ^ aShip movesBackward: backtrack ]
 ]
 
 { #category : 'initialization' }
-Moonwalk >> initializeWithBacktrack: anAmountToBacktrack [
+Moonwalk >> initializeAt: squareNumber WithBacktrack: anAmountToBacktrack [
 
-	backtrack := anAmountToBacktrack
+	backtrack := anAmountToBacktrack.
+	number := squareNumber
 ]
