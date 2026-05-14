@@ -11,19 +11,6 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'creation' }
-Game class >> usingSquares: squarePool andShips: numberOfShips andDicePool: aDicePool [
-
-	self validateNumberOfShips: numberOfShips.
-	self validateNumberOfSquares:( squarePool numberOfSquares).
-	self validateDicePool: aDicePool.
-
-	^ self new
-		  initializeUsingSquarePool: squarePool
-		  andShips: numberOfShips
-		  andDicePool: aDicePool
-]
-
 { #category : 'validation' }
 Game class >> validateDicePool: aDicePool [
 
@@ -64,6 +51,19 @@ Game class >> withShips: numberOfShips [
 		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: 1 withAll: Square ))
 		  andShips: numberOfShips
 		  andDicePool: (DicePool withDice: { (Dice withSides: 4) })
+]
+
+{ #category : 'creation' }
+Game class >> withSquarePool: squarePool andShips: numberOfShips andDicePool: aDicePool [
+
+	self validateNumberOfShips: numberOfShips.
+	self validateNumberOfSquares:( squarePool numberOfSquares).
+	self validateDicePool: aDicePool.
+
+	^ self new
+		  initializeUsingSquarePool: squarePool
+		  andShips: numberOfShips
+		  andDicePool: aDicePool
 ]
 
 { #category : 'creation' }
