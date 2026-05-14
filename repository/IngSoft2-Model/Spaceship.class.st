@@ -37,12 +37,6 @@ Spaceship >> initializeWithName: aName andPosition: aPosition [
 ]
 
 { #category : 'changing state' }
-Spaceship >> landsOn: aSquare [
-
-	^ aSquare applyEffectTo: self
-]
-
-{ #category : 'changing state' }
 Spaceship >> movesBackward: anAmmountOfSquares [
 
 	| newPosition |
@@ -58,6 +52,12 @@ Spaceship >> movesForward: anAmmountOfSquares [
 	newPosition := position + anAmmountOfSquares.
 
 	^ self class withName: name andPosition: newPosition
+]
+
+{ #category : 'changing state' }
+Spaceship >> movesToPosition: aPosition [
+
+	^ self class withName: name andPosition: aPosition
 ]
 
 { #category : 'accessing' }

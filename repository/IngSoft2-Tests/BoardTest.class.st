@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-BoardTest >> test001 [
+BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 
 	| preloadedSquares board |
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
@@ -22,7 +22,7 @@ BoardTest >> test001 [
 ]
 
 { #category : 'tests' }
-BoardTest >> test002 [
+BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 
 	| preloadedSquares board ship |
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
@@ -40,7 +40,7 @@ BoardTest >> test002 [
 ]
 
 { #category : 'tests' }
-BoardTest >> test003 [
+BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 
 	| preloadedSquares board ship |
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
@@ -160,6 +160,35 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 5).
+		                  (Spaceship withName: '2' andPosition: 1).
+		                  (Spaceship withName: '3' andPosition: 1) }.
+
+
+	self assert: updatedShips equals: finalPositions
+]
+
+{ #category : 'tests' }
+BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
+
+	| preloadedSquares board ships updatedShips finalPositions |
+	preloadedSquares := MockSquarePool withPreloadedSquares: {
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Square.
+			                    AtomicBomb.
+			                    Square }.
+	board := preloadedSquares createBoard.
+	ships := {
+		         (Spaceship withName: '1' andPosition: 4).
+		         (Spaceship withName: '2' andPosition: 4).
+		         (Spaceship withName: '3' andPosition: 4) }.
+
+
+	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+
+	finalPositions := {
+		                  (Spaceship withName: '1' andPosition: 1).
 		                  (Spaceship withName: '2' andPosition: 1).
 		                  (Spaceship withName: '3' andPosition: 1) }.
 
