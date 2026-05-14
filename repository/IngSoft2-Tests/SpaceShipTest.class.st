@@ -18,15 +18,15 @@ SpaceShipTest >> test002ShipMovesWhenToldTo [
 
 	| ship shipNewPosition |
 	ship := Spaceship withName: 'Ship1'.
-	shipNewPosition := ship movesForward: 3 until: 10.
+	shipNewPosition := ship movesForward: 3.
 	self assert: shipNewPosition position equals: 4
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test003WhenSipMovesOutsideOfRangeThenItDefaultsItsPositionToRange [
+SpaceShipTest >> test004ShipMovesBackwardWhenToldTo [
 
 	| ship shipNewPosition |
-	ship := Spaceship withName: 'Ship1'.
-	shipNewPosition := ship movesForward: 12 until: 10.
+	ship := Spaceship withName: 'Ship1' andPosition: 15.
+	shipNewPosition := ship movesBackward: 5 .
 	self assert: shipNewPosition position equals: 10
 ]

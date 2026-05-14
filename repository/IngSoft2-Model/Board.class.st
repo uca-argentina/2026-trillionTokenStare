@@ -11,6 +11,19 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'creation' }
+Board class >> usingSquares: squarePool andShips: numberOfShips andDicePool: aDicePool [
+
+	self validateNumberOfShips: numberOfShips.
+	self validateNumberOfSquares:( squarePool numberOfSquares).
+	self validateDicePool: aDicePool.
+
+	^ self new
+		  initializeUsingSquarePool: squarePool
+		  andShips: numberOfShips
+		  andDicePool: aDicePool
+]
+
 { #category : 'validation' }
 Board class >> validateDicePool: aDicePool [
 
@@ -34,17 +47,23 @@ Board class >> validateNumberOfSquares: numberOfSquares [
 ]
 
 { #category : 'creation' }
-Board class >> withShips: numberOfShips [
+Board class >> withPreloadedSquares: numberOfSquares [
 
-	self validateNumberOfShips: numberOfShips.
-	^ self new initializeWithSquares: 1 andShips: numberOfShips andDicePool: (DicePool withDice: { (Dice withSides: 4) })
+	self validateNumberOfSquares: numberOfSquares.
+	^ self new
+		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: numberOfSquares withAll: Square ))
+		  andShips: 2
+		  andDicePool: (DicePool withDice: { (Dice withSides: 4) })
 ]
 
 { #category : 'creation' }
-Board class >> withSquares: numberOfSquares [
+Board class >> withShips: numberOfShips [
 
-	self validateNumberOfSquares: numberOfSquares.
-	^ self new initializeWithSquares: numberOfSquares andShips: 2 andDicePool: (DicePool withDice: { (Dice withSides: 4) })
+	self validateNumberOfShips: numberOfShips.
+	^ self new
+		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: 1 withAll: Square ))
+		  andShips: numberOfShips
+		  andDicePool: (DicePool withDice: { (Dice withSides: 4) })
 ]
 
 { #category : 'creation' }
@@ -55,22 +74,30 @@ Board class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool:
 	self validateDicePool: aDicePool.
 
 	^ self new
-		  initializeWithSquares: numberOfSquares
+		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: numberOfSquares withAll: Square ))
 		  andShips: numberOfShips
 		  andDicePool: aDicePool
+]
+
+{ #category : 'behaviour' }
+Board >> applyEffectToShipWhenItLandsOnASquare: updatedShip [
+
+	^ updatedShip position <= squares size
+		  ifTrue: [ updatedShip landsOn: (squares at: updatedShip position) ]
+		  ifFalse: [ ^ updatedShip ]
 ]
 
 { #category : 'boolean' }
 Board >> gameIsOver [
 
 	
-	^ ships anySatisfy: [ :aShip | aShip position >= squares].
+	^ ships anySatisfy: [ :aShip | aShip position >= squares size].
 ]
 
 { #category : 'initialization' }
-Board >> initializeWithSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
+Board >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePool: aDicePool [
 
-	squares := numberOfSquares.
+	squares := aSqarePool createBoard.
 	ships := OrderedCollection new.
 	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
 	dicePool := aDicePool.
@@ -78,21 +105,27 @@ Board >> initializeWithSquares: numberOfSquares andShips: numberOfShips andDiceP
 ]
 
 { #category : 'accessing' }
-Board >> locateSpaceShip: aSpaceShip [ 
+Board >> locateSpaceShip: aSpaceShip [
+
 	| aSpaceShipPosition |
-	aSpaceShipPosition :=  (ships detect: [ :ship | ship name = aSpaceShip ] ifNone: [self error: 'The selected SpaceShip is not on the board']).
-	^aSpaceShipPosition position.
-	
+	aSpaceShipPosition := ships
+		                      detect: [ :ship | ship name = aSpaceShip ]
+		                      ifNone: [
+		                      self error:
+			                      'The selected SpaceShip is not on the board' ].
+	^ aSpaceShipPosition position
 ]
 
 { #category : 'behaviour' }
 Board >> nextTurn [
 
-	| diceValue shipIntTurn|
+	| diceValue updatedShip |
 	self validateIfGameIsOver.
 	diceValue := dicePool throw.
-	shipIntTurn := (ships at: playersTurn) movesForward: diceValue until: squares.
-	ships at: playersTurn put: shipIntTurn.
+	updatedShip := ships at: playersTurn.
+	updatedShip := updatedShip movesForward: diceValue.
+	updatedShip := self applyEffectToShipWhenItLandsOnASquare: updatedShip.
+	ships at: playersTurn put: updatedShip.
 	playersTurn := playersTurn % ships size + 1
 ]
 
@@ -114,5 +147,5 @@ Board >> whoWon [
 
 	self gameIsOver ifFalse: [ self error: 'Game isnt over' ].
 
-	^ ships detect: [ :aShip | aShip position >= squares ]
+	^ ships detect: [ :aShip | aShip position >= squares size]
 ]

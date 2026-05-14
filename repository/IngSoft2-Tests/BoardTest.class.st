@@ -12,7 +12,7 @@ Class {
 BoardTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
 	self
-		should: [ Board withSquares: 0 ]
+		should: [ Board withPreloadedSquares: 0 ]
 		raiseErrorWithMessageText: 'The board must have at least 1 square.'
 ]
 
@@ -46,7 +46,9 @@ BoardTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVa
 	dicePool := DicePool withDice: {
 			            preloadedDice1.
 			            preloadedDice2 }.
-	Board withSquares: 10 andShips: 2 andDicePool: dicePool
+	self
+		shouldnt: [ Board withSquares: 10 andShips: 2 andDicePool: dicePool ]
+		raise: Error
 ]
 
 { #category : 'tests' }
@@ -71,17 +73,15 @@ BoardTest >> test006FirstPlayerShouldThrowDicesFirst [
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 10 andShips: 2 andDicePool: dicePool.
-	
-	
+
 	board nextTurn.
 
 	listOfShips := {
 		               (Spaceship withName: 1 andPosition: 5).
-		               (Spaceship withName: 2 andPosition: 1) } asOrderedCollection .
-		
-	
-		
-	self assert: board ships equals: listOfShips 
+		               (Spaceship withName: 2 andPosition: 1) }
+		               asOrderedCollection.
+
+	self assert: board ships equals: listOfShips
 ]
 
 { #category : 'tests' }
@@ -91,18 +91,16 @@ BoardTest >> test007SecondPlayerThrowsDice [
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 10 andShips: 2 andDicePool: dicePool.
-	
-	
+
 	board nextTurn.
 	board nextTurn.
 
 	listOfShips := {
 		               (Spaceship withName: 1 andPosition: 5).
-		               (Spaceship withName: 2 andPosition: 3) } asOrderedCollection .
-		
-	
-		
-	self assert: board ships equals: listOfShips 
+		               (Spaceship withName: 2 andPosition: 3) }
+		               asOrderedCollection.
+
+	self assert: board ships equals: listOfShips
 ]
 
 { #category : 'tests' }
@@ -194,10 +192,6 @@ BoardTest >> test015whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	board := Board withSquares: 11 andShips: 4 andDicePool: dicePool.
-
-	1 to: 10 do: [ :turn | 
-		board nextTurn ].
-
 	
 	self should: [ board locateSpaceShip: 5 ] raiseErrorWithMessageText: 'The selected SpaceShip is not on the board'
 

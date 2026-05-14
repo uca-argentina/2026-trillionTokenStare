@@ -52,10 +52,10 @@ Spaceship >> movesBackward: anAmmountOfSquares [
 ]
 
 { #category : 'changing state' }
-Spaceship >> movesForward: anAmmountOfSquares until: endOfBoard [
+Spaceship >> movesForward: anAmmountOfSquares [
 
 	| newPosition |
-	newPosition := position + anAmmountOfSquares min: endOfBoard.
+	newPosition := position + anAmmountOfSquares.
 
 	^ self class withName: name andPosition: newPosition
 ]

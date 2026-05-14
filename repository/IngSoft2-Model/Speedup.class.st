@@ -9,19 +9,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Speedup class >> onBoardSize: aBoardSize [
-
-	^ self new initializeOnBoardWith: aBoardSize
-]
-
-{ #category : 'as yet unclassified' }
 Speedup >> applyEffectTo: aShip [
 
-	^ aShip movesForward: 4 until: boardSize
-]
-
-{ #category : 'as yet unclassified' }
-Speedup >> initializeOnBoardWith: aBoardSize [
-
-boardSize := aBoardSize 
+	^ aShip movesForward: 4
 ]
