@@ -25,6 +25,14 @@ MockSquarePool >> createBoard [
 ]
 
 { #category : 'initialization' }
+MockSquarePool >> createBoardWithLaps: numberOfLaps [
+
+	^ Board withSquares:
+		  (preloadedEffects withIndexCollect: [ :effect :index | effect defaultAt: index ])
+		  andLaps: numberOfLaps 
+]
+
+{ #category : 'initialization' }
 MockSquarePool >> initializeWith: aListOfPreloadedEffects [
 
 	preloadedEffects := aListOfPreloadedEffects.

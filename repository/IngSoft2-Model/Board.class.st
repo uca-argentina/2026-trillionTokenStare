@@ -2,7 +2,8 @@ Class {
 	#name : 'Board',
 	#superclass : 'Object',
 	#instVars : [
-		'squares'
+		'squares',
+		'laps'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -15,10 +16,19 @@ Board class >> withSquares: aListOfSquares [
 ]
 
 { #category : 'as yet unclassified' }
+Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
+
+	^ self new 
+	    initializeWithSquares: aListOfSquares
+	    andLaps: aNumberOfLaps
+]
+
+{ #category : 'as yet unclassified' }
 Board >> applyEffectsOf: certainShip to: listOfShips [
 
-	| square |
-	square := squares at: certainShip position.
+	| square fixedPosition|
+	fixedPosition := (certainShip position - 1) % (squares size) + 1 .
+	square := (squares at: fixedPosition ).
 
 	^ listOfShips collect: [ :ship | square applyEffectTo: ship ]
 ]
@@ -26,7 +36,15 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 { #category : 'initialization' }
 Board >> initializeWithSquares: aListOfSquares [
 
-	squares := aListOfSquares
+	squares := aListOfSquares.
+	laps := 1
+]
+
+{ #category : 'initialization' }
+Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
+
+	squares := aListOfSquares.
+	laps := aNumberOfLaps
 ]
 
 { #category : 'as yet unclassified' }
@@ -49,5 +67,12 @@ Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
 { #category : 'as yet unclassified' }
 Board >> shipInsideBoard: aShip [
 
-	^ aShip position <= squares size
+	^ aShip position <= (laps * squares size)
+	
+]
+
+{ #category : 'accessing' }
+Board >> size [
+
+	^ squares size.
 ]

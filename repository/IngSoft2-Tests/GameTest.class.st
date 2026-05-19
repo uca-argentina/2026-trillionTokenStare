@@ -172,7 +172,7 @@ GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 ]
 
 { #category : 'tests' }
-GameTest >> test014whenYouAskForASpaceShipPositionThenYouGetAResponse [ 
+GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [ 
 
 	| preloadedDice dicePool board |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
@@ -186,7 +186,7 @@ GameTest >> test014whenYouAskForASpaceShipPositionThenYouGetAResponse [
 ]
 
 { #category : 'tests' }
-GameTest >> test015whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [ 
+GameTest >> test014whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [ 
 
 	| preloadedDice dicePool board |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
@@ -195,4 +195,47 @@ GameTest >> test015whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion 
 	
 	self should: [ board locateSpaceShip: 5 ] raiseErrorWithMessageText: 'The selected SpaceShip is not on the board'
 
+]
+
+{ #category : 'tests' }
+GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
+
+	| preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 10 andShips: 2 andDicePool: dicePool andLaps: 2.
+
+	5 timesRepeat: [ game nextTurn ].
+
+	
+	self deny: game gameIsOver 
+]
+
+{ #category : 'tests' }
+GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
+
+	| preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 11 andShips: 2 andDicePool: dicePool andLaps: 2.
+
+	5 timesRepeat: [ game nextTurn ].
+	
+	self assert: (game locateSpaceShip: 1 ) equals: 1
+]
+
+{ #category : 'tests' }
+GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
+
+	| preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 10 andShips: 2 andDicePool: dicePool andLaps: 2.
+
+	11 timesRepeat: [ game nextTurn ].
+	"""
+	Expected position for spaceShip 1: 2 (the game finish because it was in the last lap)
+	Expected position for spaceShip 2: 9 (it's in the first lap)
+	"""
+   self should: [ game nextTurn ] raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
