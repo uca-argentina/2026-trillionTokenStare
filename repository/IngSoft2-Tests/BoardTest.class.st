@@ -195,3 +195,58 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
 	self assert: updatedShips equals: finalPositions
 ]
+
+{ #category : 'tests' }
+BoardTest >> test010HyperJumpSquare [
+
+	| square ship1 ship2 ship3 updatedPositions finalPositions |
+	square := HyperJump
+		          defaultAt: 2
+		          andJumps: { 300 . 200 }
+		          andParsecsToSquares: 0.01.
+	ship1 := Spaceship withName: 1 andPosition: 2.
+	ship2 := Spaceship withName: 2 andPosition: 2.
+	ship3 := Spaceship withName: 3 andPosition: 2.
+	finalPositions := {
+		                  (Spaceship withName: 1 andPosition: 5).
+		                  (Spaceship withName: 2 andPosition: 4).
+		                  (Spaceship withName: 3 andPosition: 5) }.
+
+	updatedPositions := {
+		                    (square applyEffectTo: ship1).
+		                    (square applyEffectTo: ship2).
+		                    (square applyEffectTo: ship3) }.
+
+	self assert: updatedPositions equals: finalPositions
+]
+
+{ #category : 'tests' }
+BoardTest >> test011BoardExecutesHyperJumpActionOnSpaceShip [
+
+	| preloadedSquares finalPositions preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	preloadedSquares := MockSquarePool withPreloadedSquares: {
+			                    Square.
+			                    HyperJump.
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Square }.
+	game := Game
+		        withSquarePool: preloadedSquares
+		        andShips: 3
+		        andDicePool: dicePool.
+
+
+	1 to: 3 do: [ :turn | game nextTurn ].
+
+	finalPositions := {
+		                  (Spaceship withName: 1 andPosition: 5).
+		                  (Spaceship withName: 2 andPosition: 4).
+		                  (Spaceship withName: 3 andPosition: 5) }.
+
+
+
+	self assert: game ships equals: finalPositions asOrderedCollection
+]
