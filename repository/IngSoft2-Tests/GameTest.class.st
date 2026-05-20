@@ -325,7 +325,7 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
 	1 to: 10 do: [ :turn | game nextTurn ].
 
-	self assert: (game locateSpaceShip: '1') equals: 4
+	self assert: ((game locateSpaceShip: '1' ) at:#position) equals: 4
 ]
 
 { #category : 'tests' }
@@ -396,7 +396,7 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 
 	5 timesRepeat: [ game nextTurn ].
 
-	self assert: (game locateSpaceShip: '1') equals: 1
+	self assert: ((game locateSpaceShip: '1') at: #position) equals: 1
 ]
 
 { #category : 'tests' }
@@ -452,7 +452,7 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
 	lapsExpected do: [ :lap |
 		self
-			assert: (game currentSpaceShipLap: lap first) == lap second
+			assert: ((game locateSpaceShip: lap first) at: #lap) == lap second
 			equals: true ]
 ]
 
@@ -495,6 +495,6 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 		equals: positionsExpected.
 	lapsExpected do: [ :lap |
 			self
-				assert: (game currentSpaceShipLap: lap first) == lap second
+				assert: ((game locateSpaceShip: lap first) at: #lap) == lap second
 				equals: true ]
 ]

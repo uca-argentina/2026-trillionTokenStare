@@ -11,7 +11,7 @@ ProjectTestCase >> positionOf: spaceshipNames in: game [
 	^ spaceshipNames collect: [ :name |
 			  {
 				  name.
-				  (game locateSpaceShip: name) } ]
+				  ((game locateSpaceShip: name) at:#position)} ]
 ]
 
 { #category : 'asserting' }

@@ -75,19 +75,6 @@ Game class >> withSquares: numberOfSquares andShips: listOfShips andDicePool: aD
 		  andParsecs: parsecs
 ]
 
-{ #category : 'as yet unclassified' }
-Game >> currentSpaceShipLap: aSpaceShip [ 
-	| aSpaceShipPosition currentLap |
-	aSpaceShipPosition := ships
-		                      detect: [ :ship | ship name = aSpaceShip ]
-		                      ifNone: [
-		                      self error:
-			                      'The selected SpaceShip is not on the board' ].
-	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
-
-	^ currentLap 
-]
-
 { #category : 'boolean' }
 Game >> gameIsOver [
 
@@ -107,14 +94,16 @@ Game >> initializeUsingSquarePool: aSqarePool andShips: listOfShips andDicePool:
 { #category : 'accessing' }
 Game >> locateSpaceShip: aSpaceShip [
 
-	| aSpaceShipPosition fixedPosition |
+	| aSpaceShipPosition fixedPosition currentLap |
 	aSpaceShipPosition := ships
 		                      detect: [ :ship | ship name = aSpaceShip ]
 		                      ifNone: [
 		                      self error:
 			                      'The selected SpaceShip is not on the board' ].
 	fixedPosition := ((aSpaceShipPosition position - 1) % board size) + 1.
-	^ fixedPosition 
+	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
+	
+	^ { #position -> fixedPosition . #lap -> currentLap } asDictionary
 ]
 
 { #category : 'behaviour' }
