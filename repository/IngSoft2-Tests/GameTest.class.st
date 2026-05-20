@@ -531,3 +531,32 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 				assert: ((game locateSpaceShip: lap first) at: #lap) == lap second
 				equals: true ]
 ]
+
+{ #category : 'tests' }
+GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
+
+	| preloadedDice dicePool game ships ranking namesAt |
+	ships := {
+		         (Spaceship withName: '1').
+		         (Spaceship withName: '2').
+		         (Spaceship withName: '3') }.
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game
+		        withSquares: 10
+		        andShips: ships
+		        andDicePool: dicePool
+		        andLaps: 1
+		        andParsecs: 1000.
+
+	3 timesRepeat: [ game nextTurn ].
+
+	ranking := game ranking.
+
+	namesAt := [ :rank |
+	           ((ranking at: rank) collect: [ :ship | ship name ]) asArray ].
+
+	self assert: (namesAt value: #first) equals: #( '1' ).
+	self assert: (namesAt value: #second) equals: #( '2' ).
+	self assert: (namesAt value: #third) equals: #( '3' )
+]

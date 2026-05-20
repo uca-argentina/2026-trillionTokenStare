@@ -107,6 +107,12 @@ Game >> locateSpaceShip: aSpaceShip [
 ]
 
 { #category : 'behaviour' }
+Game >> ranking [
+
+	^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
+]
+
+{ #category : 'behaviour' }
 Game >> nextTurn [
 
 	| diceValue updatedShips |

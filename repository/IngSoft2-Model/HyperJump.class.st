@@ -41,6 +41,6 @@ HyperJump >> initializeAt: squareNumber withJumps: listOfJumps andParsecs: numbe
 
 	number := squareNumber.
 	parsecs := numberOfParsecs.
-	jumps := listOfJumps.
+	jumps := listOfJumps sorted: [ :a :b | a > b ].
 	jumpIndex := 1
 ]
