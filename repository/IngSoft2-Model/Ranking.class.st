@@ -5,31 +5,16 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Ranking >> bestThreeSpaceShips: aSpaceShipCollection [
-   | aSpaceShipRankedDictionary aSpaceShipCollectionCopy currentMax first second third |
+   | aSpaceShipRankedDictionary aSpaceShipCollectionCopy  first second third |
 
    aSpaceShipCollectionCopy := aSpaceShipCollection copy.
    
-   first:= OrderedCollection new.
-   second:= OrderedCollection new.
-   third:= OrderedCollection new.
+   first:= self extractSpaceShipsByHighestPosition: aSpaceShipCollectionCopy.
+   second:= self extractSpaceShipsByHighestPosition: aSpaceShipCollectionCopy.
+   third:= self extractSpaceShipsByHighestPosition: aSpaceShipCollectionCopy.
 
-   (aSpaceShipCollectionCopy) ifNotEmpty: [
-      currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
-      first := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
-      aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
-   ].
-   (aSpaceShipCollectionCopy) ifNotEmpty: [
-      currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
-      second := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
-      aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
-   ].
-   (aSpaceShipCollectionCopy) ifNotEmpty: [
-      currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
-      third := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
-      aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
-   ].
    aSpaceShipRankedDictionary := Dictionary new.
    aSpaceShipRankedDictionary 
       at: #first put: first;   
@@ -37,4 +22,20 @@ Ranking >> bestThreeSpaceShips: aSpaceShipCollection [
       at: #third put: third.
 	^ aSpaceShipRankedDictionary
 	
+]
+
+{ #category : 'private - extraction' }
+Ranking >> extractSpaceShipsByHighestPosition: aSpaceShipCollection [
+   | aSpaceShipCollectionCopy currentMax extractedSpaceShips |
+
+   aSpaceShipCollectionCopy := aSpaceShipCollection copy.
+
+   (aSpaceShipCollectionCopy) ifNotEmpty: [
+      currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
+      extractedSpaceShips := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
+      aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
+      ^ extractedSpaceShips.
+   ]; else: [
+      ^ OrderedCollection new.
+   ].
 ]
