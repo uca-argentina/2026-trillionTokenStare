@@ -23,12 +23,25 @@ Moonwalk class >> defaultAt: squareNumber withBacktrack: backtrack andParsecs: p
 		  andNumberOfParsecs: parsecs
 ]
 
+{ #category : 'accessing' }
+Moonwalk class >> randomAt: squareNumber andParsecs: parsecs [
+        ^ self new
+                initializeAt: squareNumber
+                WithBacktrack: (2 to: 6) atRandom
+                andNumberOfParsecs: parsecs
+]
+
 { #category : 'as yet unclassified' }
 Moonwalk >> applyEffectTo: aShip [
 	
 	^ aShip position = number
 		  ifTrue: [ ^ aShip ]
 		  ifFalse: [ ^ aShip movesBackward: backtrack ]
+]
+
+{ #category : 'accessing' }
+Moonwalk >> backtrack [
+        ^ backtrack
 ]
 
 { #category : 'initialization' }

@@ -38,9 +38,8 @@ HyperJump >> applyEffectTo: aShip [
 
 { #category : 'accessing' }
 HyperJump >> initializeAt: squareNumber withJumps: listOfJumps andParsecs: numberOfParsecs [
-
-	number := squareNumber.
-	parsecs := numberOfParsecs.
-	jumps := listOfJumps.
-	jumpIndex := 1
+        number := squareNumber.
+        parsecs := numberOfParsecs.
+        jumps := listOfJumps sorted: [ :a :b | a > b ].
+        jumpIndex := 1
 ]

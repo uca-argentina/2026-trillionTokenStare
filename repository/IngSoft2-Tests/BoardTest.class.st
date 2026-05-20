@@ -296,3 +296,68 @@ BoardTest >> test012BoardDistribution [
 	self assert: (distributedBoard occurrencesOf: HyperJump) equals: 8.
 	self assert: (distributedBoard occurrencesOf: AtomicBomb ) equals: 2
 ]
+
+{ #category : 'tests' }
+BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEffectIsNotTriggered [
+        | preloadedSquares game preloadedDicePool ships positionsExpected |
+        preloadedSquares := MockSquarePool withPreloadedSquares: {
+                Square. Speedup. Square. Square. Square. Wormhole }.
+        preloadedDicePool := DicePool withDice:
+                { (DiceMock withSides: 4 andSequence: #( 1 )) }.
+        ships := {
+                (Spaceship withName: '1').
+                (Spaceship withName: '2') }.
+        game := Game
+                withSquarePool: preloadedSquares
+                andShips: ships
+                andDicePool: preloadedDicePool
+                andLaps: 1
+                andParsecs: 1000.
+        game nextTurn.
+        positionsExpected := {
+                { '1'. 6 }.
+                { '2'. 1 } }.
+        self
+                assert: (self positionOf: #( '1' '2' ) in: game)
+                equals: positionsExpected
+]
+
+{ #category : 'tests' }
+BoardTest >> test014RandomMoonwalksHaveVaryingBacktracks [
+        | moonwalks backtracks |
+        moonwalks := (1 to: 100) collect: [ :i |
+                Moonwalk randomAt: i andParsecs: 100 ].
+        backtracks := (moonwalks collect: [ :m | m backtrack ]) asSet.
+        self assert: backtracks size > 1
+]
+
+{ #category : 'tests' }
+BoardTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsUnsorted [
+        | hyperJump ship updatedShip |
+        hyperJump := HyperJump
+                defaultAt: 2
+                andJumps: { 100. 300. 200 }
+                andParsecs: 50.
+        ship := Spaceship withName: 1 andPosition: 2.
+        updatedShip := hyperJump applyEffectTo: ship.
+        self assert: updatedShip position equals: 8
+]
+
+{ #category : 'tests' }
+BoardTest >> test016HyperJumpResetsToHighestAfterExhaustingTheJumpList [
+        | hyperJump ship1 ship2 ship3 ship4 results |
+        hyperJump := HyperJump
+                defaultAt: 2
+                andJumps: { 300. 200. 100 }
+                andParsecs: 50.
+        ship1 := Spaceship withName: 1 andPosition: 2.
+        ship2 := Spaceship withName: 2 andPosition: 2.
+        ship3 := Spaceship withName: 3 andPosition: 2.
+        ship4 := Spaceship withName: 4 andPosition: 2.
+        results := {
+                (hyperJump applyEffectTo: ship1) position.
+                (hyperJump applyEffectTo: ship2) position.
+                (hyperJump applyEffectTo: ship3) position.
+                (hyperJump applyEffectTo: ship4) position }.
+        self assert: results equals: #( 8 6 4 8 )
+]

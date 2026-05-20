@@ -26,24 +26,20 @@ SquarePool class >> defaultProbabilitiesWithSize: size [
 
 { #category : 'initialization' }
 SquarePool >> createBoardWithLaps: numberOfLaps andParsecs: parsecs [
-
-	| parsecsPerSquare bagOfEffects squares |
-	parsecsPerSquare := parsecs / numberOfSquares.
-
-	bagOfEffects := OrderedCollection
-		                new: numberOfSquares
-		                streamContents: [ :stream |
-				                probabilities keysAndValuesDo: [ :effect :percent |
-						                | cuantity |
-						                cuantity := (numberOfSquares * percent / 100)
-							                            asInteger.
-						                cuantity timesRepeat: [ stream nextPut: effect ] ] ].
-	squares := bagOfEffects shuffle.
-
-	^ Board
-		  withSquares: (squares withIndexCollect: [ :effect :index |
-				   effect defaultAt: index andParsecs: parsecsPerSquare ])
-		  andLaps: numberOfLaps
+        | parsecsPerSquare bagOfEffects squares |
+        parsecsPerSquare := parsecs / numberOfSquares.
+        bagOfEffects := OrderedCollection
+                new: numberOfSquares
+                streamContents: [ :stream |
+                        probabilities keysAndValuesDo: [ :effect :percent |
+                                | cuantity |
+                                cuantity := (numberOfSquares * percent / 100) asInteger.
+                                cuantity timesRepeat: [ stream nextPut: effect ] ] ].
+        squares := bagOfEffects shuffle.
+        ^ Board
+                withSquares: (squares withIndexCollect: [ :effect :index |
+                        effect randomAt: index andParsecs: parsecsPerSquare ])
+                andLaps: numberOfLaps
 ]
 
 { #category : 'initialization' }
