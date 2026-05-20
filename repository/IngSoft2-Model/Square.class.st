@@ -15,6 +15,11 @@ Square class >> defaultAt: squareNumber andParsecs: parsecs [
 	^ self new initializeAt: squareNumber andParsecs: parsecs
 ]
 
+{ #category : 'accessing' }
+Square class >> randomAt: squareNumber andParsecs: parsecs [
+        ^ self defaultAt: squareNumber andParsecs: parsecs
+]
+
 { #category : 'comparing' }
 Square >> = aSquareClass [
 

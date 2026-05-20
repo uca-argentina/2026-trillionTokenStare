@@ -118,6 +118,11 @@ Game >> nextTurn [
 	playersTurn := playersTurn % ships size + 1
 ]
 
+{ #category : 'behaviour' }
+Game >> ranking [
+        ^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
+]
+
 { #category : 'validation' }
 Game >> validateIfGameIsOver [
 
