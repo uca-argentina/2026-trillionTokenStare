@@ -42,7 +42,7 @@ SquarePool >> createBoardWithLaps: numberOfLaps andParsecs: parsecs [
 
 	^ Board
 		  withSquares: (squares withIndexCollect: [ :effect :index |
-				   effect randomAt: index andParsecs: parsecsPerSquare ])
+				   effect defaultAt: index andParsecs: parsecsPerSquare ])
 		  andLaps: numberOfLaps
 ]
 
