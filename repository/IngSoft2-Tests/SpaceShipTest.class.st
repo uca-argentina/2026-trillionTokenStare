@@ -23,7 +23,7 @@ SpaceShipTest >> test002ShipMovesWhenToldTo [
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test004ShipMovesBackwardWhenToldTo [
+SpaceShipTest >> test003ShipMovesBackwardWhenToldTo [
 
 	| ship shipNewPosition |
 	ship := Spaceship withName: 'Ship1' andPosition: 15.

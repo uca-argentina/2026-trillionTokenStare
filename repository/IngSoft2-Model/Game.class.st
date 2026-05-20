@@ -5,7 +5,8 @@ Class {
 		'ships',
 		'dicePool',
 		'playersTurn',
-		'board'
+		'board',
+		'laps'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -68,6 +69,20 @@ Game class >> withSquarePool: squarePool andShips: numberOfShips andDicePool: aD
 ]
 
 { #category : 'creation' }
+Game class >> withSquarePool: squarePool andShips: numberOfShips andDicePool: aDicePool andLaps: aLapsNumber [
+
+	self validateNumberOfShips: numberOfShips.
+	self validateNumberOfSquares:( squarePool numberOfSquares).
+	self validateDicePool: aDicePool.
+
+	^ self new
+		  initializeUsingSquarePool: squarePool
+		  andShips: numberOfShips
+		  andDicePool: aDicePool
+		  andLaps: aLapsNumber
+]
+
+{ #category : 'creation' }
 Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
 
 	self validateNumberOfShips: numberOfShips.
@@ -79,6 +94,19 @@ Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: 
 		  andShips: numberOfShips
 		  andDicePool: aDicePool
 		andParsecs: 1000
+]
+
+{ #category : 'as yet unclassified' }
+Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool andLaps: aLapsNumber [
+	self validateNumberOfShips: numberOfShips.
+	self validateNumberOfSquares: numberOfSquares.
+	self validateDicePool: aDicePool.
+
+	^ self new
+		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: numberOfSquares withAll: Square ))
+		  andShips: numberOfShips
+		  andDicePool: aDicePool
+		  andLaps: aLapsNumber
 ]
 
 { #category : 'creation' }
@@ -96,11 +124,35 @@ Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: 
 		  andParsecs: parsecs
 ]
 
+{ #category : 'as yet unclassified' }
+Game >> currentSpaceShipLap: aSpaceShip [ 
+	| aSpaceShipPosition currentLap |
+	aSpaceShipPosition := ships
+		                      detect: [ :ship | ship name = aSpaceShip ]
+		                      ifNone: [
+		                      self error:
+			                      'The selected SpaceShip is not on the board' ].
+	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
+
+	^ currentLap 
+]
+
 { #category : 'boolean' }
 Game >> gameIsOver [
 
 	
 	^ ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ].
+]
+
+{ #category : 'initialization' }
+Game >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePool: aDicePool andLaps: numberOfLaps [
+
+	board := aSqarePool createBoardWithLaps: numberOfLaps .
+	ships := OrderedCollection new.
+	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
+	dicePool := aDicePool.
+	playersTurn := 1.
+	laps := numberOfLaps 
 ]
 
 { #category : 'initialization' }
@@ -116,13 +168,14 @@ Game >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePoo
 { #category : 'accessing' }
 Game >> locateSpaceShip: aSpaceShip [
 
-	| aSpaceShipPosition |
+	| aSpaceShipPosition fixedPosition |
 	aSpaceShipPosition := ships
 		                      detect: [ :ship | ship name = aSpaceShip ]
 		                      ifNone: [
 		                      self error:
 			                      'The selected SpaceShip is not on the board' ].
-	^ aSpaceShipPosition position
+	fixedPosition := ((aSpaceShipPosition position - 1) % board size) + 1.
+	^ fixedPosition 
 ]
 
 { #category : 'behaviour' }

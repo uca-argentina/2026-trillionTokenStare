@@ -172,7 +172,7 @@ GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 ]
 
 { #category : 'tests' }
-GameTest >> test014whenYouAskForASpaceShipPositionThenYouGetAResponse [ 
+GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [ 
 
 	| preloadedDice dicePool board |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
@@ -186,7 +186,7 @@ GameTest >> test014whenYouAskForASpaceShipPositionThenYouGetAResponse [
 ]
 
 { #category : 'tests' }
-GameTest >> test015whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [ 
+GameTest >> test014whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [ 
 
 	| preloadedDice dicePool board |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
@@ -194,5 +194,89 @@ GameTest >> test015whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion 
 	board := Game withSquares: 11 andShips: 4 andDicePool: dicePool.
 	
 	self should: [ board locateSpaceShip: 5 ] raiseErrorWithMessageText: 'The selected SpaceShip is not on the board'
+
+]
+
+{ #category : 'tests' }
+GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
+
+	| preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 10 andShips: 2 andDicePool: dicePool andLaps: 2.
+
+	5 timesRepeat: [ game nextTurn ].
+
+	
+	self deny: game gameIsOver 
+]
+
+{ #category : 'tests' }
+GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
+
+	| preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 11 andShips: 2 andDicePool: dicePool andLaps: 2.
+
+	5 timesRepeat: [ game nextTurn ].
+	
+	self assert: (game locateSpaceShip: 1 ) equals: 1
+]
+
+{ #category : 'tests' }
+GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
+
+	| preloadedDice dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 10 andShips: 2 andDicePool: dicePool andLaps: 2.
+
+	11 timesRepeat: [ game nextTurn ].
+	"""
+	Expected position for spaceShip 1: 2 (the game finish because it was in the last lap)
+	Expected position for spaceShip 2: 9 (it's in the first lap)
+	"""
+   self should: [ game nextTurn ] raiseErrorWithMessageText: 'Game is over, no more turns allowed'
+]
+
+{ #category : 'tests' }
+GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
+
+	| preloadedDice dicePool game lapsExpected |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 5 andShips: 4 andDicePool: dicePool andLaps: 4.
+
+	15 timesRepeat: [ game nextTurn].
+	
+	lapsExpected := #( (1 4) (2 3) (3 2) (4 1) ) asOrderedCollection .
+
+   lapsExpected do: [:lap |
+	   self assert: ((game currentSpaceShipLap: lap first) == lap second ) equals: true.
+   ]
+
+]
+
+{ #category : 'tests' }
+GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenThePlayersReturnToTheFisrtSquareWithoutLossingAnyLap [
+
+	| preloadedDice dicePool game lapsExpected aSqarePool positionsExpected |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	aSqarePool := MockSquarePool withPreloadedSquares: { Square. AtomicBomb. Square. Square. Square }.
+	game := Game withSquarePool: aSqarePool andShips: 3 andDicePool: dicePool andLaps: 4.
+
+	9 timesRepeat: [ game nextTurn ].
+	
+	lapsExpected := #( (1 2) (2 2) (3 2) ) asOrderedCollection .	
+   positionsExpected := #( (1 6) (2 11) (3 6) ) asOrderedCollection .
+
+   lapsExpected do: [:lap |
+	   self assert: ((game currentSpaceShipLap: lap first) == lap second ) equals: true.
+   ]."
+   positionsExpected do: [:position |
+	   self assert: ((game locateSpaceShip: position first) == position second ) equals: true.
+   ]"
 
 ]

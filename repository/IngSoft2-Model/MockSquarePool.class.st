@@ -18,6 +18,14 @@ MockSquarePool class >> withPreloadedSquares: listOfPreloadedEffects [
 ]
 
 { #category : 'initialization' }
+MockSquarePool >> createBoardWithLaps: numberOfLaps [
+
+	^ Board withSquares:
+		  (preloadedEffects withIndexCollect: [ :effect :index | effect defaultAt: index ])
+		  andLaps: numberOfLaps 
+]
+
+{ #category : 'initialization' }
 MockSquarePool >> createBoardWithParsecs: parsecs [
 
 	| parsecsPerSquare |
