@@ -3,116 +3,82 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'squares',
-		'ships',
-		'dicePool',
-		'playersTurn'
+		'laps'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'validation' }
-Board class >> validateDicePool: aDicePool [
+{ #category : 'as yet unclassified' }
+Board class >> withSquares: aListOfSquares [
 
-	(aDicePool isMemberOf: DicePool) ifFalse: [
-		self error:
-			'Board must receive a Dice Pool, not a collection, not a single Dice' ]
+	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
 
-{ #category : 'validation' }
-Board class >> validateNumberOfShips: numberOfShips [
+{ #category : 'as yet unclassified' }
+Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 
-	numberOfShips < 2 ifTrue: [
-		self error: 'The board must have at least 2 ships.' ]
+	^ self new 
+	    initializeWithSquares: aListOfSquares
+	    andLaps: aNumberOfLaps
 ]
 
-{ #category : 'validation' }
-Board class >> validateNumberOfSquares: numberOfSquares [
+{ #category : 'as yet unclassified' }
+Board >> applyEffectsOf: certainShip to: listOfShips [
 
-	numberOfSquares < 1 ifTrue: [
-		self error: 'The board must have at least 1 square.' ]
-]
+	| square fixedPosition|
+	fixedPosition := (certainShip position - 1) % (squares size) + 1 .
+	square := (squares at: fixedPosition ).
 
-{ #category : 'creation' }
-Board class >> withShips: numberOfShips [
-
-	self validateNumberOfShips: numberOfShips.
-	^ self new initializeWithSquares: 1 andShips: numberOfShips andDicePool: (DicePool withDice: { (Dice withSides: 4) })
-]
-
-{ #category : 'creation' }
-Board class >> withSquares: numberOfSquares [
-
-	self validateNumberOfSquares: numberOfSquares.
-	^ self new initializeWithSquares: numberOfSquares andShips: 2 andDicePool: (DicePool withDice: { (Dice withSides: 4) })
-]
-
-{ #category : 'creation' }
-Board class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
-
-	self validateNumberOfShips: numberOfShips.
-	self validateNumberOfSquares: numberOfSquares.
-	self validateDicePool: aDicePool.
-
-	^ self new
-		  initializeWithSquares: numberOfSquares
-		  andShips: numberOfShips
-		  andDicePool: aDicePool
-]
-
-{ #category : 'boolean' }
-Board >> gameIsOver [
-
-	
-	^ ships anySatisfy: [ :aShip | aShip position >= squares].
+	^ listOfShips collect: [ :ship | square applyEffectTo: ship ]
 ]
 
 { #category : 'initialization' }
-Board >> initializeWithSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
+Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
-	squares := numberOfSquares.
-	ships := OrderedCollection new.
-	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
-	dicePool := aDicePool.
-	playersTurn := 1
+	squares := aListOfSquares.
+	laps := aNumberOfLaps.
+	squares do: [ :square | 
+      (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
+   ]
 ]
 
 { #category : 'accessing' }
-Board >> locateSpaceShip: aSpaceShip [ 
-	| aSpaceShipPosition |
-	aSpaceShipPosition :=  (ships detect: [ :ship | ship name = aSpaceShip ] ifNone: [self error: 'The selected SpaceShip is not on the board']).
-	^aSpaceShipPosition position.
+Board >> occurrencesOf: aSquareType [
+
+	| count |
+	count := 0.
+	squares do: [ :each |
+		each = aSquareType ifTrue: [ count := count + 1 ] ].
+	^ count
+]
+
+{ #category : 'as yet unclassified' }
+Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
+
+	| shipInTurn updatedShips |
+	'Copy of the original ship positions'.
+	updatedShips := allShips deepCopy.
+	'Ship in turn moves according to dice roll'.
+	shipInTurn := allShips at: playerTurn.
+	shipInTurn := shipInTurn movesForward: diceValue.
+	'New position is stored at the intermediate ship positions collection'.
+	updatedShips at: playerTurn put: shipInTurn.
+	'apply effects on all the ships according to where the ship in turn landed'.
+	(self shipInsideBoard: shipInTurn) ifTrue: [
+		updatedShips := self applyEffectsOf: shipInTurn to: updatedShips ].
+	^ updatedShips
+]
+
+{ #category : 'as yet unclassified' }
+Board >> shipInsideBoard: aShip [
+
+	^ aShip position <= (laps * squares size)
 	
 ]
 
-{ #category : 'behaviour' }
-Board >> nextTurn [
-
-	| diceValue aShip |
-	self validateIfGameIsOver.
-	diceValue := dicePool throw.
-	aShip := ships at: playersTurn.
-	aShip moves: diceValue until: squares.
-	playersTurn := playersTurn % ships size + 1
-]
-
 { #category : 'accessing' }
-Board >> ships [
+Board >> size [
 
-	^ ships
-]
-
-{ #category : 'validation' }
-Board >> validateIfGameIsOver [
-
-	self gameIsOver ifTrue: [
-		self error: 'Game is over, no more turns allowed' ]
-]
-
-{ #category : 'accessing' }
-Board >> whoWon [
-
-	self gameIsOver ifFalse: [ self error: 'Game isnt over' ].
-
-	^ ships detect: [ :aShip | aShip position >= squares ]
+	^ squares size.
 ]

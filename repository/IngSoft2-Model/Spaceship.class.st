@@ -37,9 +37,27 @@ Spaceship >> initializeWithName: aName andPosition: aPosition [
 ]
 
 { #category : 'changing state' }
-Spaceship >> moves: anAmmountOfSquares until: endOfBoard [
+Spaceship >> movesBackward: anAmmountOfSquares [
 
-	position := position + anAmmountOfSquares min: endOfBoard
+	| newPosition |
+	newPosition := position - anAmmountOfSquares max: 1.
+
+	^ self class withName: name andPosition: newPosition
+]
+
+{ #category : 'changing state' }
+Spaceship >> movesForward: anAmmountOfSquares [
+
+	| newPosition |
+	newPosition := position + anAmmountOfSquares.
+
+	^ self class withName: name andPosition: newPosition
+]
+
+{ #category : 'changing state' }
+Spaceship >> movesToPosition: aPosition [
+
+	^ self class withName: name andPosition: aPosition
 ]
 
 { #category : 'accessing' }
