@@ -23,7 +23,7 @@ RankingTest >> test001youCanAskForTheRankOfTheThreeBestSpaceShipsByHowFarTheyHav
    .
    rankingActually := ranking bestThreeSpaceShips: listOfShips.
 
-   self assert: rakingExpexted equals: rankingActually
+   self assert: rankingActually equals: rakingExpexted
 ]
 
 { #category : 'tests' }
@@ -50,7 +50,7 @@ RankingTest >> test002whenMoreThanTwoSpacesShipsShareTheSamePositionAndTheyAreIn
    .
    rankingActually := ranking bestThreeSpaceShips: listOfShips.
 
-   self assert: rakingExpexted equals: rankingActually
+   self assert: rankingActually equals: rakingExpexted
 ]
 
 { #category : 'tests' }
@@ -72,5 +72,5 @@ RankingTest >> test003whenThaSpaceShipAreInSrartFirstPositionThenTheyAreTecnical
    .
    rankingActually := ranking bestThreeSpaceShips: listOfShips.
 
-   self assert: rakingExpexted equals: rankingActually
+   self assert: rankingActually equals: rakingExpexted
 ]
