@@ -6,9 +6,9 @@ Class {
 }
 
 { #category : 'accessing' }
-Wormhole class >> defaultAt: squareNumber [
+Wormhole class >> defaultAt: squareNumber andParsecs: parsecs [
 
-	^ self new initializeAt: squareNumber 
+	^ self new initializeAt: squareNumber andParsecs: parsecs 
 ]
 
 { #category : 'as yet unclassified' }

@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : 'accessing' }
-Speedup class >> defaultAt: squareNumber [
+Speedup class >> defaultAt: squareNumber andParsecs: parsecs [
 
-	^ self new initializeAt: squareNumber
+	^ self new initializeAt: squareNumber andParsecs: parsecs 
 ]
 
 { #category : 'as yet unclassified' }

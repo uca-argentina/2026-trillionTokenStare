@@ -6,9 +6,9 @@ Class {
 }
 
 { #category : 'accessing' }
-AtomicBomb class >> defaultAt: squareNumber [
+AtomicBomb class >> defaultAt: squareNumber andParsecs: parsecs [ 
 
-	^ self new initializeAt: squareNumber 
+	^ self new initializeAt: squareNumber andParsecs: parsecs
 ]
 
 { #category : 'as yet unclassified' }

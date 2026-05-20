@@ -40,7 +40,7 @@ Game class >> withPreloadedSquares: numberOfSquares [
 	^ self new
 		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: numberOfSquares withAll: Square ))
 		  andShips: 2
-		  andDicePool: (DicePool withDice: { (Dice withSides: 4) })
+		  andDicePool: (DicePool withDice: { (Dice withSides: 4) }) andParsecs: 1000
 ]
 
 { #category : 'creation' }
@@ -50,20 +50,21 @@ Game class >> withShips: numberOfShips [
 	^ self new
 		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: 1 withAll: Square ))
 		  andShips: numberOfShips
-		  andDicePool: (DicePool withDice: { (Dice withSides: 4) })
+		  andDicePool: (DicePool withDice: { (Dice withSides: 4) }) andParsecs: 1000
 ]
 
 { #category : 'creation' }
 Game class >> withSquarePool: squarePool andShips: numberOfShips andDicePool: aDicePool [
 
 	self validateNumberOfShips: numberOfShips.
-	self validateNumberOfSquares:( squarePool numberOfSquares).
+	self validateNumberOfSquares: squarePool numberOfSquares.
 	self validateDicePool: aDicePool.
 
 	^ self new
 		  initializeUsingSquarePool: squarePool
 		  andShips: numberOfShips
 		  andDicePool: aDicePool
+		  andParsecs: 1000
 ]
 
 { #category : 'creation' }
@@ -77,6 +78,22 @@ Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: 
 		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares: (OrderedCollection new: numberOfSquares withAll: Square ))
 		  andShips: numberOfShips
 		  andDicePool: aDicePool
+		andParsecs: 1000
+]
+
+{ #category : 'creation' }
+Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool andParsecs: parsecs [
+
+	self validateNumberOfShips: numberOfShips.
+	self validateNumberOfSquares: numberOfSquares.
+	self validateDicePool: aDicePool.
+
+	^ self new
+		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares:
+				   (OrderedCollection new: numberOfSquares withAll: Square))
+		  andShips: numberOfShips
+		  andDicePool: aDicePool
+		  andParsecs: parsecs
 ]
 
 { #category : 'boolean' }
@@ -87,9 +104,9 @@ Game >> gameIsOver [
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePool: aDicePool [
+Game >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePool: aDicePool andParsecs: parsecs [
 
-	board := aSqarePool createBoard.
+	board := aSqarePool createBoardWithParsecs: parsecs.
 	ships := OrderedCollection new.
 	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
 	dicePool := aDicePool.

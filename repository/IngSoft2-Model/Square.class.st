@@ -2,7 +2,8 @@ Class {
 	#name : 'Square',
 	#superclass : 'Object',
 	#instVars : [
-		'number'
+		'number',
+		'parsecs'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -14,6 +15,12 @@ Square class >> defaultAt: squareNumber [
 	^ self new initializeAt: squareNumber
 ]
 
+{ #category : 'accessing' }
+Square class >> defaultAt: squareNumber andParsecs: parsecs [
+
+	^ self new initializeAt: squareNumber andParsecs: parsecs
+]
+
 { #category : 'as yet unclassified' }
 Square >> applyEffectTo: aShip [
 
@@ -21,7 +28,8 @@ Square >> applyEffectTo: aShip [
 ]
 
 { #category : 'accessing' }
-Square >> initializeAt: squareNumber [
+Square >> initializeAt: squareNumber andParsecs: numberOfParsecs [
 
-	number := squareNumber
+	number := squareNumber.
+	parsecs := numberOfParsecs
 ]

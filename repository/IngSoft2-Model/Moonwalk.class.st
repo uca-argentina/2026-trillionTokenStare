@@ -9,9 +9,18 @@ Class {
 }
 
 { #category : 'accessing' }
-Moonwalk class >> defaultAt: squareNumber [
+Moonwalk class >> defaultAt: squareNumber andParsecs: parsecs [
 
-	^ self new initializeAt: squareNumber WithBacktrack: 3
+	^ self new initializeAt: squareNumber WithBacktrack: 3 andNumberOfParsecs: parsecs 
+]
+
+{ #category : 'accessing' }
+Moonwalk class >> defaultAt: squareNumber withBacktrack: backtrack andParsecs: parsecs [
+
+	^ self new
+		  initializeAt: squareNumber
+		  WithBacktrack: backtrack
+		  andNumberOfParsecs: parsecs
 ]
 
 { #category : 'as yet unclassified' }
@@ -23,8 +32,9 @@ Moonwalk >> applyEffectTo: aShip [
 ]
 
 { #category : 'initialization' }
-Moonwalk >> initializeAt: squareNumber WithBacktrack: anAmountToBacktrack [
+Moonwalk >> initializeAt: squareNumber WithBacktrack: anAmountToBacktrack andNumberOfParsecs: numberOfParsecs [
 
 	backtrack := anAmountToBacktrack.
-	number := squareNumber
+	number := squareNumber.
+	parsecs:= numberOfParsecs
 ]

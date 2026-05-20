@@ -16,7 +16,7 @@ BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	
 	self assert: (board isMemberOf: Board)
 ]
@@ -32,7 +32,7 @@ BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ship:= Spaceship withName: 'ship' andPosition: 7.
 	
 	
@@ -50,7 +50,7 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ship:= Spaceship withName: 'ship' andPosition: 6.
 
 	
@@ -68,7 +68,7 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 			                    Square.
 			                    Square.
 			                    Square }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -95,7 +95,7 @@ BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 			                    Square.
 			                    Square.
 			                    Square }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -122,7 +122,7 @@ BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 5).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -149,7 +149,7 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 			                    Square.
 			                    Moonwalk .
 			                    Square }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 4).
 		         (Spaceship withName: '2' andPosition: 4).
@@ -178,7 +178,7 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 			                    Square.
 			                    AtomicBomb.
 			                    Square }.
-	board := preloadedSquares createBoard.
+	board := preloadedSquares createBoardWithParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 4).
 		         (Spaceship withName: '2' andPosition: 4).
@@ -202,8 +202,8 @@ BoardTest >> test010HyperJumpSquare [
 	| square ship1 ship2 ship3 updatedPositions finalPositions |
 	square := HyperJump
 		          defaultAt: 2
-		          andJumps: { 300 . 200 }
-		          andParsecsToSquares: 0.01.
+		          andJumps: { 150 . 100 }
+		          andParsecs: 50.
 	ship1 := Spaceship withName: 1 andPosition: 2.
 	ship2 := Spaceship withName: 2 andPosition: 2.
 	ship3 := Spaceship withName: 3 andPosition: 2.
@@ -221,32 +221,44 @@ BoardTest >> test010HyperJumpSquare [
 ]
 
 { #category : 'tests' }
-BoardTest >> test011BoardExecutesHyperJumpActionOnSpaceShip [
+BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 
-	| preloadedSquares finalPositions preloadedDice dicePool game |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 ).
-	dicePool := DicePool withDice: { preloadedDice }.
+	| preloadedSquares game preloadedDicePool parsecs allTurnsResults |
+	"Busco inicializar las tiles antes, con cualquier cosa preseteada de una, y que el build solo me añada la posicion"
+	parsecs := 2000.
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
 			                    Square.
+			                    Speedup.
+			                    Square.
+			                    Square.
+			                    Wormhole.
 			                    HyperJump.
 			                    Square.
 			                    Square.
-			                    Square.
-			                    Square }.
+			                    Moonwalk.
+			                    AtomicBomb }.
+	preloadedDicePool := DicePool withDice:
+		                     { (DiceMock
+			                      withSides: 10
+			                      andSequence: #( 1 4 3 4 1 4 1 7 2 3 )) }.
 	game := Game
-		        withSquarePool: preloadedSquares
-		        andShips: 3
-		        andDicePool: dicePool.
+		        withSquares: preloadedSquares
+		        andShips: 2
+		        andDicePool: preloadedDicePool
+		        andParsecs: parsecs.
 
+	"jugar varias tiradas (armarlas) y guardarlas en una lista"
 
-	1 to: 3 do: [ :turn | game nextTurn ].
-
-	finalPositions := {
-		                  (Spaceship withName: 1 andPosition: 5).
-		                  (Spaceship withName: 2 andPosition: 4).
-		                  (Spaceship withName: 3 andPosition: 5) }.
-
-
-
-	self assert: game ships equals: finalPositions asOrderedCollection
+	allTurnsResults := {
+		                   { '1'. 5 }.
+		                   { '2'. 2 }.
+		                   { '1'. 8 }.
+		                   { '2'. 7 }.
+		                   { '1'. 9 }.
+		                   { '2'. 8 }.
+		                   { '1'. 8 }.
+		                   { '2'. 3 }.
+		                   { '1'. 11 } }.
+		
+	self assert: (self runGameSimulationOn: game ) equals: allTurnsResults 
 ]
