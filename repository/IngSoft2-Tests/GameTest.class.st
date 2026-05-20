@@ -239,3 +239,44 @@ GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreT
 	"""
    self should: [ game nextTurn ] raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
+
+{ #category : 'tests' }
+GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
+
+	| preloadedDice dicePool game lapsExpected |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := Game withSquares: 5 andShips: 4 andDicePool: dicePool andLaps: 4.
+
+	15 timesRepeat: [ game nextTurn].
+	
+	lapsExpected := #( (1 4) (2 3) (3 2) (4 1) ) asOrderedCollection .
+
+   lapsExpected do: [:lap |
+	   self assert: ((game currentSpaceShipLap: lap first) == lap second ) equals: true.
+   ]
+
+]
+
+{ #category : 'tests' }
+GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenThePlayersReturnToTheFisrtSquareWithoutLossingAnyLap [
+
+	| preloadedDice dicePool game lapsExpected aSqarePool positionsExpected |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	aSqarePool := MockSquarePool withPreloadedSquares: { Square. AtomicBomb. Square. Square. Square }.
+	game := Game withSquarePool: aSqarePool andShips: 3 andDicePool: dicePool andLaps: 4.
+
+	9 timesRepeat: [ game nextTurn ].
+	
+	lapsExpected := #( (1 2) (2 2) (3 2) ) asOrderedCollection .	
+   positionsExpected := #( (1 6) (2 11) (3 6) ) asOrderedCollection .
+
+   lapsExpected do: [:lap |
+	   self assert: ((game currentSpaceShipLap: lap first) == lap second ) equals: true.
+   ]."
+   positionsExpected do: [:position |
+	   self assert: ((game locateSpaceShip: position first) == position second ) equals: true.
+   ]"
+
+]

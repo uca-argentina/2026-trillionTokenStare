@@ -37,14 +37,20 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 Board >> initializeWithSquares: aListOfSquares [
 
 	squares := aListOfSquares.
-	laps := 1
+	laps := 1.
+	squares do: [ :square | 
+      (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
+   ]
 ]
 
 { #category : 'initialization' }
 Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
-	laps := aNumberOfLaps
+	laps := aNumberOfLaps.
+	squares do: [ :square | 
+      (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
+   ]
 ]
 
 { #category : 'as yet unclassified' }

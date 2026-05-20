@@ -170,7 +170,8 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 { #category : 'tests' }
 BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships updatedShips finalPositions  |
+	
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
 			                    Square.
 			                    Square.

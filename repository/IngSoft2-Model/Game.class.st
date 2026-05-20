@@ -68,6 +68,20 @@ Game class >> withSquarePool: squarePool andShips: numberOfShips andDicePool: aD
 ]
 
 { #category : 'creation' }
+Game class >> withSquarePool: squarePool andShips: numberOfShips andDicePool: aDicePool andLaps: aLapsNumber [
+
+	self validateNumberOfShips: numberOfShips.
+	self validateNumberOfSquares:( squarePool numberOfSquares).
+	self validateDicePool: aDicePool.
+
+	^ self new
+		  initializeUsingSquarePool: squarePool
+		  andShips: numberOfShips
+		  andDicePool: aDicePool
+		  andLaps: aLapsNumber
+]
+
+{ #category : 'creation' }
 Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: aDicePool [
 
 	self validateNumberOfShips: numberOfShips.
@@ -91,6 +105,19 @@ Game class >> withSquares: numberOfSquares andShips: numberOfShips andDicePool: 
 		  andShips: numberOfShips
 		  andDicePool: aDicePool
 		  andLaps: aLapsNumber
+]
+
+{ #category : 'as yet unclassified' }
+Game >> currentSpaceShipLap: aSpaceShip [ 
+	| aSpaceShipPosition currentLap |
+	aSpaceShipPosition := ships
+		                      detect: [ :ship | ship name = aSpaceShip ]
+		                      ifNone: [
+		                      self error:
+			                      'The selected SpaceShip is not on the board' ].
+	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
+
+	^ currentLap 
 ]
 
 { #category : 'boolean' }
