@@ -223,7 +223,7 @@ BoardTest >> test010HyperJumpSquare [
 { #category : 'tests' }
 BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 
-	| preloadedSquares game preloadedDicePool parsecs allTurnsResults |
+	| preloadedSquares game preloadedDicePool parsecs allTurnsResults numberOfShips ships |
 	parsecs := 2000.
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
 			                    Square.
@@ -238,9 +238,14 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 			                    AtomicBomb }.
 	preloadedDicePool := DicePool withDice:
 		                     { (DiceMock withSides: 10 andSequence: #( 1 3 )) }.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [ :number |
+		         Spaceship withName: number asString ].
+
+
 	game := Game
 		        withSquarePool: preloadedSquares
-		        andShips: 2
+		        andShips: ships
 		        andDicePool: preloadedDicePool
 		        andLaps: 1
 		        andParsecs: parsecs.

@@ -8,8 +8,9 @@ Class {
 { #category : 'tests' }
 GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
-	| ships dicePool laps parsecs squares |
-	ships := 2.
+	| ships dicePool laps parsecs squares numberOfShips |
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: 1) }.
 	laps := 1.
@@ -30,14 +31,15 @@ GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 { #category : 'tests' }
 GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 
-	| ships dicePool laps parsecs squares |
+	| ships dicePool laps parsecs squares numberOfShips |
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: 1) }.
 	laps := 1.
 	parsecs := 1.
 	squares := 10.
 
-	ships := 1.
+	numberOfShips := 1.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 
 	self
 		should: [
@@ -53,11 +55,12 @@ GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 { #category : 'tests' }
 GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 
-	| preloadedDice dicePool laps parsecs squares ships |
+	| preloadedDice dicePool laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
@@ -77,11 +80,12 @@ GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 { #category : 'tests' }
 GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
 
-	| preloadedDice1 preloadedDice2 dicePool laps parsecs squares ships |
+	| preloadedDice1 preloadedDice2 dicePool laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	
 	preloadedDice1 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	preloadedDice2 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
@@ -102,11 +106,12 @@ GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVal
 { #category : 'tests' }
 GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -126,11 +131,12 @@ GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 { #category : 'tests' }
 GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -153,11 +159,12 @@ GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 { #category : 'tests' }
 GameTest >> test007SecondPlayerThrowsDice [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -179,11 +186,12 @@ GameTest >> test007SecondPlayerThrowsDice [
 { #category : 'tests' }
 GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -208,11 +216,12 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 { #category : 'tests' }
 GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 9.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -230,11 +239,12 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 { #category : 'tests' }
 GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 9.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -252,11 +262,12 @@ GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 { #category : 'tests' }
 GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 9.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -274,11 +285,12 @@ GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 { #category : 'tests' }
 GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 9.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -296,11 +308,12 @@ GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 { #category : 'tests' }
 GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 11.
-	ships := 4.
+	numberOfShips := 4.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -318,11 +331,12 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 { #category : 'tests' }
 GameTest >> test014whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 11.
-	ships := 4.
+	numberOfShips := 4.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -341,11 +355,12 @@ GameTest >> test014whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion 
 { #category : 'tests' }
 GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 2.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -364,11 +379,12 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 { #category : 'tests' }
 GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 2.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 11.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -386,11 +402,12 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 { #category : 'tests' }
 GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
 	laps := 2.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
-	ships := 2.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -413,11 +430,12 @@ GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreT
 { #category : 'tests' }
 GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
-	| preloadedDice dicePool game laps parsecs squares ships lapsExpected |
+	| preloadedDice dicePool game laps parsecs squares ships lapsExpected numberOfShips |
 	laps := 4.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 5.
-	ships := 4.
+	numberOfShips := 4.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
@@ -441,10 +459,11 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 { #category : 'tests' }
 GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
 
-	| preloadedDice dicePool game laps parsecs ships lapsExpected positionsExpected |
+	| preloadedDice dicePool game laps parsecs ships lapsExpected positionsExpected numberOfShips |
 	laps := 4.
-	parsecs := 1.
-	ships := 3.
+	parsecs := 1000.
+	numberOfShips := 3.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
