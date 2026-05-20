@@ -221,7 +221,7 @@ BoardTest >> test010HyperJumpSquare [
 ]
 
 { #category : 'tests' }
-BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
+BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 
 	| preloadedSquares game preloadedDicePool parsecs allTurnsResults numberOfShips ships |
 	parsecs := 2000.
@@ -230,14 +230,18 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 			                    Speedup.
 			                    Square.
 			                    Square.
-			                    Wormhole.
+			                    Square.
+			                    Square.
 			                    HyperJump.
+			                    Wormhole.
 			                    Square.
 			                    Square.
 			                    Moonwalk.
 			                    AtomicBomb }.
 	preloadedDicePool := DicePool withDice:
-		                     { (DiceMock withSides: 10 andSequence: #( 1 3 )) }.
+		                     { (DiceMock
+			                      withSides: 10
+			                      andSequence: #( 1 3 2 3 7 7 )) }.
 	numberOfShips := 2.
 	ships := (1 to: numberOfShips) collect: [ :number |
 		         Spaceship withName: number asString ].
@@ -257,8 +261,20 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 			                   { '2'. 1 } }.
 		                   {
 			                   { '1'. 6 }.
-			                   { '2'. 4 } } }.
+			                   { '2'. 4 } }.
+		                   {
+			                   { '1'. 4 }.
+			                   { '2'. 4 } }.
+		                   {
+			                   { '1'. 4 }.
+			                   { '2'. 8 } }.
+		                   {
+			                   { '1'. 11 }.
+			                   { '2'. 5 } }.
+		                   {
+			                   { '1'. 1 }.
+			                   { '2'. 1 } } }.
 	self
-		assert: (self positionOf: #( '1' '2' ) in: game afterTurns: 2)
+		assert: (self positionOf: #( '1' '2' ) in: game afterTurns: 6)
 		equals: allTurnsResults
 ]
