@@ -16,8 +16,8 @@ BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
-	
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+
 	self assert: (board isMemberOf: Board)
 ]
 
@@ -32,7 +32,7 @@ BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ship:= Spaceship withName: 'ship' andPosition: 7.
 	
 	
@@ -50,7 +50,7 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ship:= Spaceship withName: 'ship' andPosition: 6.
 
 	
@@ -68,7 +68,7 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 			                    Square.
 			                    Square.
 			                    Square }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -95,7 +95,7 @@ BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 			                    Square.
 			                    Square.
 			                    Square }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -122,7 +122,7 @@ BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 5).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -149,7 +149,7 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 			                    Square.
 			                    Moonwalk .
 			                    Square }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 4).
 		         (Spaceship withName: '2' andPosition: 4).
@@ -178,7 +178,7 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 			                    Square.
 			                    AtomicBomb.
 			                    Square }.
-	board := preloadedSquares createBoardWithParsecs: 1000.
+	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 4).
 		         (Spaceship withName: '2' andPosition: 4).

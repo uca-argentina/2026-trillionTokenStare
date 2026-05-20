@@ -10,12 +10,6 @@ Class {
 }
 
 { #category : 'accessing' }
-Square class >> defaultAt: squareNumber [
-
-	^ self new initializeAt: squareNumber
-]
-
-{ #category : 'accessing' }
 Square class >> defaultAt: squareNumber andParsecs: parsecs [
 
 	^ self new initializeAt: squareNumber andParsecs: parsecs
