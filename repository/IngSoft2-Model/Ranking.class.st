@@ -7,16 +7,34 @@ Class {
 
 { #category : 'as yet unclassified' }
 Ranking >> bestThreeSpaceShips: aSpaceShipCollection [
-   | aSpaceShipRankedDictionary aSpaceShipCollectionCopy first second third |
+   | aSpaceShipRankedDictionary aSpaceShipCollectionCopy currentMax first second third |
+
    aSpaceShipCollectionCopy := aSpaceShipCollection copy.
+
+   currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
+   first := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
+   aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
+
+   currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
+   second := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
+   aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
+
+   currentMax := (aSpaceShipCollectionCopy collect: [ :ship | ship position ]) max.
+   third := aSpaceShipCollectionCopy select: [ :ship | ship position = currentMax ].
+   aSpaceShipCollectionCopy removeAllSuchThat: [ :ship | ship position = currentMax ].
+
+   "aSpaceShipCollectionCopy := aSpaceShipCollection copy.
    aSpaceShipCollectionCopy := aSpaceShipCollectionCopy sorted: [ :shipA :shipB | shipA position > shipB position ].
+   aSpaceShipCollectionGroup := aSpaceShipCollectionCopy groupByRuns: [ :shipA :shipB | shipA position = shipB position ].
    first :=aSpaceShipCollectionCopy at: 1.
    second :=aSpaceShipCollectionCopy at: 2.
    third :=aSpaceShipCollectionCopy at: 3.
+"
    aSpaceShipRankedDictionary := Dictionary new.
    aSpaceShipRankedDictionary 
       at: #first put: first;   
       at: #second put: second ;
       at: #third put: third.
 	^ aSpaceShipRankedDictionary
+	
 ]
