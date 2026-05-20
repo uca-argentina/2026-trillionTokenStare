@@ -284,12 +284,9 @@ BoardTest >> test012BoardDistribution [
 
 	| distributedSquarePool numberOfSquares distributedBoard |
 	numberOfSquares := 100.
-	distributedSquarePool := SquarePool defaultProbabilitiesWithSize:
-		                         numberOfSquares.
+	distributedSquarePool := SquarePool defaultProbabilitiesWithSize: numberOfSquares.
 
-	distributedBoard := distributedSquarePool
-		                    createBoardWithLaps: 1
-		                    andParsecs: 1000.
+	distributedBoard := distributedSquarePool createBoardWithLaps: 1 andParsecs: 1000.
 
 	self assert: distributedBoard size equals: 100.
 	self assert: (distributedBoard occurrencesOf: Square) equals: 40.
