@@ -278,3 +278,24 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 		assert: (self positionOf: #( '1' '2' ) in: game afterTurns: 6)
 		equals: allTurnsResults
 ]
+
+{ #category : 'tests' }
+BoardTest >> test012BoardDistribution [
+
+	| distributedSquarePool numberOfSquares distributedBoard |
+	numberOfSquares := 100.
+	distributedSquarePool := SquarePool defaultProbabilitiesWithSize:
+		                         numberOfSquares.
+
+	distributedBoard := distributedSquarePool
+		                    createBoardWithLaps: 1
+		                    andParsecs: 1000.
+
+	self assert: distributedBoard size equals: 100.
+	self assert: (distributedBoard occurrencesOf: Square) equals: 40.
+	self assert: (distributedBoard occurrencesOf: Wormhole) equals: 20.
+	self assert: (distributedBoard occurrencesOf: Speedup) equals: 20.
+	self assert: (distributedBoard occurrencesOf: Moonwalk) equals: 10.
+	self assert: (distributedBoard occurrencesOf: HyperJump) equals: 8.
+	self assert: (distributedBoard occurrencesOf: AtomicBomb ) equals: 2
+]

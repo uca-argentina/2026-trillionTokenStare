@@ -6,6 +6,28 @@ Class {
 }
 
 { #category : 'tests' }
+GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
+
+	| ships dicePool laps parsecs squares numberOfShips |
+	parsecs := 999.
+	numberOfShips := 2.
+	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: 1) }.
+	laps := 1.
+	squares := 1.
+	self
+		should: [
+			Game
+				withSquares: squares
+				andShips: ships
+				andDicePool: dicePool
+				andLaps: laps
+				andParsecs: parsecs ]
+		raiseErrorWithMessageText: 'The board must have at least 1000 parsecs.'
+]
+
+{ #category : 'tests' }
 GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
 	| ships dicePool laps parsecs squares numberOfShips |
@@ -14,7 +36,7 @@ GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: 1) }.
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 
 	squares := 0.
 	self
@@ -35,7 +57,7 @@ GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: 1) }.
 	laps := 1.
-	parsecs := 1.
+	parsecs := 1000.
 	squares := 10.
 
 	numberOfShips := 1.

@@ -12,7 +12,7 @@ Class {
 { #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares [
 
-	^ self new initializeWithSquares: aListOfSquares
+	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
 
 { #category : 'as yet unclassified' }
@@ -34,16 +34,6 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 ]
 
 { #category : 'initialization' }
-Board >> initializeWithSquares: aListOfSquares [
-
-	squares := aListOfSquares.
-	laps := 1.
-	squares do: [ :square | 
-      (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
-   ]
-]
-
-{ #category : 'initialization' }
 Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
@@ -51,6 +41,16 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 	squares do: [ :square | 
       (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
    ]
+]
+
+{ #category : 'accessing' }
+Board >> occurrencesOf: aSquareType [
+
+	| count |
+	count := 0.
+	squares do: [ :each |
+		each = aSquareType ifTrue: [ count := count + 1 ] ].
+	^ count
 ]
 
 { #category : 'as yet unclassified' }

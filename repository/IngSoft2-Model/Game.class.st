@@ -94,16 +94,16 @@ Game >> initializeUsingSquarePool: aSqarePool andShips: listOfShips andDicePool:
 { #category : 'accessing' }
 Game >> locateSpaceShip: aSpaceShip [
 
-	| aSpaceShipPosition fixedPosition currentLap |
+	| aSpaceShipPosition positionOnBoard currentLap |
 	aSpaceShipPosition := ships
 		                      detect: [ :ship | ship name = aSpaceShip ]
 		                      ifNone: [
 		                      self error:
 			                      'The selected SpaceShip is not on the board' ].
-	fixedPosition := ((aSpaceShipPosition position - 1) % board size) + 1.
+	positionOnBoard := ((aSpaceShipPosition position - 1) % board size) + 1.
 	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
 	
-	^ { #position -> fixedPosition . #lap -> currentLap } asDictionary
+	^ { #position -> positionOnBoard . #lap -> currentLap } asDictionary
 ]
 
 { #category : 'behaviour' }

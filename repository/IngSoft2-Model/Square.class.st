@@ -15,6 +15,12 @@ Square class >> defaultAt: squareNumber andParsecs: parsecs [
 	^ self new initializeAt: squareNumber andParsecs: parsecs
 ]
 
+{ #category : 'comparing' }
+Square >> = aSquareClass [
+
+	^ aSquareClass = self class
+]
+
 { #category : 'as yet unclassified' }
 Square >> applyEffectTo: aShip [
 
