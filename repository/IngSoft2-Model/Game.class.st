@@ -90,7 +90,7 @@ Game >> initializeUsingSquarePool: aSqarePool andShips: numberOfShips andDicePoo
 
 	board := aSqarePool createBoardWithLaps: numberOfLaps andParsecs: parsecs.
 	ships := OrderedCollection new.
-	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i) ].
+	1 to: numberOfShips do: [ :i | ships add: (Spaceship withName: i asString) ].
 	dicePool := aDicePool.
 	playersTurn := 1
 ]

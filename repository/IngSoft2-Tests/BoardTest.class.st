@@ -224,7 +224,6 @@ BoardTest >> test010HyperJumpSquare [
 BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 
 	| preloadedSquares game preloadedDicePool parsecs allTurnsResults |
-	"Busco inicializar las tiles antes, con cualquier cosa preseteada de una, y que el build solo me añada la posicion"
 	parsecs := 2000.
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
 			                    Square.
@@ -238,27 +237,23 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquaresToCompletion [
 			                    Moonwalk.
 			                    AtomicBomb }.
 	preloadedDicePool := DicePool withDice:
-		                     { (DiceMock
-			                      withSides: 10
-			                      andSequence: #( 1 4 3 4 1 4 1 7 2 3 )) }.
+		                     { (DiceMock withSides: 10 andSequence: #( 1 3 )) }.
 	game := Game
-		        withSquares: preloadedSquares
+		        withSquarePool: preloadedSquares
 		        andShips: 2
 		        andDicePool: preloadedDicePool
+		        andLaps: 1
 		        andParsecs: parsecs.
 
-	"jugar varias tiradas (armarlas) y guardarlas en una lista"
 
 	allTurnsResults := {
-		                   { '1'. 5 }.
-		                   { '2'. 2 }.
-		                   { '1'. 8 }.
-		                   { '2'. 7 }.
-		                   { '1'. 9 }.
-		                   { '2'. 8 }.
-		                   { '1'. 8 }.
-		                   { '2'. 3 }.
-		                   { '1'. 11 } }.
-		
-	self assert: (self runGameSimulationOn: game ) equals: allTurnsResults 
+		                   {
+			                   { '1'. 6 }.
+			                   { '2'. 1 } }.
+		                   {
+			                   { '1'. 6 }.
+			                   { '2'. 4 } } }.
+	self
+		assert: (self positionOf: #( '1' '2' ) in: game afterTurns: 2)
+		equals: allTurnsResults
 ]

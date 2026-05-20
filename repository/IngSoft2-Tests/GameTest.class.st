@@ -1,9 +1,6 @@
 Class {
 	#name : 'GameTest',
 	#superclass : 'ProjectTestCase',
-	#instVars : [
-		'listOfShips'
-	],
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
@@ -105,7 +102,7 @@ GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVal
 { #category : 'tests' }
 GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
 	laps := 1.
 	parsecs := 1.
 	squares := 10.
@@ -120,17 +117,16 @@ GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 		        andParsecs: parsecs.
 
 	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 1).
-		               (Spaceship withName: 2 andPosition: 1) }
-		               asOrderedCollection.
+		               { '1'. 1 }.
+		               { '2'. 1 } }.
 
-	self assert: game ships equals: listOfShips
+	self assert: (self positionOf: #('1' '2') in: game ) equals: listOfShips
 ]
 
 { #category : 'tests' }
 GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
 	laps := 1.
 	parsecs := 1.
 	squares := 10.
@@ -145,19 +141,19 @@ GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 		        andParsecs: parsecs.
 
 	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 5).
-		               (Spaceship withName: 2 andPosition: 1) }
-		               asOrderedCollection.
+		               { '1'. 5 }.
+		               { '2'. 1 } }.
 
 	game nextTurn.
-
-	self assert: game ships equals: listOfShips
+	self
+		assert: (self positionOf: #( '1' '2' ) in: game)
+		equals: listOfShips
 ]
 
 { #category : 'tests' }
 GameTest >> test007SecondPlayerThrowsDice [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
 	laps := 1.
 	parsecs := 1.
 	squares := 10.
@@ -172,23 +168,18 @@ GameTest >> test007SecondPlayerThrowsDice [
 		        andParsecs: parsecs.
 
 	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 5).
-		               (Spaceship withName: 2 andPosition: 3) }
-		               asOrderedCollection.
-
+		               { '1'. 5 }.
+		               { '2'. 3 } }.
 
 	game nextTurn.
 	game nextTurn.
-
-
-
-	self assert: game ships equals: listOfShips
+	self assert: (self positionOf: #( '1' '2' ) in: game) equals: listOfShips 
 ]
 
 { #category : 'tests' }
 GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 
-	| preloadedDice dicePool game laps parsecs squares ships |
+	| preloadedDice dicePool game laps parsecs squares ships listOfShips|
 	laps := 1.
 	parsecs := 1.
 	squares := 10.
@@ -202,17 +193,16 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 		        andLaps: laps
 		        andParsecs: parsecs.
 
-
-
-	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 9).
-		               (Spaceship withName: 2 andPosition: 5) }
-		               asOrderedCollection.
-
-
 	1 to: 4 do: [ :turn | game nextTurn ].
 
-	self assert: game ships equals: listOfShips
+	listOfShips := {
+		               { '1'. 9 }.
+		               { '2'. 5 } }.
+
+	
+	self
+		assert: (self positionOf: #( '1' '2' ) in: game)
+		equals: listOfShips
 ]
 
 { #category : 'tests' }
@@ -300,7 +290,7 @@ GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 
 	1 to: 5 do: [ :turn | game nextTurn ].
 
-	self assert: game whoWon equals: (Spaceship withName: 1 andPosition: 13)
+	self assert: game whoWon equals: (Spaceship withName: '1' andPosition: 13)
 ]
 
 { #category : 'tests' }
@@ -322,7 +312,7 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
 	1 to: 10 do: [ :turn | game nextTurn ].
 
-	self assert: (game locateSpaceShip: 1) equals: 4
+	self assert: (game locateSpaceShip: '1') equals: 4
 ]
 
 { #category : 'tests' }
@@ -390,7 +380,7 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 
 	5 timesRepeat: [ game nextTurn ].
 
-	self assert: (game locateSpaceShip: 1) equals: 1
+	self assert: (game locateSpaceShip: '1') equals: 1
 ]
 
 { #category : 'tests' }
@@ -439,7 +429,7 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
 	15 timesRepeat: [ game nextTurn ].
 
-	lapsExpected := #( #( 1 4 ) #( 2 3 ) #( 3 2 ) #( 4 1 ) )
+	lapsExpected := #( #( '1' 4 ) #( '2' 3 ) #( '3' 2 ) #( '4' 1 ) )
 		                asOrderedCollection.
 
 	lapsExpected do: [ :lap |
@@ -455,25 +445,37 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 	laps := 4.
 	parsecs := 1.
 	ships := 3.
-	preloadedDice := DiceMock withSides: 4 andSequence: #(1 2 3 4).
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	game := Game
-		        withSquarePool: (MockSquarePool withPreloadedSquares: { Square. AtomicBomb. Square. Square. Square })
+		        withSquarePool: (MockSquarePool withPreloadedSquares: {
+					         Square.
+					         AtomicBomb.
+					         Square.
+					         Square.
+					         Square })
 		        andShips: ships
 		        andDicePool: dicePool
 		        andLaps: laps
 		        andParsecs: parsecs.
 
 	9 timesRepeat: [ game nextTurn ].
-	
-	lapsExpected := #( (1 2) (2 2) (3 2) ) asOrderedCollection .	
-   positionsExpected := #( (1 6) (2 11) (3 6) ) asOrderedCollection .
 
-   lapsExpected do: [:lap |
-	   self assert: ((game currentSpaceShipLap: lap first) == lap second ) equals: true.
-   ]."
-   positionsExpected do: [:position |
-	   self assert: ((game locateSpaceShip: position first) == position second ) equals: true.
-   ]"
+	lapsExpected := {
+		                { '1'. 2 }.
+		                { '2'. 2 }.
+		                { '3'. 2 } }.
 
+	positionsExpected := {
+		                     { '1'. 1 }.
+		                     { '2'. 1 }.
+		                     { '3'. 1 } }.
+
+	self
+		assert: (self positionOf: #( '1' '2' '3' ) in: game)
+		equals: positionsExpected.
+	lapsExpected do: [ :lap |
+			self
+				assert: (game currentSpaceShipLap: lap first) == lap second
+				equals: true ]
 ]
