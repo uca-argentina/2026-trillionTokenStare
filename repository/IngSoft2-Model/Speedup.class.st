@@ -15,7 +15,7 @@ Speedup class >> defaultAt: squareNumber andParsecs: parsecs [
 ]
 
 { #category : 'as yet unclassified' }
-Speedup >> applyEffectTo: aShip [
+Speedup >> applyEffectTo: aShip in: aBoard [
 
 	^ aShip position = number
 		  ifTrue: [ ^ aShip movesForward: 4. ]

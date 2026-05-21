@@ -15,15 +15,10 @@ AtomicBomb class >> defaultAt: squareNumber andParsecs: parsecs [
 ]
 
 { #category : 'as yet unclassified' }
-AtomicBomb >> applyEffectTo: aShip [
+AtomicBomb >> applyEffectTo: aShip in: aBoard [
 	| currentLap newAbsolutePosition |
-	currentLap := (aShip position - 1) // boardSize.
-	newAbsolutePosition := (currentLap * boardSize) + 1.
+	currentLap := (aShip position - 1) // aBoard size.
+	newAbsolutePosition := (currentLap * aBoard size) + 1.
 	
 	^ aShip movesToPosition: newAbsolutePosition
-]
-
-{ #category : 'setter' }
-AtomicBomb >> boardSize: aSize [
-   boardSize := aSize
 ]

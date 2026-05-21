@@ -200,10 +200,6 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 BoardTest >> test010HyperJumpSquare [
 
 	| square ship1 ship2 ship3 updatedPositions finalPositions |
-	square := HyperJump
-		          defaultAt: 2
-		          andJumps: { 150 . 100 }
-		          andParsecs: 50.
 	ship1 := Spaceship withName: 1 andPosition: 2.
 	ship2 := Spaceship withName: 2 andPosition: 2.
 	ship3 := Spaceship withName: 3 andPosition: 2.
@@ -211,11 +207,15 @@ BoardTest >> test010HyperJumpSquare [
 		                  (Spaceship withName: 1 andPosition: 5).
 		                  (Spaceship withName: 2 andPosition: 4).
 		                  (Spaceship withName: 3 andPosition: 5) }.
+	square := HyperJump
+                defaultAt: 2
+                andJumps: { 150 . 100 }
+                andParsecs: 50.
 
 	updatedPositions := {
-		                    (square applyEffectTo: ship1).
-		                    (square applyEffectTo: ship2).
-		                    (square applyEffectTo: ship3) }.
+		                    (square applyEffectTo: ship1 in: nil).
+		                    (square applyEffectTo: ship2 in: nil).
+		                    (square applyEffectTo: ship3 in: nil) }.
 
 	self assert: updatedPositions equals: finalPositions
 ]
@@ -335,25 +335,26 @@ BoardTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsU
                 andJumps: { 100. 300. 200 }
                 andParsecs: 50.
         ship := Spaceship withName: 1 andPosition: 2.
-        updatedShip := hyperJump applyEffectTo: ship.
+        updatedShip := hyperJump applyEffectTo: ship in: nil.
         self assert: updatedShip position equals: 8
 ]
 
 { #category : 'tests' }
 BoardTest >> test016HyperJumpResetsToHighestAfterExhaustingTheJumpList [
-        | hyperJump ship1 ship2 ship3 ship4 results |
-        hyperJump := HyperJump
-                defaultAt: 2
-                andJumps: { 300. 200. 100 }
-                andParsecs: 50.
-        ship1 := Spaceship withName: 1 andPosition: 2.
-        ship2 := Spaceship withName: 2 andPosition: 2.
-        ship3 := Spaceship withName: 3 andPosition: 2.
-        ship4 := Spaceship withName: 4 andPosition: 2.
-        results := {
-                (hyperJump applyEffectTo: ship1) position.
-                (hyperJump applyEffectTo: ship2) position.
-                (hyperJump applyEffectTo: ship3) position.
-                (hyperJump applyEffectTo: ship4) position }.
-        self assert: results equals: #( 8 6 4 8 )
+
+	| hyperJump ship1 ship2 ship3 ship4 results |
+	hyperJump := HyperJump
+		             defaultAt: 2
+		             andJumps: { 300. 200. 100 }
+		             andParsecs: 50.
+	ship1 := Spaceship withName: 1 andPosition: 2.
+	ship2 := Spaceship withName: 2 andPosition: 2.
+	ship3 := Spaceship withName: 3 andPosition: 2.
+	ship4 := Spaceship withName: 4 andPosition: 2.
+	results := {
+		           (hyperJump applyEffectTo: ship1 in: nil) position.
+		           (hyperJump applyEffectTo: ship2 in: nil) position.
+		           (hyperJump applyEffectTo: ship3 in: nil) position.
+		           (hyperJump applyEffectTo: ship4 in: nil) position }.
+	self assert: results equals: #( 8 6 4 8 )
 ]

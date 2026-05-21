@@ -30,7 +30,7 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 	fixedPosition := (certainShip position - 1) % (squares size) + 1 .
 	square := (squares at: fixedPosition ).
 
-	^ listOfShips collect: [ :ship | square applyEffectTo: ship ]
+	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
 ]
 
 { #category : 'initialization' }
@@ -38,9 +38,7 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
 	laps := aNumberOfLaps.
-	squares do: [ :square | 
-      (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
-   ]
+	
 ]
 
 { #category : 'accessing' }

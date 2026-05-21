@@ -25,15 +25,14 @@ HyperJump class >> defaultAt: squareNumber andParsecs: parsecs [
 ]
 
 { #category : 'as yet unclassified' }
-HyperJump >> applyEffectTo: aShip [
+HyperJump >> applyEffectTo: aShip in: aBoard [
 
 	| currentJump |
-	^ aShip position = number
-		  ifTrue: [
-			  currentJump :=  ((jumps at: jumpIndex) / parsecs ) floor.
-			  jumpIndex := jumpIndex % jumps size + 1.
-			  ^ aShip movesForward: currentJump ]
-		  ifFalse: [ ^ aShip ]
+	aShip position = number ifTrue: [
+			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
+			jumpIndex := jumpIndex % jumps size + 1.
+			^ aShip movesForward: currentJump ].
+	^ aShip
 ]
 
 { #category : 'accessing' }
