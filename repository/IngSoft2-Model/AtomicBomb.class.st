@@ -14,12 +14,6 @@ AtomicBomb class >> defaultAt: squareNumber andParsecs: parsecs [
 	^ self new initializeAt: squareNumber andParsecs: parsecs
 ]
 
-{ #category : 'accessing' }
-AtomicBomb class >> withSquareNumber: squareNumber [
-
-	^ self new initializeAt: squareNumber 
-]
-
 { #category : 'as yet unclassified' }
 AtomicBomb >> applyEffectTo: aShip [
 	| currentLap newAbsolutePosition |
@@ -32,12 +26,4 @@ AtomicBomb >> applyEffectTo: aShip [
 { #category : 'setter' }
 AtomicBomb >> boardSize: aSize [
    boardSize := aSize
-]
-
-{ #category : 'as yet unclassified' }
-AtomicBomb >> initializeAt: squareNumber [
-	number := squareNumber.
-	boardSize := 0
-
-	
 ]
