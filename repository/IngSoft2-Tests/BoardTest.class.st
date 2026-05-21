@@ -223,8 +223,7 @@ BoardTest >> test010HyperJumpSquare [
 { #category : 'tests' }
 BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 
-	| preloadedSquares game preloadedDicePool parsecs allTurnsResults numberOfShips ships |
-	parsecs := 2000.
+	| preloadedSquares game preloadedDicePool allTurnsResults |
 	preloadedSquares := MockSquarePool withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
@@ -242,40 +241,35 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 		                     { (DiceMock
 			                      withSides: 10
 			                      andSequence: #( 1 3 2 3 7 7 )) }.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [ :number |
-		         Spaceship withName: number asString ].
 
-
-	game := Game
-		        withSquarePool: preloadedSquares
-		        andShips: ships
-		        andDicePool: preloadedDicePool
-		        andLaps: 1
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquarepool: preloadedSquares;
+		        withDicepool: preloadedDicePool;
+		        withParsecs: 2000;
+		        build.
 
 
 	allTurnsResults := {
 		                   {
-			                   { '1'. 6 }.
-			                   { '2'. 1 } }.
+			                   { 'one'. 6 }.
+			                   { 'two'. 1 } }.
 		                   {
-			                   { '1'. 6 }.
-			                   { '2'. 4 } }.
+			                   { 'one'. 6 }.
+			                   { 'two'. 4 } }.
 		                   {
-			                   { '1'. 4 }.
-			                   { '2'. 4 } }.
+			                   { 'one'. 4 }.
+			                   { 'two'. 4 } }.
 		                   {
-			                   { '1'. 4 }.
-			                   { '2'. 8 } }.
+			                   { 'one'. 4 }.
+			                   { 'two'. 8 } }.
 		                   {
-			                   { '1'. 11 }.
-			                   { '2'. 5 } }.
+			                   { 'one'. 11 }.
+			                   { 'two'. 5 } }.
 		                   {
-			                   { '1'. 1 }.
-			                   { '2'. 1 } } }.
+			                   { 'one'. 1 }.
+			                   { 'two'. 1 } } }.
 	self
-		assert: (self positionOf: #( '1' '2' ) in: game afterTurns: 6)
+		assert: (self positionOf: #( 'one' 'two' ) in: game afterTurns: 6)
 		equals: allTurnsResults
 ]
 
@@ -299,27 +293,29 @@ BoardTest >> test012BoardDistribution [
 
 { #category : 'tests' }
 BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEffectIsNotTriggered [
-        | preloadedSquares game preloadedDicePool ships positionsExpected |
-        preloadedSquares := MockSquarePool withPreloadedSquares: {
-                Square. Speedup. Square. Square. Square. Wormhole }.
-        preloadedDicePool := DicePool withDice:
-                { (DiceMock withSides: 4 andSequence: #( 1 )) }.
-        ships := {
-                (Spaceship withName: '1').
-                (Spaceship withName: '2') }.
-        game := Game
-                withSquarePool: preloadedSquares
-                andShips: ships
-                andDicePool: preloadedDicePool
-                andLaps: 1
-                andParsecs: 1000.
-        game nextTurn.
-        positionsExpected := {
-                { '1'. 6 }.
-                { '2'. 1 } }.
-        self
-                assert: (self positionOf: #( '1' '2' ) in: game)
-                equals: positionsExpected
+
+	| preloadedSquares game preloadedDicePool positionsExpected |
+	preloadedSquares := MockSquarePool withPreloadedSquares: {
+			                    Square.
+			                    Speedup.
+			                    Square.
+			                    Square.
+			                    Square.
+			                    Wormhole }.
+	preloadedDicePool := DicePool withDice:
+		                     { (DiceMock withSides: 4 andSequence: #( 1 )) }.
+	game := GameBuilder new
+		        withSquarepool: preloadedSquares;
+		        withDicepool: preloadedDicePool;
+		        build.
+
+	game nextTurn.
+	positionsExpected := {
+		                     { 'one'. 6 }.
+		                     { 'two'. 1 } }.
+	self
+		assert: (self positionOf: #( 'one' 'two' ) in: game)
+		equals: positionsExpected
 ]
 
 { #category : 'tests' }

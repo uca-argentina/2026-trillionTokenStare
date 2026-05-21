@@ -8,23 +8,10 @@ Class {
 { #category : 'tests' }
 GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
 
-	| ships dicePool laps parsecs squares numberOfShips |
-	parsecs := 999.
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: 1) }.
-	laps := 1.
-	squares := 1.
+	| gameBuilder |
+	gameBuilder := GameBuilder new withParsecs: 999.
 	self
-		should: [
-				Game
-					withSquares: squares
-					andShips: ships
-					andDicePool: dicePool
-					andLaps: laps
-					andParsecs: parsecs ]
+		should: [ gameBuilder build ]
 		raiseErrorWithMessageText:
 		'The board must have at least 1000 parsecs.'
 ]
@@ -32,149 +19,78 @@ GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
 { #category : 'tests' }
 GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
-	| ships dicePool laps parsecs squares numberOfShips |
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: 1) }.
-	laps := 1.
-	parsecs := 1000.
-
-	squares := 0.
+	| gameBuilder |
+	gameBuilder := GameBuilder new withSquares: 0.
 	self
-		should: [
-			Game
-				withSquares: squares
-				andShips: ships
-				andDicePool: dicePool
-				andLaps: laps
-				andParsecs: parsecs ]
+		should: [ gameBuilder build ]
 		raiseErrorWithMessageText: 'The board must have at least 1 square.'
 ]
 
 { #category : 'tests' }
 GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 
-	| ships dicePool laps parsecs squares numberOfShips |
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: 1) }.
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
-
-	ships := { (Spaceship withName: 'one' asString) }.
+	| gameBuilder |
+	gameBuilder := GameBuilder new withSpaceships:
+		               { (Spaceship withName: 'nave') }.
 
 	self
-		should: [
-				Game
-					withSquares: squares
-					andShips: ships
-					andDicePool: dicePool
-					andLaps: laps
-					andParsecs: parsecs ]
+		should: [ gameBuilder build ]
 		raiseErrorWithMessageText: 'The board must have at least 2 ships.'
 ]
 
 { #category : 'tests' }
 GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 
-	| preloadedDice dicePool laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
-
+	| preloadedDice dicePool gameBuilder |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 
-
-	self
-		shouldnt: [
-				Game
-					withSquares: squares
-					andShips: ships
-					andDicePool: dicePool
-					andLaps: laps
-					andParsecs: parsecs ]
-		raise: Error
+	gameBuilder := GameBuilder new withDicepool: dicePool.
+	self shouldnt: [ gameBuilder build ] raise: Error
 ]
 
 { #category : 'tests' }
 GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
 
-	| preloadedDice1 preloadedDice2 dicePool laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
-	
+	| preloadedDice1 preloadedDice2 dicePool gameBuilder |
 	preloadedDice1 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	preloadedDice2 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
 	dicePool := DicePool withDice: {
 			            preloadedDice1.
 			            preloadedDice2 }.
-	self
-		shouldnt: [
-			Game
-				withSquares: squares
-				andShips: ships
-				andDicePool: dicePool
-				andLaps: laps
-				andParsecs: parsecs ]
-		raise: Error
+
+	gameBuilder := GameBuilder new withDicepool: dicePool.
+	self shouldnt: [ gameBuilder build ] raise: Error
 ]
 
 { #category : 'tests' }
 GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
+	| game ships listOfShips |
 	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+		         (Spaceship withName: 'firstShip' asString).
+		         (Spaceship withName: 'secondShip' asString) }.
+	game := (GameBuilder new withSpaceships: ships) build.
+
 
 	listOfShips := {
-		               { 'one'. 1 }.
-		               { 'two'. 1 } }.
+		               { 'firstShip'. 1 }.
+		               { 'secondShip'. 1 } }.
 
 	self
-		assert: (self positionOf: #( 'one' 'two' ) in: game)
+		assert: (self positionOf: #( 'firstShip' 'secondShip' ) in: game)
 		equals: listOfShips
 ]
 
 { #category : 'tests' }
 GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
+	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        build.
 
 	listOfShips := {
 		               { 'one'. 5 }.
@@ -189,21 +105,12 @@ GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 { #category : 'tests' }
 GameTest >> test007SecondPlayerThrowsDice [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
+	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        build.
 
 	listOfShips := {
 		               { 'one'. 5 }.
@@ -211,27 +118,20 @@ GameTest >> test007SecondPlayerThrowsDice [
 
 	game nextTurn.
 	game nextTurn.
-	self assert: (self positionOf: #( 'one' 'two' ) in: game) equals: listOfShips 
+	self
+		assert: (self positionOf: #( 'one' 'two' ) in: game)
+		equals: listOfShips
 ]
 
 { #category : 'tests' }
 GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 
-	| preloadedDice dicePool game laps parsecs squares ships listOfShips numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 10.
-	ships := {
-		         (Spaceship withName: 'one' asString).
-		         (Spaceship withName: 'two' asString) }.
+	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        build.
 
 	1 to: 4 do: [ :turn | game nextTurn ].
 
@@ -239,7 +139,7 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 		               { 'one'. 9 }.
 		               { 'two'. 5 } }.
 
-	
+
 	self
 		assert: (self positionOf: #( 'one' 'two' ) in: game)
 		equals: listOfShips
@@ -248,135 +148,99 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 { #category : 'tests' }
 GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 9.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 9;
+		        withDicepool: dicePool;
+		        build.
 
 	1 to: 5 do: [ :turn | game nextTurn ].
 
-	self assert: game gameIsOver 
+	self assert: game gameIsOver
 ]
 
 { #category : 'tests' }
 GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 9.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 9;
+		        withDicepool: dicePool;
+		        build.
 
 	1 to: 5 do: [ :turn | game nextTurn ].
 
-	self should: [ game nextTurn ] raiseErrorWithMessageText: 'Game is over, no more turns allowed'
+	self
+		should: [ game nextTurn ]
+		raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
 
 { #category : 'tests' }
 GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 9.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 9;
+		        withDicepool: dicePool;
+		        build.
 
-	
-
-	self should: [game whoWon] raiseErrorWithMessageText: 'Game isnt over'
+	self
+		should: [ game whoWon ]
+		raiseErrorWithMessageText: 'Game isnt over'
 ]
 
 { #category : 'tests' }
 GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 9.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 9;
+		        withDicepool: dicePool;
+		        build.
 
 	1 to: 5 do: [ :turn | game nextTurn ].
 
-	self assert: game whoWon equals: (Spaceship withName: '1' andPosition: 13)
+	self
+		assert: game whoWon
+		equals: (Spaceship withName: 'one' andPosition: 13)
 ]
 
 { #category : 'tests' }
 GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 11.
-	numberOfShips := 4.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 11;
+		        withDicepool: dicePool;
+		        withSpaceships:
+			        ((1 to: 4) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        build.
 
 	1 to: 10 do: [ :turn | game nextTurn ].
 
-	self assert: ((game locateSpaceShip: '1' ) at:#position) equals: 4
+	self assert: ((game locateSpaceShip: '1') at: #position) equals: 4
 ]
 
 { #category : 'tests' }
-GameTest >> test014whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion [
+GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 1.
-	parsecs := 1000.
-	squares := 11.
-	numberOfShips := 4.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	| game |
+	game := GameBuilder new
+		        withSpaceships:
+			        ((1 to: 4) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        build.
 
 	self
 		should: [ game locateSpaceShip: '5' ]
@@ -387,20 +251,12 @@ GameTest >> test014whenYouAskForAnUnrealSpaceShipPositionThenYouDontGetPosotion 
 { #category : 'tests' }
 GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 2.
-	parsecs := 1000.
-	squares := 10.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withLaps: 2;
+		        build.
 
 	5 timesRepeat: [ game nextTurn ].
 
@@ -411,43 +267,30 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 { #category : 'tests' }
 GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 2.
-	parsecs := 1000.
-	squares := 11.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 11;
+		        withLaps: 2;
+		        withDicepool: dicePool;
+		        build.
 
 	5 timesRepeat: [ game nextTurn ].
 
-	self assert: ((game locateSpaceShip: '1') at: #position) equals: 1
+	self assert: ((game locateSpaceShip: 'one') at: #position) equals: 1
 ]
 
 { #category : 'tests' }
 GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
 
-	| preloadedDice dicePool game laps parsecs squares ships numberOfShips |
-	laps := 2.
-	parsecs := 1000.
-	squares := 10.
-	numberOfShips := 2.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withLaps: 2;
+		        withDicepool: dicePool;
+		        build.
 
 	11 timesRepeat: [ game nextTurn ].
 	"""
@@ -462,25 +305,21 @@ GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreT
 { #category : 'tests' }
 GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
-	| preloadedDice dicePool game laps parsecs squares ships lapsExpected numberOfShips |
-	laps := 4.
-	parsecs := 1000.
-	squares := 5.
-	numberOfShips := 4.
-	ships := (1 to: numberOfShips) collect: [ :number |
-		         Spaceship withName: number asString ].
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 1 ).
+	| preloadedDice dicePool game lapsExpected |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 1 3 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquares: squares
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	game := GameBuilder new
+		        withSquares: 5;
+		        withLaps: 4;
+		        withDicepool: dicePool;
+		        withSpaceships:
+			        ((1 to: 4) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        build.
 
 	15 timesRepeat: [ game nextTurn ].
 
-	lapsExpected := #( #( '1' 4 ) #( '2' 3 ) #( '3' 2 ) #( '4' 1 ) )
+	lapsExpected := #( #( '1' 4 ) #( '2' 2 ) #( '3' 1 ) #( '4' 2 ) )
 		                asOrderedCollection.
 
 	lapsExpected do: [ :lap |
@@ -492,24 +331,24 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 { #category : 'tests' }
 GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
 
-	| preloadedDice dicePool game laps parsecs ships lapsExpected positionsExpected numberOfShips |
-	laps := 4.
-	parsecs := 1000.
-	numberOfShips := 3.
-	ships := (1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)].
+	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	game := Game
-		        withSquarePool: (MockSquarePool withPreloadedSquares: {
-					         Square.
-					         AtomicBomb.
-					         Square.
-					         Square.
-					         Square })
-		        andShips: ships
-		        andDicePool: dicePool
-		        andLaps: laps
-		        andParsecs: parsecs.
+	mockSquarePool := MockSquarePool withPreloadedSquares: {
+			                  Square.
+			                  AtomicBomb.
+			                  Square.
+			                  Square.
+			                  Square }.
+	game := GameBuilder new
+		        withLaps: 4;
+		        withSpaceships:
+			        ((1 to: 3) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        withDicepool: dicePool;
+		        withSquarepool: mockSquarePool;
+		        build.
+
 
 	9 timesRepeat: [ game nextTurn ].
 
@@ -528,30 +367,30 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 		equals: positionsExpected.
 	lapsExpected do: [ :lap |
 			self
-				assert: ((game locateSpaceShip: lap first) at: #lap) == lap second
-				equals: true ]
+				assert: ((game locateSpaceShip: lap first) at: #lap)
+				identicalTo: lap second ]
 ]
 
 { #category : 'tests' }
 GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
-        | preloadedDice dicePool game ships ranking namesAt |
-        ships := {
-                (Spaceship withName: '1').
-                (Spaceship withName: '2').
-                (Spaceship withName: '3') }.
-        preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).
-        dicePool := DicePool withDice: { preloadedDice }.
-        game := Game
-                withSquares: 10
-                andShips: ships
-                andDicePool: dicePool
-                andLaps: 1
-                andParsecs: 1000.
-        3 timesRepeat: [ game nextTurn ].
-        ranking := game ranking.
-        namesAt := [ :rank |
-                ((ranking at: rank) collect: [ :ship | ship name ]) asArray ].
-        self assert: (namesAt value: #first) equals: #( '1' ).
-        self assert: (namesAt value: #second) equals: #( '2' ).
-        self assert: (namesAt value: #third) equals: #( '3' )
+
+	| preloadedDice dicePool game ranking namesAt |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := GameBuilder new
+		        withSpaceships:
+			        ((1 to: 3) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        withDicepool: dicePool;
+		        build.
+
+	3 timesRepeat: [ game nextTurn ].
+
+	ranking := game ranking.
+	namesAt := [ :rank |
+	           ((ranking at: rank) collect: [ :ship | ship name ])
+		           asArray ].
+	self assert: (namesAt value: #first) equals: #( '1' ).
+	self assert: (namesAt value: #second) equals: #( '2' ).
+	self assert: (namesAt value: #third) equals: #( '3' )
 ]
