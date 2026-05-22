@@ -11,14 +11,6 @@ Class {
 	#package : 'IngSoft2-Tests'
 }
 
-{ #category : 'as yet unclassified' }
-MockBoardBuilder class >> withPreloadedSquares: listOfPreloadedEffects [
-
-^self new initializeWith: listOfPreloadedEffects
-
-
-]
-
 { #category : 'initialization' }
 MockBoardBuilder >> build [
 
@@ -33,19 +25,6 @@ MockBoardBuilder >> build [
 ]
 
 { #category : 'initialization' }
-MockBoardBuilder >> createBoardWithLaps: numberOfLaps andParsecs: parsecs [
-
-	| parsecsPerSquare |
-	parsecsPerSquare := parsecs / preloadedEffects size.
-
-	^ Board
-		  withSquares:
-			  (preloadedEffects withIndexCollect: [ :effect :index |
-				   effect defaultAt: index andParsecs: parsecsPerSquare ])
-		  andLaps: numberOfLaps
-]
-
-{ #category : 'initialization' }
 MockBoardBuilder >> initialize [
 
 	super initialize.
@@ -53,14 +32,6 @@ MockBoardBuilder >> initialize [
 	numberOfSquares := preloadedEffects size.
 	laps := 1.
 	parsecs := 1000
-]
-
-{ #category : 'initialization' }
-MockBoardBuilder >> initializeWith: aListOfPreloadedEffects [
-
-	preloadedEffects := aListOfPreloadedEffects.
-	numberOfSquares := aListOfPreloadedEffects size.
-	
 ]
 
 { #category : 'initialization' }
@@ -74,24 +45,27 @@ MockBoardBuilder >> withEffects: aListOfPreloadedEffects [
 
 	preloadedEffects := aListOfPreloadedEffects.
 	numberOfSquares := aListOfPreloadedEffects size.
-	
+	^ self
 ]
 
 { #category : 'initialization' }
 MockBoardBuilder >> withLaps: _laps [
 
-	laps := _laps 
+	laps := _laps .
+	^ self
 ]
 
 { #category : 'initialization' }
 MockBoardBuilder >> withParsecs: _parsecs [
 
-	parsecs := _parsecs
+	parsecs := _parsecs.
+	^ self
 ]
 
 { #category : 'initialization' }
 MockBoardBuilder >> withSquares: _numberOfSquares [
 
 	preloadedEffects := (1 to: _numberOfSquares) collect: [ :i | Square ].
-	numberOfSquares := _numberOfSquares
+	numberOfSquares := _numberOfSquares.
+	^ self
 ]

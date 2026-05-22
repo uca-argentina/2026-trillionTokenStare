@@ -334,7 +334,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	mockSquarePool := MockBoardBuilder withPreloadedSquares: {
+	mockSquarePool := MockBoardBuilder new withEffects: {
 			                  Square.
 			                  AtomicBomb.
 			                  Square.
@@ -346,7 +346,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 			        ((1 to: 3) collect: [ :number |
 					         Spaceship withName: number asString ]);
 		        withDicepool: dicePool;
-		        withSquarepool: mockSquarePool;
+		        withBoardBuilder: mockSquarePool;
 		        build.
 
 

@@ -83,10 +83,11 @@ Game >> gameIsOver [
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingSquarePool: aSqarePool andShips: listOfShips andDicePool: aDicePool andLaps: numberOfLaps andParsecs: parsecs [
+Game >> initializeUsingSquarePool: aBoardBuilder andShips: listOfShips andDicePool: aDicePool andLaps: numberOfLaps andParsecs: parsecs [
 
-	board := aSqarePool createBoardWithLaps: numberOfLaps andParsecs: parsecs.
-	ships := listOfShips."(1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)]."
+	board := (aBoardBuilder withLaps: numberOfLaps; withParsecs: parsecs)
+		         build.
+	ships := listOfShips. "(1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)]."
 	dicePool := aDicePool.
 	playersTurn := 1
 ]

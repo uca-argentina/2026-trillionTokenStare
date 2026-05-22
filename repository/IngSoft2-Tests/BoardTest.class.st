@@ -8,15 +8,9 @@ Class {
 { #category : 'tests' }
 BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 
-	| preloadedSquares board |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
-			                    Square.
-			                    Speedup.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Wormhole }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+	| mockBoard board |
+	mockBoard := MockBoardBuilder new.
+	board := mockBoard build.
 
 	self assert: (board isMemberOf: Board)
 ]
@@ -25,17 +19,11 @@ BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 
 	| preloadedSquares board ship |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
-			                    Square.
-			                    Speedup.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Wormhole }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
-	ship:= Spaceship withName: 'ship' andPosition: 7.
-	
-	
+	preloadedSquares := MockBoardBuilder new.
+	board := preloadedSquares build.
+	ship := Spaceship withName: 'ship' andPosition: 11.
+
+
 	self deny: (board shipInsideBoard: ship)
 ]
 
@@ -43,17 +31,11 @@ BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 
 	| preloadedSquares board ship |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
-			                    Square.
-			                    Speedup.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Wormhole }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
-	ship:= Spaceship withName: 'ship' andPosition: 6.
+	preloadedSquares := MockBoardBuilder new.
+	board := preloadedSquares build.
+	ship := Spaceship withName: 'ship' andPosition: 10.
 
-	
+
 	self assert: (board shipInsideBoard: ship)
 ]
 
@@ -61,14 +43,8 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square.
-			                    Square }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+	preloadedSquares := MockBoardBuilder new.
+	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -88,14 +64,14 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square.
 			                    Speedup.
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Square }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -108,21 +84,21 @@ BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions 
+	self assert: updatedShips equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Wormhole }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 5).
 		         (Spaceship withName: '2' andPosition: 3) }.
@@ -135,21 +111,21 @@ BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions 
+	self assert: updatedShips equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Moonwalk .
 			                    Square }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 4).
 		         (Spaceship withName: '2' andPosition: 4).
@@ -171,14 +147,14 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square.
 			                    Square.
 			                    Square.
 			                    Square.
 			                    AtomicBomb.
 			                    Square }.
-	board := preloadedSquares createBoardWithLaps: 1 andParsecs: 1000.
+	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 4).
 		         (Spaceship withName: '2' andPosition: 4).
@@ -223,8 +199,8 @@ BoardTest >> test010HyperJumpSquare [
 { #category : 'tests' }
 BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 
-	| preloadedSquares game preloadedDicePool allTurnsResults |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
+	| mockBoardBuilder game preloadedDicePool allTurnsResults |
+	mockBoardBuilder := MockBoardBuilder new withEffects: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -243,7 +219,7 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 			                      andSequence: #( 1 3 2 3 7 7 )) }.
 
 	game := GameBuilder new
-		        withSquarepool: preloadedSquares;
+		        withBoardBuilder: mockBoardBuilder;
 		        withDicepool: preloadedDicePool;
 		        withParsecs: 2000;
 		        build.
@@ -276,11 +252,13 @@ BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 { #category : 'tests' }
 BoardTest >> test012BoardDistribution [
 
-	| distributedSquarePool numberOfSquares distributedBoard |
+	| numberOfSquares distributedBoard |
 	numberOfSquares := 100.
-	distributedSquarePool := BoardBuilder defaultProbabilitiesWithSize: numberOfSquares.
 
-	distributedBoard := distributedSquarePool createBoardWithLaps: 1 andParsecs: 1000.
+
+	distributedBoard := BoardBuilder new
+		                    withSquares: numberOfSquares;
+		                    build.
 
 	self assert: distributedBoard size equals: 100.
 	self assert: (distributedBoard occurrencesOf: Square) equals: 40.
@@ -288,14 +266,14 @@ BoardTest >> test012BoardDistribution [
 	self assert: (distributedBoard occurrencesOf: Speedup) equals: 20.
 	self assert: (distributedBoard occurrencesOf: Moonwalk) equals: 10.
 	self assert: (distributedBoard occurrencesOf: HyperJump) equals: 8.
-	self assert: (distributedBoard occurrencesOf: AtomicBomb ) equals: 2
+	self assert: (distributedBoard occurrencesOf: AtomicBomb) equals: 2
 ]
 
 { #category : 'tests' }
 BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEffectIsNotTriggered [
 
 	| preloadedSquares game preloadedDicePool positionsExpected |
-	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -305,7 +283,7 @@ BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEf
 	preloadedDicePool := DicePool withDice:
 		                     { (DiceMock withSides: 4 andSequence: #( 1 )) }.
 	game := GameBuilder new
-		        withSquarepool: preloadedSquares;
+		        withBoardBuilder: preloadedSquares;
 		        withDicepool: preloadedDicePool;
 		        build.
 
