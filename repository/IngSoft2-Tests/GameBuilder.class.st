@@ -29,7 +29,7 @@ GameBuilder >> initialize [
 	super initialize.
 	laps := 1.
 	parsecs := 1000.
-	squarePool := MockSquarePool withPreloadedSquares:
+	squarePool := MockBoardBuilder withPreloadedSquares:
 		              ((1 to: 10) collect: [ :i | Square ]).
 	dicePool := DicePool withDice: { (Dice withSides: 4) }.
 	ships := {
@@ -75,7 +75,7 @@ GameBuilder >> withSquarepool: _squarePool [
 { #category : 'as yet unclassified' }
 GameBuilder >> withSquares: _squareAmmount [
 
-	squarePool := MockSquarePool withPreloadedSquares:
+	squarePool := MockBoardBuilder withPreloadedSquares:
 		              ((1 to: _squareAmmount) collect: [ :i | Square ]).
 	^ self
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'SquarePool',
+	#name : 'BoardBuilder',
 	#superclass : 'Object',
 	#instVars : [
 		'numberOfSquares',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-SquarePool class >> defaultProbabilitiesWithSize: size [
+BoardBuilder class >> defaultProbabilitiesWithSize: size [
 
 	| probabilities |
 	probabilities := {
@@ -25,7 +25,7 @@ SquarePool class >> defaultProbabilitiesWithSize: size [
 ]
 
 { #category : 'initialization' }
-SquarePool >> createBoardWithLaps: numberOfLaps andParsecs: parsecs [
+BoardBuilder >> createBoardWithLaps: numberOfLaps andParsecs: parsecs [
         | parsecsPerSquare bagOfEffects squares |
         parsecsPerSquare := parsecs / numberOfSquares.
         bagOfEffects := OrderedCollection
@@ -43,14 +43,14 @@ SquarePool >> createBoardWithLaps: numberOfLaps andParsecs: parsecs [
 ]
 
 { #category : 'initialization' }
-SquarePool >> initializeWithSize: size andProbabilities: _probabilities [
+BoardBuilder >> initializeWithSize: size andProbabilities: _probabilities [
 
 	numberOfSquares := size.
 	probabilities := _probabilities 
 ]
 
 { #category : 'initialization' }
-SquarePool >> numberOfSquares [
+BoardBuilder >> numberOfSquares [
 
 	^ numberOfSquares
 ]

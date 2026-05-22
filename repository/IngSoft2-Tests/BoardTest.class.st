@@ -9,7 +9,7 @@ Class {
 BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 
 	| preloadedSquares board |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -25,7 +25,7 @@ BoardTest >> test001SquarePoolCreatesABoardWhenAskedTo [
 BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 
 	| preloadedSquares board ship |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -43,7 +43,7 @@ BoardTest >> test002BoardConfirmsASpaceshipIsOutside [
 BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 
 	| preloadedSquares board ship |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -61,7 +61,7 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Square.
 			                    Square.
@@ -88,7 +88,7 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -115,7 +115,7 @@ BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Square.
 			                    Square.
@@ -142,7 +142,7 @@ BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Square.
 			                    Square.
@@ -171,7 +171,7 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
 	| preloadedSquares board ships updatedShips finalPositions |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Square.
 			                    Square.
@@ -224,7 +224,7 @@ BoardTest >> test010HyperJumpSquare [
 BoardTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 
 	| preloadedSquares game preloadedDicePool allTurnsResults |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
 			                    Square.
@@ -278,7 +278,7 @@ BoardTest >> test012BoardDistribution [
 
 	| distributedSquarePool numberOfSquares distributedBoard |
 	numberOfSquares := 100.
-	distributedSquarePool := SquarePool defaultProbabilitiesWithSize: numberOfSquares.
+	distributedSquarePool := BoardBuilder defaultProbabilitiesWithSize: numberOfSquares.
 
 	distributedBoard := distributedSquarePool createBoardWithLaps: 1 andParsecs: 1000.
 
@@ -295,7 +295,7 @@ BoardTest >> test012BoardDistribution [
 BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEffectIsNotTriggered [
 
 	| preloadedSquares game preloadedDicePool positionsExpected |
-	preloadedSquares := MockSquarePool withPreloadedSquares: {
+	preloadedSquares := MockBoardBuilder withPreloadedSquares: {
 			                    Square.
 			                    Speedup.
 			                    Square.

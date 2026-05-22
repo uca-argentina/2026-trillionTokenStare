@@ -67,7 +67,7 @@ Game class >> withSquares: numberOfSquares andShips: listOfShips andDicePool: aD
 	self validateParsecs: parsecs.
 
 	^ self new
-		  initializeUsingSquarePool: (MockSquarePool withPreloadedSquares:
+		  initializeUsingSquarePool: (MockBoardBuilder withPreloadedSquares:
 				   (OrderedCollection new: numberOfSquares withAll: Square))
 		  andShips: listOfShips
 		  andDicePool: aDicePool

@@ -334,7 +334,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
-	mockSquarePool := MockSquarePool withPreloadedSquares: {
+	mockSquarePool := MockBoardBuilder withPreloadedSquares: {
 			                  Square.
 			                  AtomicBomb.
 			                  Square.
