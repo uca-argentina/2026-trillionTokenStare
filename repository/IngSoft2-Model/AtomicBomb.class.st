@@ -17,5 +17,5 @@ AtomicBomb class >> defaultAt: squareNumber andParsecs: parsecs [
 { #category : 'as yet unclassified' }
 AtomicBomb >> applyEffectTo: aShip in: aBoard [
 
-	^ aShip movesToPosition: 1 InBoardOfSize: aBoard size
+	^ aShip movesToPosition: 1 InBoard: aBoard
 ]

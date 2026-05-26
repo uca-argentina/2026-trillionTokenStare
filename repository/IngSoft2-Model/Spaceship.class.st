@@ -36,6 +36,12 @@ Spaceship >> initializeWithName: aName andPosition: aPosition [
 	position := aPosition .
 ]
 
+{ #category : 'accessing' }
+Spaceship >> lapsInBoard: board [
+
+	^ position - 1 // board size + 1
+]
+
 { #category : 'changing state' }
 Spaceship >> movesBackward: anAmmountOfSquares [
 
@@ -61,11 +67,11 @@ Spaceship >> movesToPosition: aPosition [
 ]
 
 { #category : 'changing state' }
-Spaceship >> movesToPosition: aPosition InBoardOfSize: boardSize [
+Spaceship >> movesToPosition: aPosition InBoard: board [
 
 	| currentLap newAbsolutePosition |
-	currentLap := position - 1 // boardSize.
-	newAbsolutePosition := currentLap * boardSize + aPosition.
+	currentLap := position - 1 // board size.
+	newAbsolutePosition := currentLap * board size + aPosition.
 
 	^ self class withName: name andPosition: newAbsolutePosition
 ]
@@ -78,4 +84,9 @@ Spaceship >> name [
 { #category : 'accessing' }
 Spaceship >> position [
 	^ position.
+]
+
+{ #category : 'accessing' }
+Spaceship >> positionInBoard: board [
+	^ position - 1 % board size + 1
 ]

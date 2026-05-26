@@ -86,39 +86,33 @@ Game >> initializeUsingSquarePool: aBoardBuilder andShips: listOfShips andDicePo
 ]
 
 { #category : 'accessing' }
-Game >> locateSpaceShip: aSpaceShip [
+Game >> locateSpaceShip: aSpaceshipName [
 
-	| aSpaceShipPosition positionOnBoard currentLap |
-	aSpaceShipPosition := ships
-		                      detect: [ :ship | ship name = aSpaceShip ]
-		                      ifNone: [
-		                      self error:
-			                      'This spaceship does not exist' ].
-	positionOnBoard := ((aSpaceShipPosition position - 1) % board size) + 1.
-	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
-	
-	^ { #position -> positionOnBoard . #lap -> currentLap } asDictionary
+	| aSpaceShip |
+	aSpaceShip := ships
+		              detect: [ :ship | ship name = aSpaceshipName ]
+		              ifNone: [ self error: 'This spaceship does not exist' ].
+
+
+	^ {
+		  (#name -> aSpaceShip name).
+		  (#position -> (aSpaceShip positionInBoard: board )).
+		  (#lap -> (aSpaceShip lapsInBoard: board )) } asDictionary
 ]
 
 { #category : 'accessing' }
 Game >> locateWinningSpaceShip [
 
-	| positionOnBoard currentLap winningSpaceShip |.
-
+	| winningSpaceShip |
 	winningSpaceShip := ships
 		                    detect: [ :aShip |
 		                    (board shipInsideBoard: aShip) not ]
-		                    ifNone: [
-		                    self error:
-			                    'Game is not over' ].
-
-	positionOnBoard := winningSpaceShip position - 1 % board size + 1.
-	currentLap := winningSpaceShip position - 1 // board size + 1.
-
+		                    ifNone: [ self error: 'Game is not over' ].
 	^ {
 		  (#name -> winningSpaceShip name).
-		  (#position -> positionOnBoard).
-		  (#lap -> currentLap) } asDictionary
+		  (#position -> (winningSpaceShip positionInBoard: board )).
+		  (#lap -> (winningSpaceShip lapsInBoard: board )) }
+		  asDictionary
 ]
 
 { #category : 'behaviour' }

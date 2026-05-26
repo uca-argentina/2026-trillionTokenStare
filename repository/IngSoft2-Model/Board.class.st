@@ -71,8 +71,7 @@ Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
 { #category : 'as yet unclassified' }
 Board >> shipInsideBoard: aShip [
 
-	^ aShip position <= (laps * squares size)
-	
+	^ (aShip lapsInBoard: self ) <= laps
 ]
 
 { #category : 'accessing' }
