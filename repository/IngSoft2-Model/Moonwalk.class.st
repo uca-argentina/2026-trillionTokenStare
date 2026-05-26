@@ -34,7 +34,7 @@ Moonwalk class >> randomAt: squareNumber andParsecs: parsecs [
 { #category : 'as yet unclassified' }
 Moonwalk >> applyEffectTo: aShip in: aBoard [
 
-	aShip position = number ifTrue: [ ^ aShip ].
+	(aShip positionInBoard: aBoard) = number ifTrue: [ ^ aShip ].
 	^ aShip movesBackward: backtrack
 ]
 

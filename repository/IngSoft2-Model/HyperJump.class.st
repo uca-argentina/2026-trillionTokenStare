@@ -28,7 +28,7 @@ HyperJump class >> defaultAt: squareNumber andParsecs: parsecs [
 HyperJump >> applyEffectTo: aShip in: aBoard [
 
 	| currentJump |
-	aShip position = number ifTrue: [
+	(aShip positionInBoard: aBoard) = number ifTrue: [
 			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
 			jumpIndex := jumpIndex % jumps size + 1.
 			^ aShip movesForward: currentJump ].
