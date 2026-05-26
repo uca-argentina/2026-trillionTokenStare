@@ -14,7 +14,6 @@ Wormhole class >> defaultAt: squareNumber andParsecs: parsecs [
 { #category : 'as yet unclassified' }
 Wormhole >> applyEffectTo: aShip in: aBoard [
 
-	^ aShip position = number
-		  ifTrue: [ ^ aShip movesBackward: 4. ]
-		  ifFalse: [ ^ aShip ].
+	aShip position = number ifTrue: [ ^ aShip movesBackward: 4 ].
+	^ aShip
 ]

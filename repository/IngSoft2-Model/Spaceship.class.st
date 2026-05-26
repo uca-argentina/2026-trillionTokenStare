@@ -60,6 +60,16 @@ Spaceship >> movesToPosition: aPosition [
 	^ self class withName: name andPosition: aPosition
 ]
 
+{ #category : 'changing state' }
+Spaceship >> movesToPosition: aPosition InBoardOfSize: boardSize [
+
+	| currentLap newAbsolutePosition |
+	currentLap := position - 1 // boardSize.
+	newAbsolutePosition := currentLap * boardSize + aPosition.
+
+	^ self class withName: name andPosition: newAbsolutePosition
+]
+
 { #category : 'accessing' }
 Spaceship >> name [
 	^ name.
