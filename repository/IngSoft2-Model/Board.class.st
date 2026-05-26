@@ -26,9 +26,8 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 { #category : 'as yet unclassified' }
 Board >> applyEffectsOf: certainShip to: listOfShips [
 
-	| square fixedPosition|
-	fixedPosition := (certainShip position - 1) % (squares size) + 1 .
-	square := (squares at: fixedPosition ).
+	| square |
+	square := squares at: (certainShip positionInBoard: self).
 
 	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
 ]
