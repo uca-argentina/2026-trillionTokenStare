@@ -75,13 +75,6 @@ Game class >> withSquares: numberOfSquares andShips: listOfShips andDicePool: aD
 		  andParsecs: parsecs
 ]
 
-{ #category : 'boolean' }
-Game >> gameIsOver [
-
-	
-	^ ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ].
-]
-
 { #category : 'initialization' }
 Game >> initializeUsingSquarePool: aBoardBuilder andShips: listOfShips andDicePool: aDicePool andLaps: numberOfLaps andParsecs: parsecs [
 
@@ -100,11 +93,32 @@ Game >> locateSpaceShip: aSpaceShip [
 		                      detect: [ :ship | ship name = aSpaceShip ]
 		                      ifNone: [
 		                      self error:
-			                      'The selected SpaceShip is not on the board' ].
+			                      'This spaceship does not exist' ].
 	positionOnBoard := ((aSpaceShipPosition position - 1) % board size) + 1.
 	currentLap := ((aSpaceShipPosition position - 1) // board size) + 1.
 	
 	^ { #position -> positionOnBoard . #lap -> currentLap } asDictionary
+]
+
+{ #category : 'accessing' }
+Game >> locateWinningSpaceShip [
+
+	| positionOnBoard currentLap winningSpaceShip |.
+
+	winningSpaceShip := ships
+		                    detect: [ :aShip |
+		                    (board shipInsideBoard: aShip) not ]
+		                    ifNone: [
+		                    self error:
+			                    'Game is not over' ].
+
+	positionOnBoard := winningSpaceShip position - 1 % board size + 1.
+	currentLap := winningSpaceShip position - 1 // board size + 1.
+
+	^ {
+		  (#name -> winningSpaceShip name).
+		  (#position -> positionOnBoard).
+		  (#lap -> currentLap) } asDictionary
 ]
 
 { #category : 'behaviour' }
@@ -127,14 +141,6 @@ Game >> ranking [
 { #category : 'validation' }
 Game >> validateIfGameIsOver [
 
-	self gameIsOver ifTrue: [
-		self error: 'Game is over, no more turns allowed' ]
-]
-
-{ #category : 'accessing' }
-Game >> whoWon [
-
-	self gameIsOver ifFalse: [ self error: 'Game isnt over' ].
-
-	^ ships detect: [ :aShip | (board shipInsideBoard: aShip) not ]
+	(ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ])
+		ifTrue: [ self error: 'Game is over, no more turns allowed' ]
 ]

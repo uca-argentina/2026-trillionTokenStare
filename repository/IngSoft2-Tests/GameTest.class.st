@@ -158,7 +158,10 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 
 	1 to: 5 do: [ :turn | game nextTurn ].
 
-	self assert: game gameIsOver
+	self assert: game locateWinningSpaceShip equals: {
+			(#name -> 'one').
+			(#position -> 4).
+			(#lap -> 2) } asDictionary
 ]
 
 { #category : 'tests' }
@@ -191,26 +194,8 @@ GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 		        build.
 
 	self
-		should: [ game whoWon ]
-		raiseErrorWithMessageText: 'Game isnt over'
-]
-
-{ #category : 'tests' }
-GameTest >> test012whenTheGameIsOverThenYouCanAskForTheWinningShip [
-
-	| preloadedDice dicePool game |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	game := GameBuilder new
-		        withSquares: 9;
-		        withDicepool: dicePool;
-		        build.
-
-	1 to: 5 do: [ :turn | game nextTurn ].
-
-	self
-		assert: game whoWon
-		equals: (Spaceship withName: 'one' andPosition: 13)
+		should: [ game locateWinningSpaceShip ]
+		raiseErrorWithMessageText: 'Game is not over'
 ]
 
 { #category : 'tests' }
@@ -245,7 +230,7 @@ GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion
 	self
 		should: [ game locateSpaceShip: '5' ]
 		raiseErrorWithMessageText:
-		'The selected SpaceShip is not on the board'
+		'This spaceship does not exist'
 ]
 
 { #category : 'tests' }
@@ -260,8 +245,9 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 
 	5 timesRepeat: [ game nextTurn ].
 
-
-	self deny: game gameIsOver
+	self
+		should: [ game locateWinningSpaceShip ]
+		raiseErrorWithMessageText: 'Game is not over'
 ]
 
 { #category : 'tests' }
