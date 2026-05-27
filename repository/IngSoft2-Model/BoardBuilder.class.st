@@ -30,7 +30,7 @@ BoardBuilder >> build [
 	squares := bagOfEffects shuffle.
 	^ Board
 		  withSquares: (squares withIndexCollect: [ :effect :index |
-				   effect atPosition: index; withParsecs: parsecsPerSquare ])
+				   effect deepCopy atPosition: index; withParsecs: parsecsPerSquare ])
 		  andLaps: laps
 ]
 

@@ -438,3 +438,31 @@ BoardTest >> test016HyperJumpLoopsWhenTItRunsOurOfJumps [
 		(self positionOf: #( 'one' 'two' 'three' 'four' ) in: game afterTurns: 4)
 		equals: finalPositions
 ]
+
+{ #category : 'tests' }
+BoardTest >> test017WhenSquaresAreNotContiguousToEachOtherInItsPositionThenIsNotValid [
+
+	| squareList |
+	squareList := {
+		              (Square new atPosition: 1).
+		              (Square new atPosition: 3) }.
+
+
+	self
+		should: [ Board withSquares: squareList andLaps: 1 ]
+		raiseErrorWithMessageText:
+		'Squares are required to be contiguous to each other'
+]
+
+{ #category : 'tests' }
+BoardTest >> test018WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
+
+	| squareList |
+	squareList := {
+		              (Square new atPosition: 3).
+		              (Square new atPosition: 4) }.
+
+	self
+		should: [ Board withSquares: squareList andLaps: 1 ]
+		raiseErrorWithMessageText: 'First square position must be 1'
+]

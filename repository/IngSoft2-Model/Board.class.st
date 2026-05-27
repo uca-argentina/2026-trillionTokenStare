@@ -10,6 +10,20 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+Board class >> validateContiguousSquares: aListOfSquares [
+
+	aListOfSquares overlappingPairsDo: [ :current :next |
+		current position + 1 = next position ifFalse: [ self error: 'Squares are required to be contiguous to each other' ] ]
+]
+
+{ #category : 'as yet unclassified' }
+Board class >> validateFirstSquareIsAtPositionOne: aListOfSquares [
+
+	aListOfSquares first position = 1 ifFalse: [
+		self error: 'First square position must be 1' ]
+]
+
+{ #category : 'as yet unclassified' }
 Board class >> validateNumberOfSquares: numberOfSquares [
 
 	numberOfSquares < 1 ifTrue: [
@@ -20,7 +34,8 @@ Board class >> validateNumberOfSquares: numberOfSquares [
 Board class >> withSquares: aListOfSquares [
 
 	self validateNumberOfSquares: aListOfSquares size.
-	"self validateParsecs: parsecs."
+	self validateContiguousSquares: aListOfSquares.
+	self validateFirstSquareIsAtPositionOne: aListOfSquares .
 
 	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
@@ -29,7 +44,8 @@ Board class >> withSquares: aListOfSquares [
 Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	self validateNumberOfSquares: aListOfSquares size.
-	"self validateParsecs: parsecs."
+	self validateContiguousSquares: aListOfSquares.
+	self validateFirstSquareIsAtPositionOne: aListOfSquares .
 
 	^ self new
 		  initializeWithSquares: aListOfSquares

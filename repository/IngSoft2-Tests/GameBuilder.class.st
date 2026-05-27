@@ -31,7 +31,7 @@ GameBuilder >> initialize [
 	laps := 1.
 	parsecs := 1000.
 	boardBuilder := MockBoardBuilder new withEffects:
-		              ((1 to: 10) collect: [ :i | Square ]).
+		              ((1 to: 10) collect: [ :i | Square new]).
 	dicePool := DicePool withDice: { (Dice withSides: 4) }.
 	ships := {
 		         (Spaceship withName: 'one').
@@ -77,6 +77,6 @@ GameBuilder >> withSpaceships: _spaceships [
 GameBuilder >> withSquares: _squareAmmount [
 
 	boardBuilder := MockBoardBuilder new withEffects:
-		                ((1 to: _squareAmmount) collect: [ :i | Square ]).
+		                ((1 to: _squareAmmount) collect: [ :i | Square new]).
 	^ self
 ]

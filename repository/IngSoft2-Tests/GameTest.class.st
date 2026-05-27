@@ -321,11 +321,11 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
 	dicePool := DicePool withDice: { preloadedDice }.
 	mockSquarePool := MockBoardBuilder new withEffects: {
-			                  Square.
-			                  AtomicBomb.
-			                  Square.
-			                  Square.
-			                  Square }.
+			                  Square new.
+			                  AtomicBomb new.
+			                  Square new.
+			                  Square new.
+			                  Square new}.
 	game := GameBuilder new
 		        withLaps: 4;
 		        withSpaceships:

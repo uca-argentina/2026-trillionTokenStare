@@ -13,17 +13,6 @@ Class {
 
 { #category : 'initialization' }
 MockBoardBuilder >> build [
-
-"cada square funciona como un builder
-
-cuando se pasa se debe inicializar con new. el new es default
-
-at: le añade la posicion
-parsecs: le añade los parsecs
-
-cualquier otra cosa se añade de la misma forma
-"
-
 	| parsecsPerSquare |
 	self validateParsecs.
 	self validateSquares.
