@@ -40,42 +40,30 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [ "andLaps: numberOfLaps andParsecs: parsecs"
+Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [ 
 
 	board := aBoard.
-	ships := listOfShips. "(1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)]."
+	ships := listOfShips. 
 	dicePool := aDicePool.
 	playersTurn := 1
 ]
 
 { #category : 'accessing' }
-Game >> locateSpaceShip: aSpaceshipName [
+Game >> locateSpaceShip: nameOfSpaceship [
 
-	| aSpaceShip |
-	aSpaceShip := ships
-		              detect: [ :ship | ship name = aSpaceshipName ]
-		              ifNone: [ self error: 'This spaceship does not exist' ].
-
-
-	^ {
-		  (#name -> aSpaceShip name).
-		  (#position -> (aSpaceShip positionInBoard: board )).
-		  (#lap -> (aSpaceShip lapsInBoard: board )) } asDictionary
+	^ (ships
+		   detect: [ :ship | ship name = nameOfSpaceship ]
+		   ifNone: [ self error: 'This spaceship does not exist' ])
+		  asDictionaryInBoard: board
 ]
 
 { #category : 'accessing' }
 Game >> locateWinningSpaceShip [
 
-	| winningSpaceShip |
-	winningSpaceShip := ships
-		                    detect: [ :aShip |
-		                    (board shipInsideBoard: aShip) not ]
-		                    ifNone: [ self error: 'Game is not over' ].
-	^ {
-		  (#name -> winningSpaceShip name).
-		  (#position -> (winningSpaceShip positionInBoard: board )).
-		  (#lap -> (winningSpaceShip lapsInBoard: board )) }
-		  asDictionary
+	^ (ships
+		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
+		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
+		  board
 ]
 
 { #category : 'behaviour' }

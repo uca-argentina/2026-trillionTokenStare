@@ -39,6 +39,15 @@ Spaceship >> = unaNave [
     ^ self name = unaNave name and: [ self position = unaNave position ]
 ]
 
+{ #category : 'accessing' }
+Spaceship >> asDictionaryInBoard: aBoard [
+
+	^ {
+		  (#name -> name).
+		  (#position -> (self positionInBoard: aBoard)).
+		  (#lap -> (self lapsInBoard: aBoard)) } asDictionary
+]
+
 { #category : 'initialization' }
 Spaceship >> initializeWithName: aName andPosition: aPosition [
 	super initialize .
@@ -68,12 +77,6 @@ Spaceship >> movesForward: anAmmountOfSquares [
 	newPosition := position + anAmmountOfSquares.
 
 	^ self class withName: name andPosition: newPosition
-]
-
-{ #category : 'changing state' }
-Spaceship >> movesToPosition: aPosition [
-
-	^ self class withName: name andPosition: aPosition
 ]
 
 { #category : 'changing state' }

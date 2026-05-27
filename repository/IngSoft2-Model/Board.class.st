@@ -67,17 +67,11 @@ Board >> occurrencesOf: aSquareType [
 Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
 
 	| shipInTurn updatedShips |
-	"Copy of the original ship positions"
+	shipInTurn := (allShips at: playerTurn) movesForward: diceValue.
 	updatedShips := allShips deepCopy.
-	"Ship in turn moves according to dice roll"
-	shipInTurn := allShips at: playerTurn.
-	shipInTurn := shipInTurn movesForward: diceValue.
-	"New position is stored at the intermediate ship positions collection"
 	updatedShips at: playerTurn put: shipInTurn.
-	"apply effects on all the ships according to where the ship in turn landed"
-	(self shipInsideBoard: shipInTurn) ifTrue: [
-		updatedShips := self applyEffectsOf: shipInTurn to: updatedShips ].
-	^ updatedShips
+
+	^ self applyEffectsOf: shipInTurn to: updatedShips
 ]
 
 { #category : 'as yet unclassified' }
