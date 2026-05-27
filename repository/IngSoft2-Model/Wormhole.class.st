@@ -5,12 +5,6 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'accessing' }
-Wormhole class >> defaultAt: squareNumber andParsecs: parsecs [
-
-	^ self new initializeAt: squareNumber andParsecs: parsecs 
-]
-
 { #category : 'as yet unclassified' }
 Wormhole >> applyEffectTo: aShip in: aBoard [
 

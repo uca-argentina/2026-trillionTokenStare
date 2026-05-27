@@ -82,9 +82,9 @@ Spaceship >> movesForward: anAmmountOfSquares [
 { #category : 'changing state' }
 Spaceship >> movesToPosition: aPosition InBoard: board [
 
-	| currentLap newAbsolutePosition |
-	currentLap := position - 1 // board size.
-	newAbsolutePosition := currentLap * board size + aPosition.
+	| currentNumericalLap newAbsolutePosition |
+	currentNumericalLap := (self lapsInBoard: board) - 1.
+	newAbsolutePosition := currentNumericalLap * board size + aPosition.
 
 	^ self class withName: name andPosition: newAbsolutePosition
 ]

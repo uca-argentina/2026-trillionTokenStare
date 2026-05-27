@@ -70,8 +70,10 @@ Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
 	shipInTurn := (allShips at: playerTurn) movesForward: diceValue.
 	updatedShips := allShips deepCopy.
 	updatedShips at: playerTurn put: shipInTurn.
+	(self shipInsideBoard: shipInTurn) ifTrue: [
+		^ self applyEffectsOf: shipInTurn to: updatedShips ].
 
-	^ self applyEffectsOf: shipInTurn to: updatedShips
+	^ updatedShips
 ]
 
 { #category : 'as yet unclassified' }

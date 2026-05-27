@@ -14,6 +14,16 @@ Class {
 { #category : 'initialization' }
 MockBoardBuilder >> build [
 
+"cada square funciona como un builder
+
+cuando se pasa se debe inicializar con new. el new es default
+
+at: le añade la posicion
+parsecs: le añade los parsecs
+
+cualquier otra cosa se añade de la misma forma
+"
+
 	| parsecsPerSquare |
 	self validateParsecs.
 	self validateSquares.
@@ -22,7 +32,7 @@ MockBoardBuilder >> build [
 	^ Board
 		  withSquares:
 			  (preloadedEffects withIndexCollect: [ :effect :index |
-				   effect defaultAt: index andParsecs: parsecsPerSquare ])
+				   effect atPosition: index; withParsecs: parsecsPerSquare ])
 		  andLaps: laps
 ]
 
@@ -30,7 +40,7 @@ MockBoardBuilder >> build [
 MockBoardBuilder >> initialize [
 
 	super initialize.
-	preloadedEffects := (1 to: 10) collect: [ :i | Square ].
+	preloadedEffects := (1 to: 10) collect: [ :i | Square new].
 	numberOfSquares := preloadedEffects size.
 	laps := 1.
 	parsecs := 1000
@@ -81,7 +91,7 @@ MockBoardBuilder >> withParsecs: _parsecs [
 { #category : 'initialization' }
 MockBoardBuilder >> withSquares: _numberOfSquares [
 
-	preloadedEffects := (1 to: _numberOfSquares) collect: [ :i | Square ].
+	preloadedEffects := (1 to: _numberOfSquares) collect: [ :i | Square new].
 	numberOfSquares := _numberOfSquares.
 	^ self
 ]

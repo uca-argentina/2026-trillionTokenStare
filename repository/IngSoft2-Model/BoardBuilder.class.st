@@ -30,7 +30,7 @@ BoardBuilder >> build [
 	squares := bagOfEffects shuffle.
 	^ Board
 		  withSquares: (squares withIndexCollect: [ :effect :index |
-				   effect randomAt: index andParsecs: parsecsPerSquare ])
+				   effect atPosition: index; withParsecs: parsecsPerSquare ])
 		  andLaps: laps
 ]
 
@@ -42,12 +42,12 @@ BoardBuilder >> initialize [
 	parsecs := 1000.
 	numberOfSquares := 10.
 	probabilities := {
-		                 (Square -> 40).
-		                 (Wormhole -> 20).
-		                 (Speedup -> 20).
-		                 (Moonwalk -> 10).
-		                 (HyperJump -> 8).
-		                 (AtomicBomb -> 2) } asDictionary
+		                 (Square new-> 40).
+		                 (Wormhole new-> 20).
+		                 (Speedup new-> 20).
+		                 (Moonwalk new-> 10).
+		                 (HyperJump new-> 8).
+		                 (AtomicBomb new-> 2) } asDictionary
 ]
 
 { #category : 'initialization' }
