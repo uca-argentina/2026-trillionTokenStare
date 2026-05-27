@@ -8,36 +8,8 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'accessing' }
-AtomicBomb class >> defaultAt: squareNumber andParsecs: parsecs [ 
-
-	^ self new initializeAt: squareNumber andParsecs: parsecs
-]
-
-{ #category : 'accessing' }
-AtomicBomb class >> withSquareNumber: squareNumber [
-
-	^ self new initializeAt: squareNumber 
-]
-
 { #category : 'as yet unclassified' }
-AtomicBomb >> applyEffectTo: aShip [
-	| currentLap newAbsolutePosition |
-	currentLap := (aShip position - 1) // boardSize.
-	newAbsolutePosition := (currentLap * boardSize) + 1.
-	
-	^ aShip movesToPosition: newAbsolutePosition
-]
+AtomicBomb >> applyEffectTo: aShip in: aBoard [
 
-{ #category : 'setter' }
-AtomicBomb >> boardSize: aSize [
-   boardSize := aSize
-]
-
-{ #category : 'as yet unclassified' }
-AtomicBomb >> initializeAt: squareNumber [
-	number := squareNumber.
-	boardSize := 0
-
-	
+	^ aShip movesToPosition: 1 InBoard: aBoard
 ]

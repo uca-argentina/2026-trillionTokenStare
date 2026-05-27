@@ -8,16 +8,10 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'accessing' }
-Speedup class >> defaultAt: squareNumber andParsecs: parsecs [
-
-	^ self new initializeAt: squareNumber andParsecs: parsecs 
-]
-
 { #category : 'as yet unclassified' }
-Speedup >> applyEffectTo: aShip [
+Speedup >> applyEffectTo: aShip in: aBoard [
 
-	^ aShip position = number
-		  ifTrue: [ ^ aShip movesForward: 4. ]
-		  ifFalse: [ ^ aShip ].
+	(aShip positionInBoard: aBoard) = number ifTrue: [
+		^ aShip movesForward: 4 ].
+	^ aShip
 ]

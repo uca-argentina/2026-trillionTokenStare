@@ -9,17 +9,6 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'accessing' }
-Square class >> defaultAt: squareNumber andParsecs: parsecs [
-
-	^ self new initializeAt: squareNumber andParsecs: parsecs
-]
-
-{ #category : 'accessing' }
-Square class >> randomAt: squareNumber andParsecs: parsecs [
-        ^ self defaultAt: squareNumber andParsecs: parsecs
-]
-
 { #category : 'comparing' }
 Square >> = aSquareClass [
 
@@ -27,14 +16,39 @@ Square >> = aSquareClass [
 ]
 
 { #category : 'as yet unclassified' }
-Square >> applyEffectTo: aShip [
+Square >> applyEffectTo: aShip in: aBoard [
 
 	^ aShip
 ]
 
 { #category : 'accessing' }
-Square >> initializeAt: squareNumber andParsecs: numberOfParsecs [
+Square >> atPosition: squareNumber [
 
 	number := squareNumber.
-	parsecs := numberOfParsecs
+
+	^ self
+]
+
+{ #category : 'accessing' }
+Square >> initialize [
+
+	super initialize.
+	number := 1.
+	parsecs := 1.
+	
+	^ self
+]
+
+{ #category : 'accessing' }
+Square >> position [
+
+	^ number
+]
+
+{ #category : 'accessing' }
+Square >> withParsecs: _parsecs [
+
+	parsecs := _parsecs.
+
+	^ self
 ]

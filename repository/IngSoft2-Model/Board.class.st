@@ -10,7 +10,32 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+Board class >> validateContiguousSquares: aListOfSquares [
+
+	aListOfSquares overlappingPairsDo: [ :current :next |
+		current position + 1 = next position ifFalse: [ self error: 'Squares are required to be contiguous to each other' ] ]
+]
+
+{ #category : 'as yet unclassified' }
+Board class >> validateFirstSquareIsAtPositionOne: aListOfSquares [
+
+	aListOfSquares first position = 1 ifFalse: [
+		self error: 'First square position must be 1' ]
+]
+
+{ #category : 'as yet unclassified' }
+Board class >> validateNumberOfSquares: numberOfSquares [
+
+	numberOfSquares < 1 ifTrue: [
+		self error: 'The board must have at least 1 square.' ]
+]
+
+{ #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares [
+
+	self validateNumberOfSquares: aListOfSquares size.
+	self validateContiguousSquares: aListOfSquares.
+	self validateFirstSquareIsAtPositionOne: aListOfSquares .
 
 	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
@@ -18,19 +43,22 @@ Board class >> withSquares: aListOfSquares [
 { #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 
-	^ self new 
-	    initializeWithSquares: aListOfSquares
-	    andLaps: aNumberOfLaps
+	self validateNumberOfSquares: aListOfSquares size.
+	self validateContiguousSquares: aListOfSquares.
+	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+
+	^ self new
+		  initializeWithSquares: aListOfSquares
+		  andLaps: aNumberOfLaps
 ]
 
 { #category : 'as yet unclassified' }
 Board >> applyEffectsOf: certainShip to: listOfShips [
 
-	| square fixedPosition|
-	fixedPosition := (certainShip position - 1) % (squares size) + 1 .
-	square := (squares at: fixedPosition ).
+	| square |
+	square := squares at: (certainShip positionInBoard: self).
 
-	^ listOfShips collect: [ :ship | square applyEffectTo: ship ]
+	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
 ]
 
 { #category : 'initialization' }
@@ -38,9 +66,7 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
 	laps := aNumberOfLaps.
-	squares do: [ :square | 
-      (square respondsTo: #boardSize:) ifTrue: [ square boardSize: squares size ] 
-   ]
+	
 ]
 
 { #category : 'accessing' }
@@ -57,24 +83,19 @@ Board >> occurrencesOf: aSquareType [
 Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
 
 	| shipInTurn updatedShips |
-	'Copy of the original ship positions'.
+	shipInTurn := (allShips at: playerTurn) movesForward: diceValue.
 	updatedShips := allShips deepCopy.
-	'Ship in turn moves according to dice roll'.
-	shipInTurn := allShips at: playerTurn.
-	shipInTurn := shipInTurn movesForward: diceValue.
-	'New position is stored at the intermediate ship positions collection'.
 	updatedShips at: playerTurn put: shipInTurn.
-	'apply effects on all the ships according to where the ship in turn landed'.
 	(self shipInsideBoard: shipInTurn) ifTrue: [
-		updatedShips := self applyEffectsOf: shipInTurn to: updatedShips ].
+		^ self applyEffectsOf: shipInTurn to: updatedShips ].
+
 	^ updatedShips
 ]
 
 { #category : 'as yet unclassified' }
 Board >> shipInsideBoard: aShip [
 
-	^ aShip position <= (laps * squares size)
-	
+	^ (aShip lapsInBoard: self ) <= laps
 ]
 
 { #category : 'accessing' }
