@@ -9,14 +9,24 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'as yet unclassified' }
+Spaceship class >> validateName: aName [
+
+	(aName isString) ifFalse: [
+		self error: 'Name of spaceship must be a string' ]
+]
+
 { #category : 'creation' }
 Spaceship class >> withName: aName [
+	self validateName: aName .
 	^ self new initializeWithName: aName andPosition: 1.
 ]
 
 { #category : 'creation' }
 Spaceship class >> withName: aName andPosition: aPosition [
-	^ self new initializeWithName: aName andPosition: aPosition.
+
+	self validateName: aName.
+	^ self new initializeWithName: aName andPosition: aPosition
 ]
 
 { #category : 'accessing' }

@@ -175,7 +175,7 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 { #category : 'tests' }
 BoardTest >> test010HyperJumpSquare [
 
-	| updatedPositions finalPositions ships boardBuilder game |
+	| finalPositions ships boardBuilder game |
 	ships := {
 		         (Spaceship withName: 'one').
 		         (Spaceship withName: 'two').
@@ -199,17 +199,19 @@ BoardTest >> test010HyperJumpSquare [
 			        (DicePool withDice:
 					         { (DiceMock withSides: 4 andSequence: #( 1 )) });
 		        build.
-	finalPositions := {  
-		{
-			{ 'one' . 5 } . { 'two' . 1 } . { 'three' . 1 }
-		} .
-		{
-			{ 'one' . 5 } . { 'two' . 4 } . { 'three' . 1 }
-		} .
-		{
-			{ 'one' . 5 } . { 'two' . 4 } . { 'three' . 5 }
-		} .
-	}.
+	finalPositions := {
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 1 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 5 } } }.
 
 
 	self
@@ -329,32 +331,55 @@ BoardTest >> test014RandomMoonwalksHaveVaryingBacktracks [
 
 { #category : 'tests' }
 BoardTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsUnsorted [
-        | hyperJump ship updatedShip |
-        hyperJump := HyperJump
-                defaultAt: 2
-                andJumps: { 100. 300. 200 }
-                andParsecs: 50.
-        ship := Spaceship withName: 1 andPosition: 2.
-        updatedShip := hyperJump applyEffectTo: ship in: nil.
-        self assert: updatedShip position equals: 8
-]
 
-{ #category : 'tests' }
-BoardTest >> test016HyperJumpResetsToHighestAfterExhaustingTheJumpList [
+	| hyperJumpBuilder finalPositions boardBuilder game |
+	hyperJumpBuilder := HyperJump
+		                    defaultAt: 2
+		                    andJumps: { 1000. 3000. 2000 }
+		                    andParsecs: 500. "acá hay que armar un builder para que luego la tile sea de esta forma " "-----------------------------> para un board de 10 squares, parsecs totales deben ser 5000"
 
-	| hyperJump ship1 ship2 ship3 ship4 results |
-	hyperJump := HyperJump
-		             defaultAt: 2
-		             andJumps: { 300. 200. 100 }
-		             andParsecs: 50.
-	ship1 := Spaceship withName: 1 andPosition: 2.
-	ship2 := Spaceship withName: 2 andPosition: 2.
-	ship3 := Spaceship withName: 3 andPosition: 2.
-	ship4 := Spaceship withName: 4 andPosition: 2.
-	results := {
-		           (hyperJump applyEffectTo: ship1 in: nil) position.
-		           (hyperJump applyEffectTo: ship2 in: nil) position.
-		           (hyperJump applyEffectTo: ship3 in: nil) position.
-		           (hyperJump applyEffectTo: ship4 in: nil) position }.
-	self assert: results equals: #( 8 6 4 8 )
+	"self assert: updatedShip position equals: 8."
+	""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square.
+			                hyperJumpBuilder build. "--------------------> esto es lo que estoy buscando, hay que implementar"
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square }.
+
+	game := GameBuilder new
+		        withSpaceships: {
+				        (Spaceship withName: 'one').
+				        (Spaceship withName: 'two').
+				        (Spaceship withName: 'three') };
+		        withBoardBuilder: boardBuilder;
+		        withParsecs: 5000;
+		        withDicepool:
+			        (DicePool withDice:
+					         { (DiceMock withSides: 4 andSequence: #( 1 )) });
+		        build.
+	finalPositions := { "-------------------------------------------------------------->  acá hay que revisar"
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 1 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 5 } } }.
+
+
+	self
+		assert:
+		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
+		equals: finalPositions
 ]

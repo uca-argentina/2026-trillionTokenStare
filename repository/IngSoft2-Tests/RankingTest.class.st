@@ -9,10 +9,10 @@ Class {
 RankingTest >> test001youCanAskForTheRankOfTheThreeBestSpaceShipsByHowFarTheyHaveBeenMoving [
 	| listOfShips rakingExpexted ranking rankingActually|
 	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 4).
-				         (Spaceship withName: 2 andPosition: 9).
-		               (Spaceship withName: 3 andPosition: 5).
-		               (Spaceship withName: 4 andPosition: 6) } asOrderedCollection .
+		               (Spaceship withName: '1' andPosition: 4).
+				         (Spaceship withName: '2' andPosition: 9).
+		               (Spaceship withName: '3' andPosition: 5).
+		               (Spaceship withName: '4' andPosition: 6) } asOrderedCollection .
 	ranking := Ranking new.
 	
    rakingExpexted := Dictionary new.
@@ -30,13 +30,13 @@ RankingTest >> test001youCanAskForTheRankOfTheThreeBestSpaceShipsByHowFarTheyHav
 RankingTest >> test002whenMoreThanTwoSpacesShipsShareTheSamePositionAndTheyAreInTheRankingThenTheyShareThePositionInTheRankingToo [
 	| listOfShips rakingExpexted ranking rankingActually|
 	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 11).
-				         (Spaceship withName: 2 andPosition: 12).
-		               (Spaceship withName: 3 andPosition: 13).
-				         (Spaceship withName: 4 andPosition: 13).
-				         (Spaceship withName: 5 andPosition: 13).
-		               (Spaceship withName: 6 andPosition: 12).
-		               (Spaceship withName: 7 andPosition: 10) } asOrderedCollection .
+		               (Spaceship withName: '1' andPosition: 11).
+				         (Spaceship withName: '2' andPosition: 12).
+		               (Spaceship withName: '3' andPosition: 13).
+				         (Spaceship withName: '4' andPosition: 13).
+				         (Spaceship withName: '5' andPosition: 13).
+		               (Spaceship withName: '6' andPosition: 12).
+		               (Spaceship withName: '7' andPosition: 10) } asOrderedCollection .
 	ranking := Ranking new.
 	
    rakingExpexted := Dictionary new.
@@ -57,10 +57,10 @@ RankingTest >> test002whenMoreThanTwoSpacesShipsShareTheSamePositionAndTheyAreIn
 RankingTest >> test003whenThaSpaceShipAreInSrartFirstPositionThenTheyAreTecnicallyInTheFirstPlace [
 	| listOfShips rakingExpexted ranking rankingActually|
 	listOfShips := {
-		               (Spaceship withName: 1 andPosition: 1).
-				         (Spaceship withName: 2 andPosition: 1).
-		               (Spaceship withName: 3 andPosition: 1).
-				         (Spaceship withName: 4 andPosition: 1).
+		               (Spaceship withName: '1' andPosition: 1).
+				         (Spaceship withName: '2' andPosition: 1).
+		               (Spaceship withName: '3' andPosition: 1).
+				         (Spaceship withName: '4' andPosition: 1).
    } asOrderedCollection .
 	ranking := Ranking new.
 	

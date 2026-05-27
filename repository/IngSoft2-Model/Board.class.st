@@ -10,7 +10,17 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+Board class >> validateNumberOfSquares: numberOfSquares [
+
+	numberOfSquares < 1 ifTrue: [
+		self error: 'The board must have at least 1 square.' ]
+]
+
+{ #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares [
+
+	self validateNumberOfSquares: aListOfSquares size.
+	"self validateParsecs: parsecs."
 
 	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
@@ -18,9 +28,12 @@ Board class >> withSquares: aListOfSquares [
 { #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 
-	^ self new 
-	    initializeWithSquares: aListOfSquares
-	    andLaps: aNumberOfLaps
+	self validateNumberOfSquares: aListOfSquares size.
+	"self validateParsecs: parsecs."
+
+	^ self new
+		  initializeWithSquares: aListOfSquares
+		  andLaps: aNumberOfLaps
 ]
 
 { #category : 'as yet unclassified' }

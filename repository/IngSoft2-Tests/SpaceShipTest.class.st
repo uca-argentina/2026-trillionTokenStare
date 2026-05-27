@@ -30,3 +30,11 @@ SpaceShipTest >> test003ShipMovesBackwardWhenToldTo [
 	shipNewPosition := ship movesBackward: 5 .
 	self assert: shipNewPosition position equals: 10
 ]
+
+{ #category : 'tests' }
+SpaceShipTest >> test004shipIsValidOnlyWithNameAsText [
+
+	self
+		should: [ Spaceship withName: 123 ]
+		raiseErrorWithMessageText: 'Name of spaceship must be a string'
+]

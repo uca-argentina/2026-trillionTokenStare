@@ -15,6 +15,9 @@ Class {
 BoardBuilder >> build [
 
 	| parsecsPerSquare bagOfEffects squares |
+	"self validateNumberOfSquares: aListOfSquares size."
+	self validateParsecs.
+	self validateSquares.
 	parsecsPerSquare := parsecs / numberOfSquares.
 	bagOfEffects := OrderedCollection
 		                new: numberOfSquares
@@ -51,6 +54,20 @@ BoardBuilder >> initialize [
 BoardBuilder >> numberOfSquares [
 
 	^ numberOfSquares
+]
+
+{ #category : 'initialization' }
+BoardBuilder >> validateParsecs [
+
+	parsecs < 1000 ifTrue: [
+		self error: 'The board must have at least 1000 parsecs.' ]
+]
+
+{ #category : 'initialization' }
+BoardBuilder >> validateSquares [
+
+	 numberOfSquares < 1 ifTrue: [
+		self error: 'The board must have at least 1 square.' ]
 ]
 
 { #category : 'initialization' }

@@ -5,8 +5,7 @@ Class {
 		'ships',
 		'dicePool',
 		'playersTurn',
-		'board',
-		'laps'
+		'board'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -27,59 +26,23 @@ Game class >> validateNumberOfShips: numberOfShips [
 		self error: 'The board must have at least 2 ships.' ]
 ]
 
-{ #category : 'validation' }
-Game class >> validateNumberOfSquares: numberOfSquares [
-
-	numberOfSquares < 1 ifTrue: [
-		self error: 'The board must have at least 1 square.' ]
-]
-
-{ #category : 'validation' }
-Game class >> validateParsecs: parsecs [
-
-	parsecs < 1000 ifTrue: [
-		self error: 'The board must have at least 1000 parsecs.' ]
-]
-
 { #category : 'creation' }
-Game class >> withSquarePool: squarePool andShips: listOfShips andDicePool: aDicePool andLaps: numberOfLaps andParsecs: parsecs [
+Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
+	"andLaps: numberOfLaps andParsecs: parsecs"
 
 	self validateNumberOfShips: listOfShips.
-	self validateNumberOfSquares: squarePool numberOfSquares .
 	self validateDicePool: aDicePool.
-	self validateParsecs: parsecs.
-	
 
 	^ self new
-		  initializeUsingSquarePool: squarePool
+		  initializeUsingBoard: aBoard
 		  andShips: listOfShips
 		  andDicePool: aDicePool
-		  andLaps: numberOfLaps
-		  andParsecs: parsecs
-]
-
-{ #category : 'creation' }
-Game class >> withSquares: numberOfSquares andShips: listOfShips andDicePool: aDicePool andLaps: numberOfLaps andParsecs: parsecs [
-
-	self validateNumberOfShips: listOfShips.
-	self validateNumberOfSquares: numberOfSquares.
-	self validateDicePool: aDicePool.
-	self validateParsecs: parsecs.
-
-	^ self new
-		  initializeUsingSquarePool: (MockBoardBuilder withPreloadedSquares:
-				   (OrderedCollection new: numberOfSquares withAll: Square))
-		  andShips: listOfShips
-		  andDicePool: aDicePool
-		  andLaps: numberOfLaps
-		  andParsecs: parsecs
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingSquarePool: aBoardBuilder andShips: listOfShips andDicePool: aDicePool andLaps: numberOfLaps andParsecs: parsecs [
+Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [ "andLaps: numberOfLaps andParsecs: parsecs"
 
-	board := (aBoardBuilder withLaps: numberOfLaps; withParsecs: parsecs)
-		         build.
+	board := aBoard.
 	ships := listOfShips. "(1 to: numberOfShips) collect: [:number | (Spaceship withName: number asString)]."
 	dicePool := aDicePool.
 	playersTurn := 1

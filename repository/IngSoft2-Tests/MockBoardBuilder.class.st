@@ -15,6 +15,8 @@ Class {
 MockBoardBuilder >> build [
 
 	| parsecsPerSquare |
+	self validateParsecs.
+	self validateSquares.
 	parsecsPerSquare := parsecs / preloadedEffects size.
 
 	^ Board
@@ -38,6 +40,20 @@ MockBoardBuilder >> initialize [
 MockBoardBuilder >> numberOfSquares [
 
 	^ numberOfSquares
+]
+
+{ #category : 'vali' }
+MockBoardBuilder >> validateParsecs [
+
+	parsecs < 1000 ifTrue: [
+		self error: 'The board must have at least 1000 parsecs.' ]
+]
+
+{ #category : 'initialization' }
+MockBoardBuilder >> validateSquares [
+
+	 numberOfSquares < 1 ifTrue: [
+		self error: 'The board must have at least 1 square.' ]
 ]
 
 { #category : 'initialization' }
