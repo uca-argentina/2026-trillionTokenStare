@@ -173,16 +173,17 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 ]
 
 { #category : 'tests' }
-BoardTest >> test010HyperJumpSquare [
+BoardTest >> test010HyperJumpSquareWithParsecs [
 
-	| finalPositions ships boardBuilder game |
+	| finalPositions ships boardBuilder game hyperJumpSquare |
+	hyperJumpSquare := HyperJump new withJumpsInParsecs: { 300 . 200 }.
 	ships := {
 		         (Spaceship withName: 'one').
 		         (Spaceship withName: 'two').
 		         (Spaceship withName: 'three') }.
 	boardBuilder := MockBoardBuilder new withEffects: {
 			                Square new.
-			                HyperJump new.
+			                hyperJumpSquare.
 			                Square new.
 			                Square new.
 			                Square new.
@@ -341,7 +342,7 @@ BoardTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsU
 		
 	boardBuilder := MockBoardBuilder new withEffects: {
 			                Square new.
-			                HyperJump new withJumps: {100 . 300 . 200}.
+			                HyperJump new withJumpsInParsecs: {100 . 300 . 200}.
 			                Square new.
 			                Square new.
 			                Square new.
@@ -392,7 +393,7 @@ BoardTest >> test016HyperJumpLoopsWhenTItRunsOurOfJumps [
 
 	boardBuilder := MockBoardBuilder new withEffects: {
 			                Square new.
-			                (HyperJump new withJumps: { 300. 200. 100 }).
+			                (HyperJump new withJumpsInParsecs: { 300. 200. 100 }).
 			                Square new.
 			                Square new.
 			                Square new.
@@ -465,4 +466,54 @@ BoardTest >> test018WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
 	self
 		should: [ Board withSquares: squareList andLaps: 1 ]
 		raiseErrorWithMessageText: 'First square position must be 1'
+]
+
+{ #category : 'tests' }
+BoardTest >> test019HyperJumpSquareWithLightYears [
+
+	| finalPositions ships boardBuilder game hyperJumpSquare |
+	hyperJumpSquare := HyperJump new withJumpsInLightYears: { 101. 67 }.
+	ships := {
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two').
+		         (Spaceship withName: 'three') }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                hyperJumpSquare.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new }.
+
+	game := GameBuilder new
+		        withLightYears: 334;
+		        withSpaceships: ships;
+		        withBoardBuilder: boardBuilder;
+		        withDicepool:
+			        (DicePool withDice:
+					         { (DiceMock withSides: 4 andSequence: #( 1 )) });
+		        build.
+	finalPositions := {
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 1 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 5 } } }.
+
+
+	self
+		assert:
+		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
+		equals: finalPositions
 ]

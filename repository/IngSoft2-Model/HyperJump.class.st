@@ -33,7 +33,16 @@ HyperJump >> initialize [
 ]
 
 { #category : 'accessing' }
-HyperJump >> withJumps: listOfJumps [
+HyperJump >> withJumpsInLightYears: listOfJumps [
+
+	jumps := (listOfJumps sorted: [ :a :b | a > b ]) collect: [ :jump | jump * 3 ].
+	jumpIndex := 1.
+
+	^ self
+]
+
+{ #category : 'accessing' }
+HyperJump >> withJumpsInParsecs: listOfJumps [
 
 	jumps := listOfJumps sorted: [ :a :b | a > b ].
 	jumpIndex := 1.
