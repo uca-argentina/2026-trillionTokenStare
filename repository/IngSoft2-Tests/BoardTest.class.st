@@ -175,25 +175,47 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 { #category : 'tests' }
 BoardTest >> test010HyperJumpSquare [
 
-	| square ship1 ship2 ship3 updatedPositions finalPositions |
-	ship1 := Spaceship withName: 1 andPosition: 2.
-	ship2 := Spaceship withName: 2 andPosition: 2.
-	ship3 := Spaceship withName: 3 andPosition: 2.
-	finalPositions := {
-		                  (Spaceship withName: 1 andPosition: 5).
-		                  (Spaceship withName: 2 andPosition: 4).
-		                  (Spaceship withName: 3 andPosition: 5) }.
-	square := HyperJump
-                defaultAt: 2
-                andJumps: { 150 . 100 }
-                andParsecs: 50.
+	| updatedPositions finalPositions ships boardBuilder game |
+	ships := {
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two').
+		         (Spaceship withName: 'three') }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square.
+			                HyperJump.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square.
+			                Square }.
 
-	updatedPositions := {
-		                    (square applyEffectTo: ship1 in: nil).
-		                    (square applyEffectTo: ship2 in: nil).
-		                    (square applyEffectTo: ship3 in: nil) }.
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withBoardBuilder: boardBuilder;
+		        withDicepool:
+			        (DicePool withDice:
+					         { (DiceMock withSides: 4 andSequence: #( 1 )) });
+		        build.
+	finalPositions := {  
+		{
+			{ 'one' . 5 } . { 'two' . 1 } . { 'three' . 1 }
+		} .
+		{
+			{ 'one' . 5 } . { 'two' . 4 } . { 'three' . 1 }
+		} .
+		{
+			{ 'one' . 5 } . { 'two' . 4 } . { 'three' . 5 }
+		} .
+	}.
 
-	self assert: updatedPositions equals: finalPositions
+
+	self
+		assert:
+		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
+		equals: finalPositions
 ]
 
 { #category : 'tests' }
