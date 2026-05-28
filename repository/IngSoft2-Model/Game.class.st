@@ -40,19 +40,6 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 		  andDicePool: aDicePool
 ]
 
-{ #category : 'behaviour' }
-Game >> currentPlayerPlaysCard: anInstantCard [
-
-	| currentShip |
-	currentShip := ships at: playersTurn.
-
-	cards
-		applyInstantEffectCard: anInstantCard
-		from: currentShip
-		withShips: ships
-		withBoard: board
-]
-
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 
@@ -84,7 +71,7 @@ Game >> locateWinningSpaceShip [
 { #category : 'behaviour' }
 Game >> nextPlayerThrowsDice [
 
-	| updatedShips amountToAdvance shipInTurn |
+	| amountToAdvance shipInTurn |
 	self validateIfGameIsOver.
 	shipInTurn := ships at: playersTurn.
 
@@ -92,19 +79,18 @@ Game >> nextPlayerThrowsDice [
 		                   applyPermanentEffectOn: shipInTurn
 		                   overThrow: dicePool throw.
 
-	updatedShips := board
-		                shipInTurn: playersTurn
-		                movesForward: amountToAdvance
-		                andAffects: ships.
-	ships := updatedShips.
+	ships := board
+		         shipInTurn: playersTurn
+		         movesForward: amountToAdvance
+		         andAffects: ships.
 
 	playersTurn := playersTurn % ships size + 1
 ]
 
 { #category : 'behaviour' }
-Game >> nextPlayerThrowsDiceAndUsesCard: aCard [
+Game >> nextPlayerThrowsDiceAndUsesPermanentCard: aCard [
 
-	| updatedShips amountToAdvance shipInTurn |
+	| amountToAdvance shipInTurn |
 	self validateIfGameIsOver.
 	shipInTurn := ships at: playersTurn.
 
@@ -114,13 +100,25 @@ Game >> nextPlayerThrowsDiceAndUsesCard: aCard [
 		                   applyPermanentEffectOn: shipInTurn
 		                   overThrow: dicePool throw.
 
-	updatedShips := board
-		                shipInTurn: playersTurn
-		                movesForward: amountToAdvance
-		                andAffects: ships.
-	ships := updatedShips.
+	ships := board
+		         shipInTurn: playersTurn
+		         movesForward: amountToAdvance
+		         andAffects: ships.
 
 	playersTurn := playersTurn % ships size + 1
+]
+
+{ #category : 'behaviour' }
+Game >> nextPlayerUsesInstantCard: anInstantCard [
+
+	| currentShip |
+	currentShip := ships at: playersTurn.
+
+	ships := cards
+		         applyInstantEffectCard: anInstantCard
+		         from: currentShip
+		         withShips: ships
+		         withBoard: board
 ]
 
 { #category : 'behaviour' }

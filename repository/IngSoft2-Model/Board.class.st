@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'squares',
-		'laps'
+		'laps',
+		'lastEffect'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -66,8 +67,22 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 
 	| square |
 	square := squares at: (certainShip positionInBoard: self).
+	
+	"((square isKindOf: Square) and: [ square class ~~ Square ]) ifTrue: [
+		lastEffect := square ]."
+	lastEffect := Speedup new.
 
 	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
+]
+
+{ #category : 'as yet unclassified' }
+Board >> applyLastEffectTo: shipThatReceivesEffect in: listOfShips [
+
+	| updatedShips |
+	updatedShips := listOfShips deepCopy.
+	updatedShips collect: [ :ship | lastEffect applyEffectTo: ship in: self ].
+
+	^ updatedShips
 ]
 
 { #category : 'initialization' }

@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+Wormhole >> applyEffectRegardlesOfPositionTo: aShip in: aBoard [
+
+	^ aShip movesBackward: 4
+]
+
+{ #category : 'as yet unclassified' }
 Wormhole >> applyEffectTo: aShip in: aBoard [
 
 	(aShip positionInBoard: aBoard) = number ifTrue: [

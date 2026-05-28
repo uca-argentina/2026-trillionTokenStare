@@ -126,7 +126,7 @@ CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 
 	self
 		should: [
-				game nextPlayerThrowsDiceAndUsesCard:
+				game nextPlayerThrowsDiceAndUsesPermanentCard:
 					(Overload new affectsShipWithName: 'Ship2') ]
 		raiseErrorWithMessageText:
 		'Ship can not play a card that doesnt posess'
@@ -152,7 +152,7 @@ CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 		        withDicepool: dicePool;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesCard: Acceleration new.
+	game nextPlayerThrowsDiceAndUsesPermanentCard: Acceleration new.
 	game nextPlayerThrowsDice.
 
 	self
@@ -183,7 +183,7 @@ CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 		        withSquares: 20;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesCard:
+	game nextPlayerThrowsDiceAndUsesPermanentCard:
 		(Speed new affectsShipWithName: 'Ship1').
 	game nextPlayerThrowsDice.
 	game nextPlayerThrowsDice.
@@ -215,7 +215,7 @@ CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 		        withDicepool: dicePool;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesCard:
+	game nextPlayerThrowsDiceAndUsesPermanentCard:
 		(Overload new affectsShipWithName: 'Ship2').
 	game nextPlayerThrowsDice.
 	game nextPlayerThrowsDice.
@@ -273,13 +273,13 @@ CardsTest >> test010playerPlaysCancellationCard [
 		        withSquares: 20;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesCard:
+	game nextPlayerThrowsDiceAndUsesPermanentCard:
 		(Overload new affectsShipWithName: 'Ship2').
 
-	game currentPlayerPlaysCard:
+	game nextPlayerUsesInstantCard:
 		(Cancellation new withCardToCancel: Overload new).
 
-	game nextPlayerThrowsDiceAndUsesCard:
+	game nextPlayerThrowsDiceAndUsesPermanentCard:
 		(Speed new affectsShipWithName: 'Ship2').
 
 	game nextPlayerThrowsDice.
@@ -313,13 +313,13 @@ CardsTest >> test011playerTriesToPlayInstantCardAsPermanentCard [
 		        withSquares: 20;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesCard:
+	game nextPlayerThrowsDiceAndUsesPermanentCard:
 		(Overload new affectsShipWithName: 'Ship2').
 
 
 	self
 		should: [
-				game nextPlayerThrowsDiceAndUsesCard:
+				game nextPlayerThrowsDiceAndUsesPermanentCard:
 					(Cancellation new withCardToCancel: Overload) ]
 		raiseErrorWithMessageText: 'Not a permanent effect card.'
 ]
@@ -356,9 +356,13 @@ CardsTest >> test012RepeatCard [
 		        build.
 
 	game nextPlayerThrowsDice. "falls on SpeedUp"
-	game currentPlayerPlaysCard: (Repeat new withTargetShipName: 'Ship2'). "Repeats speedUpFromItsPositionToItself"
+	game nextPlayerUsesInstantCard: (Repeat new withTargetShipName: 'Ship2'). "Repeats speedUpFromItsPositionToItself"
 	game nextPlayerThrowsDice. "throws something else"
 
 
-	self deny: true
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 7 ).
+				#( 'Ship2' 9 ) }
 ]

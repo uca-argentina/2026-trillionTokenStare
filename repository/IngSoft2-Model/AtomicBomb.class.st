@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+AtomicBomb >> applyEffectRegardlesOfPositionTo: aShip in: aBoard [
+
+	^ aShip movesToPosition: 1 InBoard: aBoard
+]
+
+{ #category : 'as yet unclassified' }
 AtomicBomb >> applyEffectTo: aShip in: aBoard [
 
 	^ aShip movesToPosition: 1 InBoard: aBoard

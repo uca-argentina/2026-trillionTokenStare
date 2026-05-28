@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+HyperJump >> applyEffectRegardlesOfPositionTo: aShip in: aBoard [
+
+	| currentJump |
+	currentJump := ((jumps at: jumpIndex) / parsecs) floor.
+	jumpIndex := jumpIndex % jumps size + 1.
+	
+	^ aShip movesForward: currentJump
+]
+
+{ #category : 'as yet unclassified' }
 HyperJump >> applyEffectTo: aShip in: aBoard [
 
 	| currentJump |
