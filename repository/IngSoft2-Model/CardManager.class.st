@@ -15,9 +15,9 @@ CardManager class >> withActiveCards: cards [
 ]
 
 { #category : 'initialization' }
-CardManager >> addPermanentCards: card [
+CardManager >> addPermanentCard: card to: shipInTurn [
 
-	activeCards add: card
+	activeCards add: (shipInTurn playCard: card)
 ]
 
 { #category : 'initialization' }

@@ -71,43 +71,42 @@ Game >> locateWinningSpaceShip [
 { #category : 'behaviour' }
 Game >> nextPlayerThrowsDice [
 
-	| diceValue updatedShips throwAfterCardEffect |
+	| updatedShips amountToAdvance shipInTurn |
 	self validateIfGameIsOver.
-	"
-	throw dice and apply any effect to me if there is any
-	"
-	diceValue := dicePool throw.
-	throwAfterCardEffect:= cards applyEffectOn: (ships at: playersTurn) overThrow: diceValue .
-	"
-	update ships according to where they land on and throw
-	"
-	updatedShips := board shipInTurn: playersTurn movesForward: throwAfterCardEffect andAffects: ships .
+	shipInTurn := ships at: playersTurn.
+
+	amountToAdvance := cards
+		                   applyEffectOn: shipInTurn
+		                   overThrow: dicePool throw.
+
+	updatedShips := board
+		                shipInTurn: playersTurn
+		                movesForward: amountToAdvance
+		                andAffects: ships.
 	ships := updatedShips.
-	
+
 	playersTurn := playersTurn % ships size + 1
 ]
 
 { #category : 'behaviour' }
 Game >> nextPlayerThrowsDiceAndUsesCard: aCard [
 
-	| diceValue updatedShips cardInEffect throwAfterCardEffect |
+	| updatedShips amountToAdvance shipInTurn |
 	self validateIfGameIsOver.
-	"
-	add card to permanent cards
-	"
-	cardInEffect := (ships at: playersTurn) playCard: aCard. "carta en juego, lo podria hacer el manager...."
-	cards addPermanentCards: cardInEffect .
-	"
-	throw dice and apply any effect to me if there is any
-	"
-	diceValue := dicePool throw.
-	throwAfterCardEffect:= cards applyEffectOn: (ships at: playersTurn) overThrow: diceValue .
-	"
-	update ships according to where they land on and throw
-	"
-	updatedShips := board shipInTurn: playersTurn movesForward: throwAfterCardEffect andAffects: ships .
+	shipInTurn := ships at: playersTurn.
+
+	cards addPermanentCard: aCard to: shipInTurn.
+
+	amountToAdvance := cards
+		                   applyEffectOn: shipInTurn
+		                   overThrow: dicePool throw.
+
+	updatedShips := board
+		                shipInTurn: playersTurn
+		                movesForward: amountToAdvance
+		                andAffects: ships.
 	ships := updatedShips.
-	
+
 	playersTurn := playersTurn % ships size + 1
 ]
 
