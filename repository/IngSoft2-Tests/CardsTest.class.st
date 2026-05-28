@@ -107,3 +107,23 @@ CardsTest >> test004ActiveCards [
 	self assert: resultInShip1 equals: 10.
 	self assert: resultInShip2 equals: 7
 ]
+
+{ #category : 'tests' }
+CardsTest >> test005 [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Card new.
+				          Card new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Card new.
+				          Card new }) }.
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        build.
+	self deny: true
+]

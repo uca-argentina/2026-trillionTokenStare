@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : 'initialization' }
+Speed >> = aCard [
+
+	^ self class = aCard class
+]
+
+{ #category : 'initialization' }
 Speed >> affectsShipWithName: _shipToAffect [
 
 	shipToAffect := _shipToAffect.

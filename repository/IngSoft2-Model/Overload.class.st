@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : 'initialization' }
+Overload >> = aCard [
+
+	^ self class = aCard class
+]
+
+{ #category : 'initialization' }
 Overload >> affectsShipWithName: _shipToAffect [
 
 	shipToAffect := _shipToAffect.

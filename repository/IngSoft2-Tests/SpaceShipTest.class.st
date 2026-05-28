@@ -67,18 +67,67 @@ SpaceShipTest >> test006ShipMovesToCertainPositionRelativeToBoardWithoutChaingin
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test007shipManager [
+SpaceShipTest >> test007shipsWithCards [
 
-	| ships board updatedShip |
-	ships := ShipManager withShips: {
-			         (Spaceship withName: 'Ship1').
-			         (Spaceship withName: 'Ship1') }.
-	board := MockBoardBuilder new build.
+	| ships cardExpected |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Acceleration new.
+				          Speed new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Card new.
+				          Overload new }) }.
 
-	"updatedShip := ships movesToPosition: 1 InBoard: board."
+	cardExpected := ships first playCard:
+		                (Speed new affectsShipWithName: 'Ship1').
 
-	self assert: (updatedShip asDictionaryInBoard: board) equals: {
-			(#name -> 'Ship1').
-			(#position -> 1).
-			(#lap -> 2) } asDictionary
+	self assert: cardExpected equals: Speed new
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test008shipsTriesToPlayCardThatDoesntPosess [
+
+	| ships |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Acceleration new.
+				          Speed new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Card new.
+				          Overload new }) }.
+
+	self should: [ ships first playCard:
+		                (Overload new affectsShipWithName: 'Ship2'). ] raiseErrorWithMessageText: 'Ship can not play a card that doesnt posess'
+	
+
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test009shipReceivesCard [
+
+	| ships cardExpected |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {  }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {  }) }.
+
+	ships first receivesCard: Acceleration new.
+
+	cardExpected := ships first playCard:
+		                (Acceleration new).
+
+	self assert: cardExpected equals: Acceleration new
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test010ShipRunsOutOfCards [
+
+	| ships |
+	ships := { (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+			          Card new.
+			          Card new }) }.
+
+	self
+		should: [ 3 timesRepeat: [ ships first playCard: Card new ] ]
+		raiseErrorWithMessageText:
+		'Ship can not play a card that doesnt posess'
 ]

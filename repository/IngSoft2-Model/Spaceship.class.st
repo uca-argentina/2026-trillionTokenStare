@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'position',
-		'name'
+		'name',
+		'cards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -19,14 +20,21 @@ Spaceship class >> validateName: aName [
 { #category : 'creation' }
 Spaceship class >> withName: aName [
 	self validateName: aName .
-	^ self new initializeWithName: aName andPosition: 1.
+	^ self new initializeWithName: aName andPosition: 1 andCards: {  }
 ]
 
 { #category : 'creation' }
 Spaceship class >> withName: aName andPosition: aPosition [
 
 	self validateName: aName.
-	^ self new initializeWithName: aName andPosition: aPosition
+	^ self new initializeWithName: aName andPosition: aPosition andCards: {  }
+]
+
+{ #category : 'creation' }
+Spaceship class >> withName: aName andPosition: aPosition andCards: _cards [
+
+	self validateName: aName.
+	^ self new initializeWithName: aName andPosition: aPosition andCards: _cards 
 ]
 
 { #category : 'accessing' }
@@ -49,10 +57,11 @@ Spaceship >> asDictionaryInBoard: aBoard [
 ]
 
 { #category : 'initialization' }
-Spaceship >> initializeWithName: aName andPosition: aPosition [
+Spaceship >> initializeWithName: aName andPosition: aPosition andCards: _cards [
 	super initialize .
 	name := aName .
 	position := aPosition .
+	cards:= _cards asOrderedCollection 
 ]
 
 { #category : 'accessing' }
@@ -94,6 +103,17 @@ Spaceship >> name [
 	^ name.
 ]
 
+{ #category : 'changing state' }
+Spaceship >> playCard: aCard [
+
+	^ cards
+		  detect: [ :eachCard | eachCard = aCard ]
+		  ifFound: [ :myCard |
+				  cards remove: myCard.
+				  aCard ]
+		  ifNone: [ self error: 'Ship can not play a card that doesnt posess' ]
+]
+
 { #category : 'accessing' }
 Spaceship >> position [
 	^ position.
@@ -102,4 +122,10 @@ Spaceship >> position [
 { #category : 'accessing' }
 Spaceship >> positionInBoard: board [
 	^ position - 1 % board size + 1
+]
+
+{ #category : 'accessing' }
+Spaceship >> receivesCard: _card [
+
+	cards add: _card
 ]

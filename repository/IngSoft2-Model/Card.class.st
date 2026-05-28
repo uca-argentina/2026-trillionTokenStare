@@ -5,6 +5,12 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'comparing' }
+Card >> = aCard [
+
+	^ self class = aCard class
+]
+
 { #category : 'initialization' }
 Card >> applyEffectOn: aShip overThrow: aThrow [
 
