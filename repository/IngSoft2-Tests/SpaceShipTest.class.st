@@ -65,3 +65,20 @@ SpaceShipTest >> test006ShipMovesToCertainPositionRelativeToBoardWithoutChaingin
 			(#position -> 1).
 			(#lap -> 2) } asDictionary
 ]
+
+{ #category : 'tests' }
+SpaceShipTest >> test007shipManager [
+
+	| ships board updatedShip |
+	ships := ShipManager withShips: {
+			         (Spaceship withName: 'Ship1').
+			         (Spaceship withName: 'Ship1') }.
+	board := MockBoardBuilder new build.
+
+	"updatedShip := ships movesToPosition: 1 InBoard: board."
+
+	self assert: (updatedShip asDictionaryInBoard: board) equals: {
+			(#name -> 'Ship1').
+			(#position -> 1).
+			(#lap -> 2) } asDictionary
+]

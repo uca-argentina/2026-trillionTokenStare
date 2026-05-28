@@ -76,3 +76,34 @@ CardsTest >> test003AccelerationCard [
 	self assert: resultInShip1 equals: 9.
 	self assert: resultInShip2 equals: 9
 ]
+
+{ #category : 'tests' }
+CardsTest >> test004ActiveCards [
+
+	| ships dicePool resultInShip1 resultInShip2 activeCards |
+	"
+	las cartas son una propiedad que guardan las naves, entonces un manager podria guardar las cartas junto a las naves.
+	las cartas activas pertenecen al juego pero las maneja el manager
+	"
+	dicePool := DicePool withDice: {
+			            (DiceMock withSides: 4 andSequence: #( 4 )).
+			            (DiceMock withSides: 4 andSequence: #( 4 )) }.
+	ships := {
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two') }.
+
+	activeCards := CardManager new withActiveCards: {
+			               Acceleration new.
+			               (Speed new affectsShipWithName: 'one').
+			               (Overload new affectsShipWithName: 'two') }.
+
+	resultInShip1 := activeCards
+		                 applyEffectOn: ships first
+		                 overThrow: dicePool throw.
+	resultInShip2 := activeCards
+		                 applyEffectOn: ships last
+		                 overThrow: dicePool throw.
+
+	self assert: resultInShip1 equals: 10.
+	self assert: resultInShip2 equals: 7
+]
