@@ -96,7 +96,7 @@ GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 		               { 'one'. 5 }.
 		               { 'two'. 1 } }.
 
-	game nextTurn.
+	game nextPlayerThrowsDice.
 	self
 		assert: (self positionOf: #( 'one' 'two' ) in: game)
 		equals: listOfShips
@@ -116,8 +116,8 @@ GameTest >> test007SecondPlayerThrowsDice [
 		               { 'one'. 5 }.
 		               { 'two'. 3 } }.
 
-	game nextTurn.
-	game nextTurn.
+	game nextPlayerThrowsDice.
+	game nextPlayerThrowsDice.
 	self
 		assert: (self positionOf: #( 'one' 'two' ) in: game)
 		equals: listOfShips
@@ -133,7 +133,7 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 		        withDicepool: dicePool;
 		        build.
 
-	1 to: 4 do: [ :turn | game nextTurn ].
+	1 to: 4 do: [ :turn | game nextPlayerThrowsDice ].
 
 	listOfShips := {
 		               { 'one'. 9 }.
@@ -156,7 +156,7 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 		        withDicepool: dicePool;
 		        build.
 
-	1 to: 5 do: [ :turn | game nextTurn ].
+	1 to: 5 do: [ :turn | game nextPlayerThrowsDice ].
 
 	self assert: game locateWinningSpaceShip equals: {
 			(#name -> 'one').
@@ -175,10 +175,10 @@ GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 		        withDicepool: dicePool;
 		        build.
 
-	1 to: 5 do: [ :turn | game nextTurn ].
+	1 to: 5 do: [ :turn | game nextPlayerThrowsDice ].
 
 	self
-		should: [ game nextTurn ]
+		should: [ game nextPlayerThrowsDice ]
 		raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
 
@@ -212,7 +212,7 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 					         Spaceship withName: number asString ]);
 		        build.
 
-	1 to: 10 do: [ :turn | game nextTurn ].
+	1 to: 10 do: [ :turn | game nextPlayerThrowsDice ].
 
 	self assert: ((game locateSpaceShip: '1') at: #position) equals: 4
 ]
@@ -243,7 +243,7 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 		        withLaps: 2;
 		        build.
 
-	5 timesRepeat: [ game nextTurn ].
+	5 timesRepeat: [ game nextPlayerThrowsDice ].
 
 	self
 		should: [ game locateWinningSpaceShip ]
@@ -262,7 +262,7 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 		        withDicepool: dicePool;
 		        build.
 
-	5 timesRepeat: [ game nextTurn ].
+	5 timesRepeat: [ game nextPlayerThrowsDice ].
 
 	self assert: ((game locateSpaceShip: 'one') at: #position) equals: 1
 ]
@@ -278,13 +278,13 @@ GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreT
 		        withDicepool: dicePool;
 		        build.
 
-	11 timesRepeat: [ game nextTurn ].
+	11 timesRepeat: [ game nextPlayerThrowsDice ].
 	"""
 	Expected position for spaceShip 1: 2 (the game finish because it was in the last lap)
 	Expected position for spaceShip 2: 9 (it's in the first lap)
 	"""
 	self
-		should: [ game nextTurn ]
+		should: [ game nextPlayerThrowsDice ]
 		raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
 
@@ -303,7 +303,7 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 					         Spaceship withName: number asString ]);
 		        build.
 
-	15 timesRepeat: [ game nextTurn ].
+	15 timesRepeat: [ game nextPlayerThrowsDice ].
 
 	lapsExpected := #( #( '1' 4 ) #( '2' 2 ) #( '3' 1 ) #( '4' 2 ) )
 		                asOrderedCollection.
@@ -336,7 +336,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 		        build.
 
 
-	9 timesRepeat: [ game nextTurn ].
+	9 timesRepeat: [ game nextPlayerThrowsDice ].
 
 	lapsExpected := {
 		                { '1'. 2 }.
@@ -370,7 +370,7 @@ GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
 		        withDicepool: dicePool;
 		        build.
 
-	3 timesRepeat: [ game nextTurn ].
+	3 timesRepeat: [ game nextPlayerThrowsDice ].
 
 	ranking := game ranking.
 	namesAt := [ :rank |

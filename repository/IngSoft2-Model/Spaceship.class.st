@@ -76,7 +76,7 @@ Spaceship >> movesBackward: anAmmountOfSquares [
 	| newPosition |
 	newPosition := position - anAmmountOfSquares max: 1.
 
-	^ self class withName: name andPosition: newPosition
+	^ self class withName: name andPosition: newPosition andCards: cards
 ]
 
 { #category : 'changing state' }
@@ -85,7 +85,7 @@ Spaceship >> movesForward: anAmmountOfSquares [
 	| newPosition |
 	newPosition := position + anAmmountOfSquares.
 
-	^ self class withName: name andPosition: newPosition
+	^ self class withName: name andPosition: newPosition andCards: cards
 ]
 
 { #category : 'changing state' }
@@ -95,7 +95,7 @@ Spaceship >> movesToPosition: aPosition InBoard: board [
 	currentNumericalLap := (self lapsInBoard: board) - 1.
 	newAbsolutePosition := currentNumericalLap * board size + aPosition.
 
-	^ self class withName: name andPosition: newAbsolutePosition
+	^ self class withName: name andPosition: newAbsolutePosition andCards: cards 
 ]
 
 { #category : 'accessing' }

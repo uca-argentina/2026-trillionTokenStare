@@ -8,6 +8,18 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'as yet unclassified' }
+CardManager class >> withActiveCards: cards [
+
+^self new initializeWithActiveCards: cards 
+]
+
+{ #category : 'initialization' }
+CardManager >> addPermanentCards: card [
+
+	activeCards add: card
+]
+
 { #category : 'initialization' }
 CardManager >> applyEffectOn: aShip overThrow: aThrow [
 
@@ -22,15 +34,8 @@ CardManager >> applyEffectOn: aShip overThrow: aThrow [
 ]
 
 { #category : 'initialization' }
-CardManager >> initialize [
+CardManager >> initializeWithActiveCards: _cards [
 
 	super initialize.
-	^ self
-]
-
-{ #category : 'initialization' }
-CardManager >> withActiveCards: _activeCards [
-
-	activeCards := _activeCards.
-	^ self
+	activeCards := _cards asOrderedCollection 
 ]

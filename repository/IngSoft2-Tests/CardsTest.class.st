@@ -82,7 +82,7 @@ CardsTest >> test004ActiveCards [
 
 	| ships dicePool resultInShip1 resultInShip2 activeCards |
 	"
-	las cartas son una propiedad que guardan las naves, entonces un manager podria guardar las cartas junto a las naves.
+	las cartas son una propiedad que guardan las naves, a diferencia de la posicion estas funcionan con setters y getters. (por ahora)
 	las cartas activas pertenecen al juego pero las maneja el manager
 	"
 	dicePool := DicePool withDice: {
@@ -92,7 +92,7 @@ CardsTest >> test004ActiveCards [
 		         (Spaceship withName: 'one').
 		         (Spaceship withName: 'two') }.
 
-	activeCards := CardManager new withActiveCards: {
+	activeCards := CardManager withActiveCards: {
 			               Acceleration new.
 			               (Speed new affectsShipWithName: 'one').
 			               (Overload new affectsShipWithName: 'two') }.
@@ -109,12 +109,12 @@ CardsTest >> test004ActiveCards [
 ]
 
 { #category : 'tests' }
-CardsTest >> test005 [
+CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 
 	| ships dicePool game |
 	ships := {
 		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Card new.
+				          Acceleration new.
 				          Card new }).
 		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
 				          Card new.
@@ -125,5 +125,108 @@ CardsTest >> test005 [
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
 		        build.
-	self deny: true
+
+
+
+	self
+		should: [
+				game nextPlayerThrowsDiceAndUsesCard:
+					(Overload new affectsShipWithName: 'Ship2') ]
+		raiseErrorWithMessageText:
+		'Ship can not play a card that doesnt posess'
+]
+
+{ #category : 'tests' }
+CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Acceleration new.
+				          Card new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Card new.
+				          Card new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        build.
+
+	game nextPlayerThrowsDiceAndUsesCard: Acceleration new.
+	game nextPlayerThrowsDice.
+
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 6 ).
+				#( 'Ship2' 6 ) }
+]
+
+{ #category : 'tests' }
+CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Speed new.
+				          Card new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Card new.
+				          Card new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        withSquares: 20;
+		        build.
+
+	game nextPlayerThrowsDiceAndUsesCard:
+		(Speed new affectsShipWithName: 'Ship1').
+	game nextPlayerThrowsDice.
+	game nextPlayerThrowsDice.
+
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 11 ).
+				#( 'Ship2' 5 ) }
+]
+
+{ #category : 'tests' }
+CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Overload new.
+				          Card new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Card new.
+				          Card new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        build.
+
+	game nextPlayerThrowsDiceAndUsesCard:
+		(Overload new affectsShipWithName: 'Ship2').
+	game nextPlayerThrowsDice.
+	game nextPlayerThrowsDice.
+
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 9 ).
+				#( 'Ship2' 3 ) }
 ]

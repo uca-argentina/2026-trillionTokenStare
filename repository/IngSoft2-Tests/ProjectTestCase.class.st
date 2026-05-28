@@ -18,7 +18,7 @@ ProjectTestCase >> positionOf: spaceshipNames in: game [
 ProjectTestCase >> positionOf: spaceshipNames in: game afterTurns: numberOfTurns [
 
 	^ (1 to: numberOfTurns) collect: [ :turn |
-			  game nextTurn.
+			  game nextPlayerThrowsDice.
 			  self positionOf: spaceshipNames in: game ]
 ]
 
