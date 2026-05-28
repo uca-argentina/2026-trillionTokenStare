@@ -46,7 +46,11 @@ Game >> currentPlayerPlaysCard: anInstantCard [
 	| currentShip |
 	currentShip := ships at: playersTurn.
 
-	cards playInstantCard: anInstantCard from: currentShip
+	cards
+		applyInstantEffectCard: anInstantCard
+		from: currentShip
+		withShips: ships
+		withBoard: board
 ]
 
 { #category : 'initialization' }

@@ -21,6 +21,16 @@ CardManager >> addPermanentCard: card from: shipInTurn [
 ]
 
 { #category : 'initialization' }
+CardManager >> applyInstantEffectCard: card from: shipInTurn withShips: listOfShips withBoard: board [
+
+	(shipInTurn playCard: card)
+		withCardManager: self;
+		withShips: listOfShips;
+		withBoard: board;
+		applyInstantEffect
+]
+
+{ #category : 'initialization' }
 CardManager >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	| resultingThrow |
@@ -50,12 +60,4 @@ CardManager >> initializeWithActiveCards: _cards [
 CardManager >> permanentCards [
 
 	^ activeCards
-]
-
-{ #category : 'initialization' }
-CardManager >> playInstantCard: card from: shipInTurn [
-
-	(shipInTurn playCard: card)
-		withCardManager: self;
-		applyInstantEffect
 ]

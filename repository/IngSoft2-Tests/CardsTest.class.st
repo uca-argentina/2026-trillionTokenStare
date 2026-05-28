@@ -323,3 +323,42 @@ CardsTest >> test011playerTriesToPlayInstantCardAsPermanentCard [
 					(Cancellation new withCardToCancel: Overload) ]
 		raiseErrorWithMessageText: 'Not a permanent effect card.'
 ]
+
+{ #category : 'tests' }
+CardsTest >> test012RepeatCard [
+
+	| ships dicePool game |
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 2 4 )) }.
+
+	ships := {
+		         (Spaceship
+			          withName: 'Ship1'
+			          andPosition: 1
+			          andCards: { Speed new }).
+		         (Spaceship
+			          withName: 'Ship2'
+			          andPosition: 1
+			          andCards: { Repeat new }) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        withBoardBuilder: (MockBoardBuilder new withEffects: {
+						         Square new.
+						         Square new.
+						         Speedup new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new });
+		        build.
+
+	game nextPlayerThrowsDice. "falls on SpeedUp"
+	game currentPlayerPlaysCard: (Repeat new withTargetShipName: 'Ship2'). "Repeats speedUpFromItsPositionToItself"
+	game nextPlayerThrowsDice. "throws something else"
+
+
+	self deny: true
+]
