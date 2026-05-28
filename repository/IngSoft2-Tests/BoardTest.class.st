@@ -517,3 +517,18 @@ BoardTest >> test019HyperJumpSquareWithLightYears [
 		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
 		equals: finalPositions
 ]
+
+{ #category : 'tests' }
+BoardTest >> test020WhenParsecsBetweenSquaresAreNotUniformThenIsNotValid [
+
+	| squareList |
+	squareList := {
+		              (Square new atPosition: 1; withParsecs: 50).
+		              (Square new atPosition: 2; withParsecs: 30) }.
+
+
+	self
+		should: [ Board withSquares: squareList andLaps: 1 ]
+		raiseErrorWithMessageText:
+		'Squares are required to all have the same amount of parsecs'
+]

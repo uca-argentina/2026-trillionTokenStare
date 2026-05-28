@@ -40,6 +40,12 @@ Square >> initialize [
 ]
 
 { #category : 'accessing' }
+Square >> parsecs [
+
+	^ parsecs 
+]
+
+{ #category : 'accessing' }
 Square >> position [
 
 	^ number

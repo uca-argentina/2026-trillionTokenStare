@@ -31,11 +31,19 @@ Board class >> validateNumberOfSquares: numberOfSquares [
 ]
 
 { #category : 'as yet unclassified' }
+Board class >> validateUniformAmountOfParsecs: aListOfSquares [
+
+	aListOfSquares overlappingPairsDo: [ :current :next |
+		current parsecs = next parsecs ifFalse: [ self error: 'Squares are required to all have the same amount of parsecs' ] ]
+]
+
+{ #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares [
 
 	self validateNumberOfSquares: aListOfSquares size.
 	self validateContiguousSquares: aListOfSquares.
 	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+	self validateUniformAmountOfParsecs: aListOfSquares.
 
 	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
@@ -46,6 +54,7 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 	self validateNumberOfSquares: aListOfSquares size.
 	self validateContiguousSquares: aListOfSquares.
 	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+	self validateUniformAmountOfParsecs: aListOfSquares.
 
 	^ self new
 		  initializeWithSquares: aListOfSquares

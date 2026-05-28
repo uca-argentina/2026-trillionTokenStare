@@ -78,6 +78,13 @@ BoardBuilder >> withLaps: _laps [
 ]
 
 { #category : 'initialization' }
+BoardBuilder >> withLightYears: _lightYears [
+
+	parsecs := _lightYears * 3.
+	^ self
+]
+
+{ #category : 'initialization' }
 BoardBuilder >> withParsecs: _parsecs [
 
 	parsecs := _parsecs.
