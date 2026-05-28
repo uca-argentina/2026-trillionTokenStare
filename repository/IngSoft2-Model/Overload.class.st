@@ -9,12 +9,6 @@ Class {
 }
 
 { #category : 'initialization' }
-Overload >> = aCard [
-
-	^ self class = aCard class
-]
-
-{ #category : 'initialization' }
 Overload >> affectsShipWithName: _shipToAffect [
 
 	shipToAffect := _shipToAffect.
@@ -22,7 +16,7 @@ Overload >> affectsShipWithName: _shipToAffect [
 ]
 
 { #category : 'as yet unclassified' }
-Overload >> applyEffectOn: aShip overThrow: aThrow [
+Overload >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	aShip name = shipToAffect ifTrue: [ ^ aThrow - 2 max: 1 ].
 	^ aThrow

@@ -12,9 +12,15 @@ Card >> = aCard [
 ]
 
 { #category : 'initialization' }
-Card >> applyEffectOn: aShip overThrow: aThrow [
+Card >> applyInstantEffect [
 
-	self subclassResponsibility
+	self error: 'Not an instant effect card'
+]
+
+{ #category : 'initialization' }
+Card >> applyPermanentEffectOn: aShip overThrow: aThrow [
+
+	self error: 'Not a permanent effect card.'
 ]
 
 { #category : 'initialization' }

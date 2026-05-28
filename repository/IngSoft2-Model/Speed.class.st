@@ -9,12 +9,6 @@ Class {
 }
 
 { #category : 'initialization' }
-Speed >> = aCard [
-
-	^ self class = aCard class
-]
-
-{ #category : 'initialization' }
 Speed >> affectsShipWithName: _shipToAffect [
 
 	shipToAffect := _shipToAffect.
@@ -22,7 +16,7 @@ Speed >> affectsShipWithName: _shipToAffect [
 ]
 
 { #category : 'initialization' }
-Speed >> applyEffectOn: aShip overThrow: aThrow [
+Speed >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	aShip name = shipToAffect ifTrue: [ ^ aThrow + 1 ].
 	^ aThrow

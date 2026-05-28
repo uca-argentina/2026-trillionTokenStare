@@ -40,6 +40,15 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 		  andDicePool: aDicePool
 ]
 
+{ #category : 'behaviour' }
+Game >> currentPlayerPlaysCard: anInstantCard [
+
+	| currentShip |
+	currentShip := ships at: playersTurn.
+
+	cards playInstantCard: anInstantCard from: currentShip
+]
+
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 
@@ -76,7 +85,7 @@ Game >> nextPlayerThrowsDice [
 	shipInTurn := ships at: playersTurn.
 
 	amountToAdvance := cards
-		                   applyEffectOn: shipInTurn
+		                   applyPermanentEffectOn: shipInTurn
 		                   overThrow: dicePool throw.
 
 	updatedShips := board
@@ -95,10 +104,10 @@ Game >> nextPlayerThrowsDiceAndUsesCard: aCard [
 	self validateIfGameIsOver.
 	shipInTurn := ships at: playersTurn.
 
-	cards addPermanentCard: aCard to: shipInTurn.
+	cards addPermanentCard: aCard from: shipInTurn.
 
 	amountToAdvance := cards
-		                   applyEffectOn: shipInTurn
+		                   applyPermanentEffectOn: shipInTurn
 		                   overThrow: dicePool throw.
 
 	updatedShips := board

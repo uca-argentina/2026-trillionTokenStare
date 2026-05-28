@@ -6,13 +6,7 @@ Class {
 }
 
 { #category : 'initialization' }
-Acceleration >> = aCard [
-
-	^ self class = aCard class
-]
-
-{ #category : 'initialization' }
-Acceleration >> applyEffectOn: aShip overThrow: aThrow [
+Acceleration >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	^ aThrow + 1
 ]

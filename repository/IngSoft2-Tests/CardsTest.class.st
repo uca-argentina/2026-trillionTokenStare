@@ -19,10 +19,10 @@ CardsTest >> test001OverloadCard [
 	card := Overload new affectsShipWithName: 'two'.
 
 	resultInShip1 := card
-		                 applyEffectOn: ships first
+		                 applyPermanentEffectOn: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := card
-		                 applyEffectOn: ships last
+		                 applyPermanentEffectOn: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 8.
@@ -43,10 +43,10 @@ CardsTest >> test002SpeedCard [
 	card := Speed new affectsShipWithName: 'two'.
 
 	resultInShip1 := card
-		                 applyEffectOn: ships first
+		                 applyPermanentEffectOn: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := card
-		                 applyEffectOn: ships last
+		                 applyPermanentEffectOn: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 8.
@@ -67,10 +67,10 @@ CardsTest >> test003AccelerationCard [
 	card := Acceleration new.
 
 	resultInShip1 := card
-		                 applyEffectOn: ships first
+		                 applyPermanentEffectOn: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := card
-		                 applyEffectOn: ships last
+		                 applyPermanentEffectOn: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 9.
@@ -81,10 +81,6 @@ CardsTest >> test003AccelerationCard [
 CardsTest >> test004ActiveCards [
 
 	| ships dicePool resultInShip1 resultInShip2 activeCards |
-	"
-	las cartas son una propiedad que guardan las naves, a diferencia de la posicion estas funcionan con setters y getters. (por ahora)
-	las cartas activas pertenecen al juego pero las maneja el manager
-	"
 	dicePool := DicePool withDice: {
 			            (DiceMock withSides: 4 andSequence: #( 4 )).
 			            (DiceMock withSides: 4 andSequence: #( 4 )) }.
@@ -98,10 +94,10 @@ CardsTest >> test004ActiveCards [
 			               (Overload new affectsShipWithName: 'two') }.
 
 	resultInShip1 := activeCards
-		                 applyEffectOn: ships first
+		                 applyPermanentEffectOn: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := activeCards
-		                 applyEffectOn: ships last
+		                 applyPermanentEffectOn: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 10.
@@ -229,4 +225,101 @@ CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 		equals: {
 				#( 'Ship1' 9 ).
 				#( 'Ship2' 3 ) }
+]
+
+{ #category : 'tests' }
+CardsTest >> test009cancellationCard [
+
+	| ships dicePool activeCards resultInShip1 |
+	dicePool := DicePool withDice: {
+			            (DiceMock withSides: 4 andSequence: #( 4 )).
+			            (DiceMock withSides: 4 andSequence: #( 4 )) }.
+	ships := {
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two') }.
+
+	activeCards := CardManager withActiveCards: {
+			               Acceleration new.
+			               (Speed new affectsShipWithName: 'one').
+			               (Overload new affectsShipWithName: 'two') }.
+
+	activeCards cancel: Acceleration new.
+
+	resultInShip1 := activeCards
+		                 applyPermanentEffectOn: ships first
+		                 overThrow: dicePool throw.
+
+	self assert: resultInShip1 equals: 9"Acceleration was cancelled"
+]
+
+{ #category : 'tests' }
+CardsTest >> test010playerPlaysCancellationCard [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Overload new.
+				          Speed new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Speed new.
+				          Cancellation new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        withSquares: 20;
+		        build.
+
+	game nextPlayerThrowsDiceAndUsesCard:
+		(Overload new affectsShipWithName: 'Ship2').
+
+	game currentPlayerPlaysCard:
+		(Cancellation new withCardToCancel: Overload new).
+
+	game nextPlayerThrowsDiceAndUsesCard:
+		(Speed new affectsShipWithName: 'Ship2').
+
+	game nextPlayerThrowsDice.
+	game nextPlayerThrowsDice.
+
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 9 ).
+				#( 'Ship2' 11 ) }
+]
+
+{ #category : 'tests' }
+CardsTest >> test011playerTriesToPlayInstantCardAsPermanentCard [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Overload new.
+				          Acceleration new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Cancellation new.
+				          Speed new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        withSquares: 20;
+		        build.
+
+	game nextPlayerThrowsDiceAndUsesCard:
+		(Overload new affectsShipWithName: 'Ship2').
+
+
+	self
+		should: [
+				game nextPlayerThrowsDiceAndUsesCard:
+					(Cancellation new withCardToCancel: Overload) ]
+		raiseErrorWithMessageText: 'Not a permanent effect card.'
 ]
