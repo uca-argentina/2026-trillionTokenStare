@@ -44,78 +44,53 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 
 	board := aBoard.
-	ships := listOfShips.
+	ships := SpaceshipManager withShips: listOfShips .
 	dicePool := aDicePool.
 	cards := CardManager withActiveCards: {}.
-	playersTurn := 1
+	
 ]
 
 { #category : 'accessing' }
 Game >> locateSpaceShip: nameOfSpaceship [
 
-	^ (ships
-		   detect: [ :ship | ship name = nameOfSpaceship ]
-		   ifNone: [ self error: 'This spaceship does not exist' ])
-		  asDictionaryInBoard: board
+	^ships locateSpaceShip: nameOfSpaceship in: board 
 ]
 
 { #category : 'accessing' }
 Game >> locateWinningSpaceShip [
 
-	^ (ships
-		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
-		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
-		  board
+	^ ships locateWinningSpaceShipIn: board
 ]
 
 { #category : 'behaviour' }
 Game >> nextPlayerThrowsDice [
 
-	| amountToAdvance shipInTurn |
-	self validateIfGameIsOver.
-	shipInTurn := ships at: playersTurn.
+	| amountToAdvance |
+	ships validateIfGameIsOverInsideBoard: board.
 
 	amountToAdvance := cards
-		                   applyPermanentEffectOn: shipInTurn
+		                   applyPermanentEffectOn: ships shipInTurn
 		                   overThrow: dicePool throw.
 
-	ships := board
-		         shipInTurn: playersTurn
-		         movesForward: amountToAdvance
-		         andAffects: ships.
-
-	playersTurn := playersTurn % ships size + 1
+	ships shipInTurnMoves: amountToAdvance inside: board
 ]
 
 { #category : 'behaviour' }
 Game >> nextPlayerThrowsDiceAndUsesPermanentCard: aCard [
 
-	| amountToAdvance shipInTurn |
-	self validateIfGameIsOver.
-	shipInTurn := ships at: playersTurn.
+	| amountToAdvance |
+	ships validateIfGameIsOverInsideBoard: board.
 
-	cards addPermanentCard: aCard from: shipInTurn.
+	cards addPermanentCard: aCard from: ships shipInTurn.
 
 	amountToAdvance := cards
-		                   applyPermanentEffectOn: shipInTurn
+		                   applyPermanentEffectOn: ships shipInTurn
 		                   overThrow: dicePool throw.
 
-	ships := board
-		         shipInTurn: playersTurn
-		         movesForward: amountToAdvance
-		         andAffects: ships.
-
-	playersTurn := playersTurn % ships size + 1
+	ships shipInTurnMoves: amountToAdvance inside: board
 ]
 
 { #category : 'behaviour' }
 Game >> ranking [
-        ^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
-]
-
-{ #category : 'validation' }
-Game >> validateIfGameIsOver [
-
-	(ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ])
-		ifTrue: [ self error: 'Game is over, no more turns allowed' ]
+        ^ ships ranking
 ]

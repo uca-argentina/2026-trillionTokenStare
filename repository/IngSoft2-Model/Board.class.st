@@ -102,19 +102,6 @@ Board >> occurrencesOf: aSquareType [
 ]
 
 { #category : 'as yet unclassified' }
-Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
-
-	| shipInTurn updatedShips |
-	shipInTurn := (allShips at: playerTurn) movesForward: diceValue.
-	updatedShips := allShips deepCopy.
-	updatedShips at: playerTurn put: shipInTurn.
-	(self shipInsideBoard: shipInTurn) ifTrue: [
-		^ self applyEffectsOf: shipInTurn to: updatedShips ].
-
-	^ updatedShips
-]
-
-{ #category : 'as yet unclassified' }
 Board >> shipInsideBoard: aShip [
 
 	^ (aShip lapsInBoard: self ) <= laps

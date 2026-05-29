@@ -42,28 +42,31 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 { #category : 'tests' }
 BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new.
 	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
 
+	newShipPosition := ships first movesForward: 2.
+	ships at: 1 put: newShipPosition.
 
-	updatedShips := board shipInTurn: 1 movesForward: 2 andAffects: ships.
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 3).
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions 
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships updatedShips finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Speedup new.
@@ -77,20 +80,24 @@ BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 		         (Spaceship withName: '2' andPosition: 3) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 6).
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Square new.
@@ -104,20 +111,24 @@ BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 		         (Spaceship withName: '2' andPosition: 3) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 2).
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Square new.
@@ -132,7 +143,11 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 		         (Spaceship withName: '3' andPosition: 4) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 5).
@@ -140,13 +155,13 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 		                  (Spaceship withName: '3' andPosition: 1) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Square new.
@@ -161,7 +176,11 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 		         (Spaceship withName: '3' andPosition: 4) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 1).
@@ -169,7 +188,7 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 		                  (Spaceship withName: '3' andPosition: 1) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
