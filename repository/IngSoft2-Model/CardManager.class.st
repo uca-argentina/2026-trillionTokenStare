@@ -21,21 +21,6 @@ CardManager >> addPermanentCard: card from: shipInTurn [
 ]
 
 { #category : 'initialization' }
-CardManager >> applyInstantEffectCard: card from: shipInTurn withShips: listOfShips withBoard: board [
-
-	| updatedShips |
-	updatedShips := listOfShips deepCopy.
-
-	(shipInTurn playCard: card)
-		withCardManager: self;
-		withShips: updatedShips;
-		withBoard: board;
-		applyInstantEffect.
-
-	^ updatedShips
-]
-
-{ #category : 'initialization' }
 CardManager >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	| resultingThrow |

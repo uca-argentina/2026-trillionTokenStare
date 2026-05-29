@@ -109,19 +109,6 @@ Game >> nextPlayerThrowsDiceAndUsesPermanentCard: aCard [
 ]
 
 { #category : 'behaviour' }
-Game >> nextPlayerUsesInstantCard: anInstantCard [
-
-	| currentShip |
-	currentShip := ships at: playersTurn.
-
-	ships := cards
-		         applyInstantEffectCard: anInstantCard
-		         from: currentShip
-		         withShips: ships
-		         withBoard: board
-]
-
-{ #category : 'behaviour' }
 Game >> ranking [
         ^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
 ]

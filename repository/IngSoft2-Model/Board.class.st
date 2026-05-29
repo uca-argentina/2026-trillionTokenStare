@@ -68,9 +68,7 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 	| square |
 	square := squares at: (certainShip positionInBoard: self).
 	
-	"((square isKindOf: Square) and: [ square class ~~ Square ]) ifTrue: [
-		lastEffect := square ]."
-	lastEffect := Speedup new.
+	lastEffect := square.
 
 	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
 ]
