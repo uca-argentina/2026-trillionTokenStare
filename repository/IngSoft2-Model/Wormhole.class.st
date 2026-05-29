@@ -12,3 +12,17 @@ Wormhole >> applyEffectTo: aShip in: aBoard [
 		^ aShip movesBackward: 4 ].
 	^ aShip
 ]
+
+{ #category : 'as yet unclassified' }
+Wormhole >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+
+	aCondition ifTrue: [
+		^ aShip movesBackward: 4 ].
+	^ aShip
+]
+
+{ #category : 'as yet unclassified' }
+Wormhole >> noEffect [
+
+^ false
+]

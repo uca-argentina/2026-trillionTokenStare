@@ -67,20 +67,14 @@ Board >> applyEffectsOf: certainShip to: listOfShips [
 
 	| square |
 	square := squares at: (certainShip positionInBoard: self).
-	
-	lastEffect := square.
 
-	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
-]
+	square noEffect ifFalse: [ lastEffect := square ].
 
-{ #category : 'as yet unclassified' }
-Board >> applyLastEffectTo: shipThatReceivesEffect in: listOfShips [
-
-	| updatedShips |
-	updatedShips := listOfShips deepCopy.
-	updatedShips collect: [ :ship | lastEffect applyEffectTo: ship in: self ].
-
-	^ updatedShips
+	^ listOfShips collect: [ :ship |
+			  square
+				  applyEffectTo: ship
+				  in: self
+				  withCondition: (ship positionInBoard: self) = square position ]
 ]
 
 { #category : 'initialization' }
@@ -88,6 +82,7 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
 	laps := aNumberOfLaps.
+	lastEffect := Square new.
 	
 ]
 
@@ -99,6 +94,16 @@ Board >> occurrencesOf: aSquareType [
 	squares do: [ :each |
 		each = aSquareType ifTrue: [ count := count + 1 ] ].
 	^ count
+]
+
+{ #category : 'as yet unclassified' }
+Board >> repeatLastEffectOn: targetShip fromShips: listOfShips [
+
+	^ listOfShips collect: [ :ship |
+			  lastEffect
+				  applyEffectTo: ship
+				  in: self
+				  withCondition: targetShip = ship ]
 ]
 
 { #category : 'as yet unclassified' }

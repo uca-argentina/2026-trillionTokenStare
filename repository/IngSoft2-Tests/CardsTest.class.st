@@ -251,3 +251,43 @@ CardsTest >> test009cancellationCard [
 
 	self assert: resultInShip1 equals: 9"Acceleration was cancelled"
 ]
+
+{ #category : 'tests' }
+CardsTest >> test010repeatCard [
+
+	| ships board finalPositions |
+	ships := {
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two') }.
+
+	board := MockBoardBuilder new
+		         withEffects: {
+				         Square new.
+				         Speedup new.
+				         Square new.
+				         Square new.
+				         Square new.
+				         Square new.
+				         Square new.
+				         Square new.
+				         Square new };
+		         build.
+
+	"
+	game next turn loop across objects
+	"
+	ships at: 1 put: (ships first movesForward: 1).
+
+	(board shipInsideBoard: ships first) ifTrue: [
+		ships := board applyEffectsOf: ships first to: ships ].
+	"
+	action to be tested
+	"
+	ships := board repeatLastEffectOn: ships second fromShips: ships.
+
+	finalPositions := {
+		                  (Spaceship withName: 'one' andPosition: 6).
+		                  (Spaceship withName: 'two' andPosition: 5) }.
+
+	self assert: ships equals: finalPositions
+]

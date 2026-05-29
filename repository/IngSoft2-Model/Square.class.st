@@ -21,6 +21,12 @@ Square >> applyEffectTo: aShip in: aBoard [
 	^ aShip
 ]
 
+{ #category : 'as yet unclassified' }
+Square >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+
+	^ aShip
+]
+
 { #category : 'accessing' }
 Square >> atPosition: squareNumber [
 
@@ -37,6 +43,12 @@ Square >> initialize [
 	parsecs := 1.
 	
 	^ self
+]
+
+{ #category : 'as yet unclassified' }
+Square >> noEffect [
+
+^ true
 ]
 
 { #category : 'accessing' }

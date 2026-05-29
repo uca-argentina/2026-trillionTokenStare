@@ -15,6 +15,13 @@ Moonwalk >> applyEffectTo: aShip in: aBoard [
 	^ aShip movesBackward: backtrack
 ]
 
+{ #category : 'as yet unclassified' }
+Moonwalk >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+
+	aCondition ifTrue: [ ^ aShip ].
+	^ aShip movesBackward: backtrack
+]
+
 { #category : 'accessing' }
 Moonwalk >> backtrack [
         ^ backtrack
@@ -29,6 +36,12 @@ Moonwalk >> initialize [
 	parsecs := 1.
 
 	^ self
+]
+
+{ #category : 'as yet unclassified' }
+Moonwalk >> noEffect [
+
+^ false
 ]
 
 { #category : 'initialization' }

@@ -27,9 +27,9 @@ CardManager >> applyPermanentEffectOn: aShip overThrow: aThrow [
 	resultingThrow := aThrow.
 
 	activeCards do: [ :card |
-		resultingThrow := card
-			                  applyPermanentEffectOn: aShip
-			                  overThrow: resultingThrow ].
+			resultingThrow := card
+				                  applyPermanentEffectOn: aShip
+				                  overThrow: resultingThrow ].
 	^ resultingThrow
 ]
 

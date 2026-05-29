@@ -66,7 +66,7 @@ BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 { #category : 'tests' }
 BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions newShipPosition |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Speedup new.

@@ -20,6 +20,17 @@ HyperJump >> applyEffectTo: aShip in: aBoard [
 	^ aShip
 ]
 
+{ #category : 'as yet unclassified' }
+HyperJump >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+
+	| currentJump |
+	aCondition ifTrue: [
+			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
+			jumpIndex := jumpIndex % jumps size + 1.
+			^ aShip movesForward: currentJump ].
+	^ aShip
+]
+
 { #category : 'accessing' }
 HyperJump >> initialize [
 
@@ -30,6 +41,12 @@ HyperJump >> initialize [
 	jumpIndex := 1.
 
 	^ self
+]
+
+{ #category : 'as yet unclassified' }
+HyperJump >> noEffect [
+
+^ false
 ]
 
 { #category : 'accessing' }
