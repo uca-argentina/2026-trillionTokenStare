@@ -6,17 +6,28 @@ Class {
 }
 
 { #category : 'initialization' }
+Repeat >> affectsShipWithName: _target [
+
+	shipThatReceivesEffect := _target .
+
+	^ self
+]
+
+{ #category : 'initialization' }
 Repeat >> applyInstantEffect [
 
-	board applyLastEffectTo: shipThatReceivesEffect in: listOfShips
+	shipManager
+		shipNamed: shipThatReceivesEffect
+		repeatsMoveinside: board
+	"board repeatLastEffectOn: shipThatReceivesEffect fromShips: shipManager"
 ]
 
 { #category : 'initialization' }
 Repeat >> initialize [
 
 	super initialize.
-	shipThatReceivesEffect := ''.
-	listOfShips := {  }.
+	shipThatReceivesEffect := Spaceship withName: ''.
+	shipManager := SpaceshipManager withSpaceships: {  }.
 	board := BoardBuilder new build.
 	^ self
 ]

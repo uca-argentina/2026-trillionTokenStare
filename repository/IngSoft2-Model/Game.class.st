@@ -44,26 +44,51 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 
 	board := aBoard.
-	ships := SpaceshipManager withShips: listOfShips .
+	ships := SpaceshipManager withSpaceships: listOfShips .
 	dicePool := aDicePool.
 	cards := CardManager withActiveCards: {}.
 	
 ]
 
+{ #category : 'behaviour' }
+Game >> instantCard: aCard from: nameOfPlayer [
+
+	| cardToPlay |
+	ships validateIfGameIsOverInsideBoard: board.
+	"cards addInstantCard: aCard from: (ships locateSpaceShip: nameOfPlayer)."
+
+	cardToPlay := (ships locateSpaceShip: nameOfPlayer in:board) playCard: aCard.
+
+	cardToPlay
+		withBoard: board;
+		withCardManager: cards;
+		withSpaceships: ships;
+		applyInstantEffect
+		
+	
+
+
+]
+
 { #category : 'accessing' }
 Game >> locateSpaceShip: nameOfSpaceship [
 
-	^ships locateSpaceShip: nameOfSpaceship in: board 
+	^ships SpaceShipAsDictionary: nameOfSpaceship in: board 
 ]
 
 { #category : 'accessing' }
 Game >> locateWinningSpaceShip [
 
-	^ ships locateWinningSpaceShipIn: board
+	^ ships WinningSpaceShipAsDictionaryIn: board
 ]
 
 { #category : 'behaviour' }
-Game >> nextPlayerThrowsDice [
+Game >> ranking [
+        ^ ships ranking
+]
+
+{ #category : 'behaviour' }
+Game >> throwDiceNextTurn [
 
 	| amountToAdvance |
 	ships validateIfGameIsOverInsideBoard: board.
@@ -76,7 +101,7 @@ Game >> nextPlayerThrowsDice [
 ]
 
 { #category : 'behaviour' }
-Game >> nextPlayerThrowsDiceAndUsesPermanentCard: aCard [
+Game >> throwDicePermanentCardNextTurn: aCard [
 
 	| amountToAdvance |
 	ships validateIfGameIsOverInsideBoard: board.
@@ -88,9 +113,5 @@ Game >> nextPlayerThrowsDiceAndUsesPermanentCard: aCard [
 		                   overThrow: dicePool throw.
 
 	ships shipInTurnMoves: amountToAdvance inside: board
-]
-
-{ #category : 'behaviour' }
-Game >> ranking [
-        ^ ships ranking
+	
 ]

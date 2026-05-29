@@ -2,7 +2,8 @@ Class {
 	#name : 'CardManager',
 	#superclass : 'Object',
 	#instVars : [
-		'activeCards'
+		'activeCards',
+		'instantCards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -12,6 +13,12 @@ Class {
 CardManager class >> withActiveCards: cards [
 
 ^self new initializeWithActiveCards: cards 
+]
+
+{ #category : 'initialization' }
+CardManager >> addInstantCard: card from: shipInTurn [
+
+	instantCards add: (shipInTurn playCard: card)
 ]
 
 { #category : 'initialization' }

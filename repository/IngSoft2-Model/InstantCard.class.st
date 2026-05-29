@@ -5,9 +5,8 @@ Class {
 		'cardToCancel',
 		'shipThatReceivesEffect',
 		'cardManager',
-		'listOfShips',
 		'board',
-		'ships'
+		'shipManager'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -35,24 +34,9 @@ InstantCard >> withCardManager: _cardManager [
 ]
 
 { #category : 'initialization' }
-InstantCard >> withCardToCancel: _cardToCancel [
+InstantCard >> withSpaceships: _listOfShips [
 
-	cardToCancel := _cardToCancel.
-	^self
-]
-
-{ #category : 'initialization' }
-InstantCard >> withShips: _listOfShips [
-
-	ships := _listOfShips.
-
-	^ self
-]
-
-{ #category : 'initialization' }
-InstantCard >> withTargetShipName: _target [
-
-	shipThatReceivesEffect := _target .
+	shipManager := _listOfShips.
 
 	^ self
 ]

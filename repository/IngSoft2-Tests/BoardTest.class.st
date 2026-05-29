@@ -331,7 +331,7 @@ BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEf
 		        withDicepool: preloadedDicePool;
 		        build.
 
-	game nextPlayerThrowsDice.
+	game throwDiceNextTurn.
 	positionsExpected := {
 		                     { 'one'. 6 }.
 		                     { 'two'. 1 } }.

@@ -9,13 +9,6 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Moonwalk >> applyEffectTo: aShip in: aBoard [
-
-	(aShip positionInBoard: aBoard) = number ifTrue: [ ^ aShip ].
-	^ aShip movesBackward: backtrack
-]
-
-{ #category : 'as yet unclassified' }
 Moonwalk >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
 	aCondition ifTrue: [ ^ aShip ].

@@ -126,7 +126,7 @@ CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 
 	self
 		should: [
-				game nextPlayerThrowsDiceAndUsesPermanentCard:
+				game throwDicePermanentCardNextTurn:
 					(Overload new affectsShipWithName: 'Ship2') ]
 		raiseErrorWithMessageText:
 		'Ship can not play a card that doesnt posess'
@@ -152,8 +152,8 @@ CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 		        withDicepool: dicePool;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesPermanentCard: Acceleration new.
-	game nextPlayerThrowsDice.
+	game throwDicePermanentCardNextTurn: Acceleration new.
+	game throwDiceNextTurn.
 
 	self
 		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
@@ -183,10 +183,10 @@ CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 		        withSquares: 20;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesPermanentCard:
+	game throwDicePermanentCardNextTurn:
 		(Speed new affectsShipWithName: 'Ship1').
-	game nextPlayerThrowsDice.
-	game nextPlayerThrowsDice.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
 
 	self
 		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
@@ -215,10 +215,10 @@ CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 		        withDicepool: dicePool;
 		        build.
 
-	game nextPlayerThrowsDiceAndUsesPermanentCard:
+	game throwDicePermanentCardNextTurn:
 		(Overload new affectsShipWithName: 'Ship2').
-	game nextPlayerThrowsDice.
-	game nextPlayerThrowsDice.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
 
 	self
 		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
@@ -290,4 +290,101 @@ CardsTest >> test010repeatCard [
 		                  (Spaceship withName: 'two' andPosition: 5) }.
 
 	self assert: ships equals: finalPositions
+]
+
+{ #category : 'tests' }
+CardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Overload new.
+				          Cancellation new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Repeat new.
+				          Speed new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 2 2 2 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        withBoardBuilder: (MockBoardBuilder new withEffects: {
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new });
+		        build.
+
+	game throwDiceNextTurn.
+	game throwDicePermanentCardNextTurn:
+		(Speed new affectsShipWithName: 'Ship2').
+
+	game
+		instantCard: (Cancellation new affectsCard: Speed new)
+		from: 'Ship1'.
+
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
+
+
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 7 ).
+				#( 'Ship2' 6 ) }
+]
+
+{ #category : 'tests' }
+CardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
+
+	| ships dicePool game |
+	ships := {
+		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
+				          Overload new.
+				          Cancellation new }).
+		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
+				          Repeat new.
+				          Speed new }) }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 2 3 )) }.
+
+	game := GameBuilder new
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        withBoardBuilder: (MockBoardBuilder new withEffects: {
+						         Square new.
+						         Square new.
+						         Speedup new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new.
+						         Square new });
+		        build.
+
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
+
+	game
+		instantCard: (Repeat new affectsShipWithName: 'Ship2')
+		from: 'Ship2'.
+
+
+
+	self
+		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
+		equals: {
+				#( 'Ship1' 7 ).
+				#( 'Ship2' 8 ) }
 ]

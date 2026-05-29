@@ -16,12 +16,6 @@ Square >> = aSquareClass [
 ]
 
 { #category : 'as yet unclassified' }
-Square >> applyEffectTo: aShip in: aBoard [
-
-	^ aShip
-]
-
-{ #category : 'as yet unclassified' }
 Square >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
 	^ aShip

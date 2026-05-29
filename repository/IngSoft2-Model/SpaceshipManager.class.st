@@ -10,9 +10,25 @@ Class {
 }
 
 { #category : 'initialization' }
-SpaceshipManager class >> withShips: _ships [
+SpaceshipManager class >> withSpaceships: _ships [
 
 	^ self new initializeWithShips: _ships
+]
+
+{ #category : 'initialization' }
+SpaceshipManager >> SpaceShipAsDictionary: nameOfSpaceship in: board [
+
+	^ (self locateSpaceShip: nameOfSpaceship in: board)
+		  asDictionaryInBoard: board
+]
+
+{ #category : 'initialization' }
+SpaceshipManager >> WinningSpaceShipAsDictionaryIn: board [
+
+	^ (ships
+		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
+		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
+		  board
 ]
 
 { #category : 'initialization' }
@@ -31,19 +47,9 @@ SpaceshipManager >> initializeWithShips: _ships [
 { #category : 'initialization' }
 SpaceshipManager >> locateSpaceShip: nameOfSpaceship in: board [
 
-	^ (ships
-		   detect: [ :ship | ship name = nameOfSpaceship ]
-		   ifNone: [ self error: 'This spaceship does not exist' ])
-		  asDictionaryInBoard: board
-]
-
-{ #category : 'initialization' }
-SpaceshipManager >> locateWinningSpaceShipIn: board [
-
-	^ (ships
-		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
-		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
-		  board
+	^ ships
+		  detect: [ :ship | ship name = nameOfSpaceship ]
+		  ifNone: [ self error: 'This spaceship does not exist' ]
 ]
 
 { #category : 'initialization' }
@@ -69,6 +75,15 @@ SpaceshipManager >> shipInTurnMoves: amountToAdvance inside: board [
 		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	self advanceTurn
+]
+
+{ #category : 'initialization' }
+SpaceshipManager >> shipNamed: playersName repeatsMoveinside: board [
+
+	ships := board
+		         repeatLastEffectOn:
+		         (self locateSpaceShip: playersName in: board)
+		         fromShips: ships
 ]
 
 { #category : 'initialization' }

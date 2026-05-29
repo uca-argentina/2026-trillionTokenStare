@@ -9,14 +9,6 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Speedup >> applyEffectTo: aShip in: aBoard [
-
-	(aShip positionInBoard: aBoard) = number ifTrue: [
-		^ aShip movesForward: 4 ].
-	^ aShip
-]
-
-{ #category : 'as yet unclassified' }
 Speedup >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
 	aCondition ifTrue: [

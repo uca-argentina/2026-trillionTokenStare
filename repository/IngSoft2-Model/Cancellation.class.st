@@ -5,6 +5,13 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'as yet unclassified' }
+Cancellation >> affectsCard: aCard [
+
+	cardToCancel := aCard.
+	^ self
+]
+
 { #category : 'initialization' }
 Cancellation >> applyInstantEffect [
 
