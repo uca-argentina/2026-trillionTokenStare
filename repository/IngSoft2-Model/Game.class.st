@@ -57,7 +57,7 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	ships validateIfGameIsOverInsideBoard: board.
 	"cards addInstantCard: aCard from: (ships locateSpaceShip: nameOfPlayer)."
 
-	cardToPlay := (ships locateSpaceShip: nameOfPlayer in:board) playCard: aCard.
+	cardToPlay := (ships locateSpaceShip: nameOfPlayer ) playCard: aCard.
 
 	cardToPlay
 		withBoard: board;
@@ -73,16 +73,16 @@ Game >> instantCard: aCard from: nameOfPlayer [
 { #category : 'accessing' }
 Game >> locateSpaceShip: nameOfSpaceship [
 
-	^ships SpaceShipAsDictionary: nameOfSpaceship in: board 
+	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
 ]
 
 { #category : 'accessing' }
 Game >> locateWinningSpaceShip [
 
-	^ ships WinningSpaceShipAsDictionaryIn: board
+	^ ships winningSpaceShipAsDictionaryIn: board
 ]
 
-{ #category : 'behaviour' }
+{ #category : 'accessing' }
 Game >> ranking [
         ^ ships ranking
 ]

@@ -15,19 +15,13 @@ CardManager class >> withActiveCards: cards [
 ^self new initializeWithActiveCards: cards 
 ]
 
-{ #category : 'initialization' }
-CardManager >> addInstantCard: card from: shipInTurn [
-
-	instantCards add: (shipInTurn playCard: card)
-]
-
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 CardManager >> addPermanentCard: card from: shipInTurn [
 
 	activeCards add: (shipInTurn playCard: card)
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 CardManager >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	| resultingThrow |
@@ -40,7 +34,7 @@ CardManager >> applyPermanentEffectOn: aShip overThrow: aThrow [
 	^ resultingThrow
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 CardManager >> cancel: card [
 
 	activeCards remove: card ifAbsent: [ self error: 'No permanent card of this type found' ]
@@ -53,7 +47,7 @@ CardManager >> initializeWithActiveCards: _cards [
 	activeCards := _cards asOrderedCollection 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 CardManager >> permanentCards [
 
 	^ activeCards

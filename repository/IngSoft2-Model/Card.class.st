@@ -11,13 +11,13 @@ Card >> = aCard [
 	^ self class = aCard class
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 Card >> applyInstantEffect [
 
 	self error: 'Not an instant effect card'
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 Card >> applyPermanentEffectOn: aShip overThrow: aThrow [
 
 	self error: 'Not a permanent effect card.'

@@ -62,7 +62,7 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 		  andLaps: aNumberOfLaps
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Board >> applyEffectsOf: certainShip to: listOfShips [
 
 	| square |
@@ -96,7 +96,7 @@ Board >> occurrencesOf: aSquareType [
 	^ count
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Board >> repeatLastEffectOn: targetShip fromShips: listOfShips [
 
 	^ listOfShips collect: [ :ship |
@@ -106,7 +106,7 @@ Board >> repeatLastEffectOn: targetShip fromShips: listOfShips [
 				  withCondition: targetShip = ship ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Board >> shipInsideBoard: aShip [
 
 	^ (aShip lapsInBoard: self ) <= laps

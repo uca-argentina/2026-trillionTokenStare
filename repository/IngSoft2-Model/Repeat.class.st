@@ -18,7 +18,7 @@ Repeat >> applyInstantEffect [
 
 	shipManager
 		shipNamed: shipThatReceivesEffect
-		repeatsMoveinside: board
+		repeatsEffectinside: board
 	"board repeatLastEffectOn: shipThatReceivesEffect fromShips: shipManager"
 ]
 

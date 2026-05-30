@@ -70,7 +70,7 @@ Spaceship >> lapsInBoard: board [
 	^ position - 1 // board size + 1
 ]
 
-{ #category : 'changing state' }
+{ #category : 'behavior' }
 Spaceship >> movesBackward: anAmmountOfSquares [
 
 	| newPosition |
@@ -79,7 +79,7 @@ Spaceship >> movesBackward: anAmmountOfSquares [
 	^ self class withName: name andPosition: newPosition andCards: cards
 ]
 
-{ #category : 'changing state' }
+{ #category : 'behavior' }
 Spaceship >> movesForward: anAmmountOfSquares [
 
 	| newPosition |
@@ -88,7 +88,7 @@ Spaceship >> movesForward: anAmmountOfSquares [
 	^ self class withName: name andPosition: newPosition andCards: cards
 ]
 
-{ #category : 'changing state' }
+{ #category : 'behavior' }
 Spaceship >> movesToPosition: aPosition InBoard: board [
 
 	| currentNumericalLap newAbsolutePosition |
@@ -103,7 +103,7 @@ Spaceship >> name [
 	^ name.
 ]
 
-{ #category : 'changing state' }
+{ #category : 'behavior' }
 Spaceship >> playCard: aCard [
 
 	^ cards
@@ -124,7 +124,7 @@ Spaceship >> positionInBoard: board [
 	^ position - 1 % board size + 1
 ]
 
-{ #category : 'accessing' }
+{ #category : 'behavior' }
 Spaceship >> receivesCard: _card [
 
 	cards add: _card
