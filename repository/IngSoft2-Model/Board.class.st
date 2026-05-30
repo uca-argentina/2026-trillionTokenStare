@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'squares',
-		'laps'
+		'laps',
+		'lastEffect'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -31,11 +32,19 @@ Board class >> validateNumberOfSquares: numberOfSquares [
 ]
 
 { #category : 'as yet unclassified' }
+Board class >> validateUniformAmountOfParsecs: aListOfSquares [
+
+	aListOfSquares overlappingPairsDo: [ :current :next |
+		current parsecs = next parsecs ifFalse: [ self error: 'Squares are required to all have the same amount of parsecs' ] ]
+]
+
+{ #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares [
 
 	self validateNumberOfSquares: aListOfSquares size.
 	self validateContiguousSquares: aListOfSquares.
 	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+	self validateUniformAmountOfParsecs: aListOfSquares.
 
 	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
@@ -46,19 +55,26 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 	self validateNumberOfSquares: aListOfSquares size.
 	self validateContiguousSquares: aListOfSquares.
 	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+	self validateUniformAmountOfParsecs: aListOfSquares.
 
 	^ self new
 		  initializeWithSquares: aListOfSquares
 		  andLaps: aNumberOfLaps
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Board >> applyEffectsOf: certainShip to: listOfShips [
 
 	| square |
 	square := squares at: (certainShip positionInBoard: self).
 
-	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
+	square noEffect ifFalse: [ lastEffect := square ].
+
+	^ listOfShips collect: [ :ship |
+			  square
+				  applyEffectTo: ship
+				  in: self
+				  withCondition: (ship positionInBoard: self) = square position ]
 ]
 
 { #category : 'initialization' }
@@ -66,6 +82,7 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
 	laps := aNumberOfLaps.
+	lastEffect := Square new.
 	
 ]
 
@@ -79,20 +96,17 @@ Board >> occurrencesOf: aSquareType [
 	^ count
 ]
 
-{ #category : 'as yet unclassified' }
-Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
+{ #category : 'behavior' }
+Board >> repeatLastEffectOn: targetShip fromShips: listOfShips [
 
-	| shipInTurn updatedShips |
-	shipInTurn := (allShips at: playerTurn) movesForward: diceValue.
-	updatedShips := allShips deepCopy.
-	updatedShips at: playerTurn put: shipInTurn.
-	(self shipInsideBoard: shipInTurn) ifTrue: [
-		^ self applyEffectsOf: shipInTurn to: updatedShips ].
-
-	^ updatedShips
+	^ listOfShips collect: [ :ship |
+			  lastEffect
+				  applyEffectTo: ship
+				  in: self
+				  withCondition: targetShip = ship ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Board >> shipInsideBoard: aShip [
 
 	^ (aShip lapsInBoard: self ) <= laps

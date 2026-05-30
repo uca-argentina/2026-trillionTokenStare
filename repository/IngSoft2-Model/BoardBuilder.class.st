@@ -11,7 +11,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'initialization' }
+{ #category : 'building' }
 BoardBuilder >> build [
 
 	| parsecsPerSquare bagOfEffects squares |
@@ -50,48 +50,55 @@ BoardBuilder >> initialize [
 		                 (AtomicBomb new-> 2) } asDictionary
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 BoardBuilder >> numberOfSquares [
 
 	^ numberOfSquares
 ]
 
-{ #category : 'initialization' }
+{ #category : 'validation' }
 BoardBuilder >> validateParsecs [
 
 	parsecs < 1000 ifTrue: [
 		self error: 'The board must have at least 1000 parsecs.' ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'validation' }
 BoardBuilder >> validateSquares [
 
 	 numberOfSquares < 1 ifTrue: [
 		self error: 'The board must have at least 1 square.' ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 BoardBuilder >> withLaps: _laps [
 
 	laps := _laps.
 	^ self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
+BoardBuilder >> withLightYears: _lightYears [
+
+	parsecs := _lightYears * 3.
+	^ self
+]
+
+{ #category : 'behavior' }
 BoardBuilder >> withParsecs: _parsecs [
 
 	parsecs := _parsecs.
 	^ self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 BoardBuilder >> withProbabilities: _probabilities [
 
 	probabilities := _probabilities.
 	^ self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 BoardBuilder >> withSquares: _squares [
 
 	numberOfSquares := _squares.

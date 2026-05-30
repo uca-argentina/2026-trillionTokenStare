@@ -60,6 +60,13 @@ GameBuilder >> withLaps: _laps [
 ]
 
 { #category : 'as yet unclassified' }
+GameBuilder >> withLightYears: _lightYears [
+
+	parsecs := _lightYears * 3.
+	^ self
+]
+
+{ #category : 'as yet unclassified' }
 GameBuilder >> withParsecs: _parsecs [
 
 	parsecs := _parsecs.

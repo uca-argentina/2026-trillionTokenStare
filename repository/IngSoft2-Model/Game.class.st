@@ -5,7 +5,9 @@ Class {
 		'ships',
 		'dicePool',
 		'playersTurn',
-		'board'
+		'board',
+		'cards',
+		'lastCardPlayed'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -40,52 +42,76 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [ 
+Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 
 	board := aBoard.
-	ships := listOfShips. 
+	ships := SpaceshipManager withSpaceships: listOfShips.
 	dicePool := aDicePool.
-	playersTurn := 1
+	cards := CardManager withActiveCards: {  }.
+	lastCardPlayed := Card new
+]
+
+{ #category : 'behaviour' }
+Game >> instantCard: aCard from: nameOfPlayer [
+
+	| currentCard |
+	ships validateIfGameIsOverInsideBoard: board.
+
+	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
+
+	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
+
+	currentCard
+		withBoard: board;
+		withCardManager: cards;
+		withSpaceships: ships;
+		withLastCardPlayed: lastCardPlayed ;
+		applyInstantEffect
 ]
 
 { #category : 'accessing' }
 Game >> locateSpaceShip: nameOfSpaceship [
 
-	^ (ships
-		   detect: [ :ship | ship name = nameOfSpaceship ]
-		   ifNone: [ self error: 'This spaceship does not exist' ])
-		  asDictionaryInBoard: board
+	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
 ]
 
 { #category : 'accessing' }
 Game >> locateWinningSpaceShip [
 
-	^ (ships
-		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
-		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
-		  board
+	^ ships winningSpaceShipAsDictionaryIn: board
 ]
 
-{ #category : 'behaviour' }
-Game >> nextTurn [
-
-	| diceValue updatedShips |
-	self validateIfGameIsOver.
-	diceValue := dicePool throw.
-	updatedShips := board shipInTurn: playersTurn movesForward: diceValue andAffects: ships .
-	ships := updatedShips.
-	
-	playersTurn := playersTurn % ships size + 1
-]
-
-{ #category : 'behaviour' }
+{ #category : 'accessing' }
 Game >> ranking [
-        ^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
+        ^ ships ranking
 ]
 
-{ #category : 'validation' }
-Game >> validateIfGameIsOver [
+{ #category : 'behaviour' }
+Game >> throwDiceNextTurn [
 
-	(ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ])
-		ifTrue: [ self error: 'Game is over, no more turns allowed' ]
+	| amountToAdvance |
+	ships validateIfGameIsOverInsideBoard: board.
+
+	amountToAdvance := cards
+		                   applyPermanentEffectOn: ships shipInTurn
+		                   overThrow: dicePool throw.
+
+	ships shipInTurnMoves: amountToAdvance inside: board
+]
+
+{ #category : 'behaviour' }
+Game >> throwDicePermanentCardNextTurn: aCard [
+
+	| amountToAdvance currentCard |
+	ships validateIfGameIsOverInsideBoard: board.
+
+	currentCard := cards addPermanentCard: aCard from: ships shipInTurn.
+	
+	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
+
+	amountToAdvance := cards
+		                   applyPermanentEffectOn: ships shipInTurn
+		                   overThrow: dicePool throw.
+
+	ships shipInTurnMoves: amountToAdvance inside: board
 ]

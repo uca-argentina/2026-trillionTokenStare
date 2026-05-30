@@ -15,8 +15,8 @@ Square >> = aSquareClass [
 	^ aSquareClass = self class
 ]
 
-{ #category : 'as yet unclassified' }
-Square >> applyEffectTo: aShip in: aBoard [
+{ #category : 'behavior' }
+Square >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
 	^ aShip
 ]
@@ -29,7 +29,7 @@ Square >> atPosition: squareNumber [
 	^ self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 Square >> initialize [
 
 	super initialize.
@@ -37,6 +37,18 @@ Square >> initialize [
 	parsecs := 1.
 	
 	^ self
+]
+
+{ #category : 'behavior' }
+Square >> noEffect [
+
+^ true
+]
+
+{ #category : 'accessing' }
+Square >> parsecs [
+
+	^ parsecs 
 ]
 
 { #category : 'accessing' }

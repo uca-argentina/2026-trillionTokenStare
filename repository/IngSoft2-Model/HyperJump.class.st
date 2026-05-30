@@ -10,10 +10,10 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-HyperJump >> applyEffectTo: aShip in: aBoard [
+HyperJump >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
 	| currentJump |
-	(aShip positionInBoard: aBoard) = number ifTrue: [
+	aCondition ifTrue: [
 			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
 			jumpIndex := jumpIndex % jumps size + 1.
 			^ aShip movesForward: currentJump ].
@@ -32,8 +32,23 @@ HyperJump >> initialize [
 	^ self
 ]
 
+{ #category : 'as yet unclassified' }
+HyperJump >> noEffect [
+
+^ false
+]
+
 { #category : 'accessing' }
-HyperJump >> withJumps: listOfJumps [
+HyperJump >> withJumpsInLightYears: listOfJumps [
+
+	jumps := (listOfJumps sorted: [ :a :b | a > b ]) collect: [ :jump | jump * 3 ].
+	jumpIndex := 1.
+
+	^ self
+]
+
+{ #category : 'accessing' }
+HyperJump >> withJumpsInParsecs: listOfJumps [
 
 	jumps := listOfJumps sorted: [ :a :b | a > b ].
 	jumpIndex := 1.

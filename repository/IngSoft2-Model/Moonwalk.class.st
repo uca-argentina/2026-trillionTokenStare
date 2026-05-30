@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Moonwalk >> applyEffectTo: aShip in: aBoard [
+Moonwalk >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
-	(aShip positionInBoard: aBoard) = number ifTrue: [ ^ aShip ].
+	aCondition ifTrue: [ ^ aShip ].
 	^ aShip movesBackward: backtrack
 ]
 
@@ -29,6 +29,12 @@ Moonwalk >> initialize [
 	parsecs := 1.
 
 	^ self
+]
+
+{ #category : 'as yet unclassified' }
+Moonwalk >> noEffect [
+
+^ false
 ]
 
 { #category : 'initialization' }

@@ -6,9 +6,15 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Wormhole >> applyEffectTo: aShip in: aBoard [
+Wormhole >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
 
-	(aShip positionInBoard: aBoard) = number ifTrue: [
+	aCondition ifTrue: [
 		^ aShip movesBackward: 4 ].
 	^ aShip
+]
+
+{ #category : 'as yet unclassified' }
+Wormhole >> noEffect [
+
+^ false
 ]

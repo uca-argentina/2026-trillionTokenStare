@@ -42,28 +42,31 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 { #category : 'tests' }
 BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new.
 	board := preloadedSquares build.
 	ships := {
 		         (Spaceship withName: '1' andPosition: 1).
 		         (Spaceship withName: '2' andPosition: 3) }.
 
+	newShipPosition := ships first movesForward: 2.
+	ships at: 1 put: newShipPosition.
 
-	updatedShips := board shipInTurn: 1 movesForward: 2 andAffects: ships.
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 3).
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions 
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Speedup new.
@@ -77,20 +80,24 @@ BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 		         (Spaceship withName: '2' andPosition: 3) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 6).
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Square new.
@@ -104,20 +111,24 @@ BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 		         (Spaceship withName: '2' andPosition: 3) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 2).
 		                  (Spaceship withName: '2' andPosition: 3) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Square new.
@@ -132,7 +143,11 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 		         (Spaceship withName: '3' andPosition: 4) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 5).
@@ -140,13 +155,13 @@ BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 		                  (Spaceship withName: '3' andPosition: 1) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
 BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
-	| preloadedSquares board ships updatedShips finalPositions |
+	| preloadedSquares board ships  finalPositions newShipPosition |
 	preloadedSquares := MockBoardBuilder new withEffects: {
 			                    Square new.
 			                    Square new.
@@ -161,7 +176,11 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 		         (Spaceship withName: '3' andPosition: 4) }.
 
 
-	updatedShips := board shipInTurn: 1 movesForward: 1 andAffects: ships.
+	newShipPosition := ships first movesForward: 1.
+	ships at: 1 put: newShipPosition.
+
+	(board shipInsideBoard: newShipPosition) ifTrue: [
+		ships := board applyEffectsOf: newShipPosition to: ships ].
 
 	finalPositions := {
 		                  (Spaceship withName: '1' andPosition: 1).
@@ -169,20 +188,21 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 		                  (Spaceship withName: '3' andPosition: 1) }.
 
 
-	self assert: updatedShips equals: finalPositions
+	self assert: ships equals: finalPositions
 ]
 
 { #category : 'tests' }
-BoardTest >> test010HyperJumpSquare [
+BoardTest >> test010HyperJumpSquareWithParsecs [
 
-	| finalPositions ships boardBuilder game |
+	| finalPositions ships boardBuilder game hyperJumpSquare |
+	hyperJumpSquare := HyperJump new withJumpsInParsecs: { 300 . 200 }.
 	ships := {
 		         (Spaceship withName: 'one').
 		         (Spaceship withName: 'two').
 		         (Spaceship withName: 'three') }.
 	boardBuilder := MockBoardBuilder new withEffects: {
 			                Square new.
-			                HyperJump new.
+			                hyperJumpSquare.
 			                Square new.
 			                Square new.
 			                Square new.
@@ -311,7 +331,7 @@ BoardTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEf
 		        withDicepool: preloadedDicePool;
 		        build.
 
-	game nextTurn.
+	game throwDiceNextTurn.
 	positionsExpected := {
 		                     { 'one'. 6 }.
 		                     { 'two'. 1 } }.
@@ -341,7 +361,7 @@ BoardTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsU
 		
 	boardBuilder := MockBoardBuilder new withEffects: {
 			                Square new.
-			                HyperJump new withJumps: {100 . 300 . 200}.
+			                HyperJump new withJumpsInParsecs: {100 . 300 . 200}.
 			                Square new.
 			                Square new.
 			                Square new.
@@ -392,7 +412,7 @@ BoardTest >> test016HyperJumpLoopsWhenTItRunsOurOfJumps [
 
 	boardBuilder := MockBoardBuilder new withEffects: {
 			                Square new.
-			                (HyperJump new withJumps: { 300. 200. 100 }).
+			                (HyperJump new withJumpsInParsecs: { 300. 200. 100 }).
 			                Square new.
 			                Square new.
 			                Square new.
@@ -465,4 +485,69 @@ BoardTest >> test018WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
 	self
 		should: [ Board withSquares: squareList andLaps: 1 ]
 		raiseErrorWithMessageText: 'First square position must be 1'
+]
+
+{ #category : 'tests' }
+BoardTest >> test019HyperJumpSquareWithLightYears [
+
+	| finalPositions ships boardBuilder game hyperJumpSquare |
+	hyperJumpSquare := HyperJump new withJumpsInLightYears: { 101. 67 }.
+	ships := {
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two').
+		         (Spaceship withName: 'three') }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                hyperJumpSquare.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new }.
+
+	game := GameBuilder new
+		        withLightYears: 334;
+		        withSpaceships: ships;
+		        withBoardBuilder: boardBuilder;
+		        withDicepool:
+			        (DicePool withDice:
+					         { (DiceMock withSides: 4 andSequence: #( 1 )) });
+		        build.
+	finalPositions := {
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 1 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 1 } }.
+		                  {
+			                  { 'one'. 5 }.
+			                  { 'two'. 4 }.
+			                  { 'three'. 5 } } }.
+
+
+	self
+		assert:
+		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
+		equals: finalPositions
+]
+
+{ #category : 'tests' }
+BoardTest >> test020WhenParsecsBetweenSquaresAreNotUniformThenIsNotValid [
+
+	| squareList |
+	squareList := {
+		              (Square new atPosition: 1; withParsecs: 50).
+		              (Square new atPosition: 2; withParsecs: 30) }.
+
+
+	self
+		should: [ Board withSquares: squareList andLaps: 1 ]
+		raiseErrorWithMessageText:
+		'Squares are required to all have the same amount of parsecs'
 ]
