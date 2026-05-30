@@ -18,7 +18,12 @@ CardManager class >> withActiveCards: cards [
 { #category : 'accessing' }
 CardManager >> addPermanentCard: card from: shipInTurn [
 
-	activeCards add: (shipInTurn playCard: card)
+	| lastCardPlayed |
+	lastCardPlayed := shipInTurn playCard: card.
+
+	activeCards add: lastCardPlayed.
+
+	^ lastCardPlayed
 ]
 
 { #category : 'behavior' }

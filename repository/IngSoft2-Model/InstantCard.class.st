@@ -6,7 +6,8 @@ Class {
 		'shipThatReceivesEffect',
 		'cardManager',
 		'board',
-		'shipManager'
+		'shipManager',
+		'game'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -16,6 +17,24 @@ Class {
 InstantCard >> = aCard [
 
 	^ self class = aCard class
+]
+
+{ #category : 'initialization' }
+InstantCard >> affectsShipWithName: _target [
+
+	^ self
+]
+
+{ #category : 'initialization' }
+InstantCard >> cancelCard: aCard [
+
+	^ self
+]
+
+{ #category : 'comparing' }
+InstantCard >> isInstantCard [
+
+^true
 ]
 
 { #category : 'initialization' }
@@ -31,6 +50,20 @@ InstantCard >> withCardManager: _cardManager [
 
 	cardManager := _cardManager.
 	^self
+]
+
+{ #category : 'initialization' }
+InstantCard >> withGame: _game [
+
+	game := _game.
+
+	^ self
+]
+
+{ #category : 'initialization' }
+InstantCard >> withLastCardPlayed: aCard [
+
+	^ self
 ]
 
 { #category : 'initialization' }

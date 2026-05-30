@@ -29,3 +29,21 @@ Card >> initialize [
 	super initialize.
 	^ self
 ]
+
+{ #category : 'comparing' }
+Card >> isInstantCard [
+
+^false
+]
+
+{ #category : 'comparing' }
+Card >> isPermanentCard [
+
+^false
+]
+
+{ #category : 'comparing' }
+Card >> isRedo [
+
+^false
+]

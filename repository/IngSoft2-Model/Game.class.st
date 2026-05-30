@@ -6,7 +6,8 @@ Class {
 		'dicePool',
 		'playersTurn',
 		'board',
-		'cards'
+		'cards',
+		'lastCardPlayed'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -44,30 +45,28 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 
 	board := aBoard.
-	ships := SpaceshipManager withSpaceships: listOfShips .
+	ships := SpaceshipManager withSpaceships: listOfShips.
 	dicePool := aDicePool.
-	cards := CardManager withActiveCards: {}.
-	
+	cards := CardManager withActiveCards: {  }.
+	lastCardPlayed := Card new
 ]
 
 { #category : 'behaviour' }
 Game >> instantCard: aCard from: nameOfPlayer [
 
-	| cardToPlay |
+	| currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
-	"cards addInstantCard: aCard from: (ships locateSpaceShip: nameOfPlayer)."
 
-	cardToPlay := (ships locateSpaceShip: nameOfPlayer ) playCard: aCard.
+	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
 
-	cardToPlay
+	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
+
+	currentCard
 		withBoard: board;
 		withCardManager: cards;
 		withSpaceships: ships;
+		withLastCardPlayed: lastCardPlayed ;
 		applyInstantEffect
-		
-	
-
-
 ]
 
 { #category : 'accessing' }
@@ -103,15 +102,16 @@ Game >> throwDiceNextTurn [
 { #category : 'behaviour' }
 Game >> throwDicePermanentCardNextTurn: aCard [
 
-	| amountToAdvance |
+	| amountToAdvance currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
 
-	cards addPermanentCard: aCard from: ships shipInTurn.
+	currentCard := cards addPermanentCard: aCard from: ships shipInTurn.
+	
+	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
 
 	amountToAdvance := cards
 		                   applyPermanentEffectOn: ships shipInTurn
 		                   overThrow: dicePool throw.
 
 	ships shipInTurnMoves: amountToAdvance inside: board
-	
 ]

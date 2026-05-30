@@ -16,3 +16,9 @@ PermanentCard >> affectsShipWithName: _shipToAffect [
 
 	^ self
 ]
+
+{ #category : 'comparing' }
+PermanentCard >> isPermanentCard [
+
+^true
+]
