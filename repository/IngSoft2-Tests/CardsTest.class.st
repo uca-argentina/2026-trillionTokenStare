@@ -328,7 +328,7 @@ CardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
 		(Speed new affectsShipWithName: 'Ship2').
 
 	game
-		instantCard: (Cancellation new cancelCard: Speed new)
+		instantCard: (Cancellation new withCardToCancel: Speed new)
 		from: 'Ship1'.
 
 	game throwDiceNextTurn.

@@ -12,17 +12,17 @@ Cancellation >> applyInstantEffect [
 ]
 
 { #category : 'initialization' }
-Cancellation >> cancelCard: aCard [
-
-	cardToCancel := aCard.
-	^ self
-]
-
-{ #category : 'initialization' }
 Cancellation >> initialize [
 
 	super initialize.
 	cardToCancel := Card new.
 	cardManager:= CardManager withActiveCards: {  }.
+	^ self
+]
+
+{ #category : 'initialization' }
+Cancellation >> withCardToCancel: aCard [
+
+	cardToCancel := aCard.
 	^ self
 ]

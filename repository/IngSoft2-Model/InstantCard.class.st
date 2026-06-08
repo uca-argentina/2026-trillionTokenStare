@@ -25,12 +25,6 @@ InstantCard >> affectsShipWithName: _target [
 	^ self
 ]
 
-{ #category : 'initialization' }
-InstantCard >> cancelCard: aCard [
-
-	^ self
-]
-
 { #category : 'comparing' }
 InstantCard >> isInstantCard [
 
@@ -50,6 +44,12 @@ InstantCard >> withCardManager: _cardManager [
 
 	cardManager := _cardManager.
 	^self
+]
+
+{ #category : 'initialization' }
+InstantCard >> withCardToCancel: aCard [
+
+	^ self
 ]
 
 { #category : 'initialization' }

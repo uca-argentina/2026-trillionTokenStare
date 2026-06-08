@@ -36,13 +36,6 @@ Redo >> applyInstantEffect [
 ]
 
 { #category : 'initialization' }
-Redo >> cancelCard: aCard [
-
-	cardToCancel := aCard.
-	^ self
-]
-
-{ #category : 'initialization' }
 Redo >> initialize [
 
 	super initialize.
@@ -53,6 +46,13 @@ Redo >> initialize [
 Redo >> isRedo [
 
 ^true
+]
+
+{ #category : 'initialization' }
+Redo >> withCardToCancel: aCard [
+
+	cardToCancel := aCard.
+	^ self
 ]
 
 { #category : 'initialization' }
