@@ -25,18 +25,6 @@ DeckMock >> drawCard [
 
 { #category : 'initialization' }
 DeckMock >> initializeWithSequence: aSequence [ 
-   self validateSequence: aSequence.
 	sequence := aSequence.
 	index := 1
-]
-
-{ #category : 'validation' }
-DeckMock >> validateSequence: aSequence [.
-	(aSequence isMemberOf: Array) ifFalse: [
-		self error: 'The mocksequence must be an array' ].
-	aSequence isNotEmpty ifFalse: [
-		self error: 'The mocksequence must have any card' ].
-	(aSequence allSatisfy: [ :queue | queue isKindOf: Card ]) ifFalse: [
-		self error: 'The mocksequence must have card exclusively' ].
-	
 ]

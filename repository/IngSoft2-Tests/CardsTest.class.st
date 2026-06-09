@@ -113,8 +113,8 @@ CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 		         (Spaceship withName: 'Ship2') }.
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
-	deckMock := DeckMock withSequence: { Acceleration new. Card new. Card new. Card new }.
-	
+	deckMock := DeckMock withSequence: { Acceleration new }.
+
 	game := GameBuilder new
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
@@ -134,14 +134,11 @@ CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 { #category : 'tests' }
 CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Acceleration new.
-				          Card new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Card new.
-				          Card new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+	deckMock := DeckMock withSequence: { Acceleration new }.
 
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
@@ -149,6 +146,7 @@ CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 	game := GameBuilder new
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
+		        withDeck: deckMock;
 		        build.
 
 	game throwDicePermanentCardNextTurn: Acceleration new.
@@ -164,14 +162,11 @@ CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 { #category : 'tests' }
 CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Speed new.
-				          Card new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Card new.
-				          Card new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+	deckMock := DeckMock withSequence: { Speed new }.
 
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
@@ -180,6 +175,7 @@ CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
 		        withSquares: 20;
+		        withDeck: deckMock;
 		        build.
 
 	game throwDicePermanentCardNextTurn:
@@ -197,14 +193,11 @@ CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 { #category : 'tests' }
 CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Overload new.
-				          Card new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Card new.
-				          Card new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+	deckMock := DeckMock withSequence: { Overload new }.
 
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
@@ -212,6 +205,7 @@ CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 	game := GameBuilder new
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
+		        withDeck: deckMock;
 		        build.
 
 	game throwDicePermanentCardNextTurn:
@@ -294,14 +288,16 @@ CardsTest >> test010repeatCard [
 { #category : 'tests' }
 CardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Overload new.
-				          Cancellation new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Repeat new.
-				          Speed new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+
+	deckMock := DeckMock withSequence: {
+			            Overload new.
+			            Cancellation new.
+			            Repeat new.
+			            Speed new }.
 
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 4 2 2 2 )) }.
@@ -309,6 +305,7 @@ CardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
 	game := GameBuilder new
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
+		        withDeck: deckMock;
 		        withBoardBuilder: (MockBoardBuilder new withEffects: {
 						         Square new.
 						         Square new.
@@ -344,14 +341,16 @@ CardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
 { #category : 'tests' }
 CardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Overload new.
-				          Cancellation new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Repeat new.
-				          Speed new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+
+	deckMock := DeckMock withSequence: {
+			            Overload new.
+			            Cancellation new.
+			            Repeat new.
+			            Speed new }.
 
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 2 3 )) }.
@@ -359,6 +358,7 @@ CardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
 	game := GameBuilder new
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
+		        withDeck: deckMock;
 		        withBoardBuilder: (MockBoardBuilder new withEffects: {
 						         Square new.
 						         Square new.
@@ -391,27 +391,31 @@ CardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
 { #category : 'tests' }
 CardsTest >> test013redoCardWorksWithSpeed [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship
-			          withName: 'Ship1'
-			          andPosition: 1
-			          andCards: { Speed new }).
-		         (Spaceship
-			          withName: 'Ship2'
-			          andPosition: 1
-			          andCards: { Redo new . Speed new}) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+
+	deckMock := DeckMock withSequence: {
+			            Speed new.
+			            Card new.
+			            Redo new.
+			            Speed new }.
 
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 2 3 )) }.
 
 	game := GameBuilder new
+		        withDeck: deckMock;
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
 		        build.
 
-	game throwDicePermanentCardNextTurn: (Speed new affectsShipWithName: 'Ship1').
-	game instantCard: (Redo new affectsShipWithName: 'Ship2') from: 'Ship2'. 
+	game throwDicePermanentCardNextTurn:
+		(Speed new affectsShipWithName: 'Ship1').
+	game
+		instantCard: (Redo new affectsShipWithName: 'Ship2')
+		from: 'Ship2'.
 	game throwDiceNextTurn.
 
 	self

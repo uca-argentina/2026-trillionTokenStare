@@ -53,14 +53,3 @@ DeckTest >> test004BeforeGameStartsTheDeckGivesTwoCardsForEachPlayer [
 	
 	
 ]
-
-{ #category : 'tests' }
-DeckTest >> test005whenTheMockDeckHasNoCardsOrHasMistakenCardsThenThisDeckIsInvalid [
-	
-	| sequence |
-	sequence := { 4 . 'dd' . Redo new } .
-	
-	self should: [ DeckMock withSequence: 5  ] raiseErrorWithMessageText: 'The mocksequence must be an array'.	
-	self should: [ DeckMock withSequence: {} ] raiseErrorWithMessageText: 'The mocksequence must have any card'.	
-	self should: [ DeckMock withSequence: sequence ] raiseErrorWithMessageText: 'The mocksequence must have card exclusively'.
-]
