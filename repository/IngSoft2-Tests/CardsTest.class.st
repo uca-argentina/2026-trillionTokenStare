@@ -107,19 +107,18 @@ CardsTest >> test004ActiveCards [
 { #category : 'tests' }
 CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 
-	| ships dicePool game |
+	| ships dicePool game deckMock |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Acceleration new.
-				          Card new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Card new.
-				          Card new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
 	dicePool := DicePool withDice:
 		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+	deckMock := DeckMock withSequence: { Acceleration new. Card new. Card new. Card new }.
+	
 	game := GameBuilder new
 		        withSpaceships: ships;
 		        withDicepool: dicePool;
+		        withDeck: deckMock;
 		        build.
 
 

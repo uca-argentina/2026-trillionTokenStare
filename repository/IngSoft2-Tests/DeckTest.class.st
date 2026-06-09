@@ -26,7 +26,7 @@ DeckTest >> test002ADeckProvidesARandomCardFromTheGame [
 DeckTest >> test003AMockDeckProvidesCardsInExpectedSequence [
 	| mockDeck sequence |
 	sequence := { Redo new. Speed new . Acceleration new } .
-	mockDeck := MockDeck withSequence: sequence.
+	mockDeck := DeckMock withSequence: sequence.
 	1 to: sequence size do: [ :index |
 			self assert: mockDeck drawCard equals: (sequence at: index) .
    ]
@@ -36,7 +36,7 @@ DeckTest >> test003AMockDeckProvidesCardsInExpectedSequence [
 DeckTest >> test004BeforeGameStartsTheDeckGivesTwoCardsForEachPlayer [
 	| mockDeck sequence spaceshipManager spaceships |
 	sequence := { Redo new. Acceleration new . Speed new . Cancellation new } .
-	mockDeck := MockDeck withSequence: sequence.
+	mockDeck := DeckMock withSequence: sequence.
 	spaceships := { Spaceship withName: 'player_1' . Spaceship withName: 'player_2' } .
 	spaceshipManager := SpaceshipManager withSpaceships: spaceships .
 	
@@ -52,4 +52,15 @@ DeckTest >> test004BeforeGameStartsTheDeckGivesTwoCardsForEachPlayer [
 	
 	
 	
+]
+
+{ #category : 'tests' }
+DeckTest >> test005whenTheMockDeckHasNoCardsOrHasMistakenCardsThenThisDeckIsInvalid [
+	
+	| sequence |
+	sequence := { 4 . 'dd' . Redo new } .
+	
+	self should: [ DeckMock withSequence: 5  ] raiseErrorWithMessageText: 'The mocksequence must be an array'.	
+	self should: [ DeckMock withSequence: {} ] raiseErrorWithMessageText: 'The mocksequence must have any card'.	
+	self should: [ DeckMock withSequence: sequence ] raiseErrorWithMessageText: 'The mocksequence must have card exclusively'.
 ]

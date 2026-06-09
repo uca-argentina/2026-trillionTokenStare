@@ -7,7 +7,8 @@ Class {
 		'playersTurn',
 		'board',
 		'cards',
-		'lastCardPlayed'
+		'lastCardPlayed',
+		'deck'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -29,7 +30,7 @@ Game class >> validateNumberOfShips: numberOfShips [
 ]
 
 { #category : 'creation' }
-Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
+Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 	"andLaps: numberOfLaps andParsecs: parsecs"
 
 	self validateNumberOfShips: listOfShips.
@@ -39,16 +40,20 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 		  initializeUsingBoard: aBoard
 		  andShips: listOfShips
 		  andDicePool: aDicePool
+		  andDeck: aDeck 
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
+Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
 	board := aBoard.
 	ships := SpaceshipManager withSpaceships: listOfShips.
 	dicePool := aDicePool.
 	cards := CardManager withActiveCards: {  }.
-	lastCardPlayed := Card new
+	lastCardPlayed := Card new.
+
+	deck := aDeck.
+	ships giveTwoCardsToEachSpaceship: deck
 ]
 
 { #category : 'behaviour' }
