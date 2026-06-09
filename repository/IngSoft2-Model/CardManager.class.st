@@ -2,8 +2,7 @@ Class {
 	#name : 'CardManager',
 	#superclass : 'Object',
 	#instVars : [
-		'activeCards',
-		'instantCards'
+		'activeCards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'

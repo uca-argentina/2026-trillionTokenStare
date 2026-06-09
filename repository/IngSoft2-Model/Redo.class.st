@@ -31,7 +31,7 @@ Redo >> applyInstantEffect [
 				withCardManager: cardManager;
 				withSpaceships: shipManager;
 				affectsShipWithName: shipThatReceivesEffect;
-				withCardToCancel: cardToCancel;
+				cancelCard: cardToCancel;
 				applyInstantEffect ]
 ]
 

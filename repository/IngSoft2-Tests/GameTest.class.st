@@ -380,3 +380,24 @@ GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
 	self assert: (namesAt value: #second) equals: #( '2' ).
 	self assert: (namesAt value: #third) equals: #( '3' )
 ]
+
+{ #category : 'tests' }
+GameTest >> test021spaceshipsStartTheGameWithTwoCartsFromDesk [
+
+	| mockDeck sequence spaceshipManager spaceships game |
+	sequence := { Redo new. Acceleration new . Speed new } .
+	mockDeck := DeckMock withSequence: sequence.
+	spaceships := { Spaceship withName: 'player_1' . Spaceship withName: 'player_2' } .
+	spaceshipManager := SpaceshipManager withSpaceships: spaceships .
+	
+	game := GameBuilder new
+	   withSpaceships: spaceships;
+	   withDeck: mockDeck;
+	   build
+	.
+	
+	self assert:( (spaceships at: 1) playCard: (sequence at: 1) ) equals: (sequence at: 1).
+	self assert:( (spaceships at: 1) playCard: (sequence at: 2) ) equals: (sequence at: 2).
+	self assert:( (spaceships at: 2) playCard: (sequence at: 3) ) equals: (sequence at: 3).
+	self assert:( (spaceships at: 2) playCard: (sequence at: 1) ) equals: (sequence at: 1).
+]

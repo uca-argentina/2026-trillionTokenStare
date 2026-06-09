@@ -15,6 +15,16 @@ SpaceshipManager class >> withSpaceships: _ships [
 	^ self new initializeWithShips: _ships
 ]
 
+{ #category : 'behavior' }
+SpaceshipManager >> giveTwoCardsToEachSpaceship: deck [
+	ships do: [ :aShip |
+		aShip 
+		     receivesCard: deck drawCard ;
+		     receivesCard: deck drawCard 
+	]
+   
+]
+
 { #category : 'initialization' }
 SpaceshipManager >> initializeWithShips: _ships [
 
