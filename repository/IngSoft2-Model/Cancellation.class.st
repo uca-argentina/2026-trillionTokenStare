@@ -1,22 +1,23 @@
 Class {
 	#name : 'Cancellation',
 	#superclass : 'InstantCard',
+	#instVars : [
+		'cardToCancel'
+	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'behavior' }
-Cancellation >> applyInstantEffect [
+Cancellation >> applyInstantEffectOnGame: aGame [
 
-	cardManager cancel: cardToCancel
+	aGame cards cancel: cardToCancel
 ]
 
 { #category : 'initialization' }
 Cancellation >> initialize [
 
 	super initialize.
-	cardToCancel := Card new.
-	cardManager:= CardManager withActiveCards: {  }.
 	^ self
 ]
 

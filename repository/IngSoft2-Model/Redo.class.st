@@ -2,7 +2,9 @@ Class {
 	#name : 'Redo',
 	#superclass : 'InstantCard',
 	#instVars : [
-		'lastCardPlayed'
+		'lastCardPlayed',
+		'shipThatReceivesEffect',
+		'cardToCancel'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -17,22 +19,19 @@ Redo >> affectsShipWithName: _target [
 ]
 
 { #category : 'behavior' }
-Redo >> applyInstantEffect [
+Redo >> applyInstantEffectOnGame: aGame [
 
-	lastCardPlayed isPermanentCard ifTrue: [
-			cardManager
+	aGame lastCardPlayed isPermanentCard ifTrue: [
+			aGame cards
 				addPermanentCard:
-				(lastCardPlayed affectsShipWithName: shipThatReceivesEffect)
-				from: shipManager shipInTurn ].
+				(aGame lastCardPlayed affectsShipWithName: shipThatReceivesEffect)
+				from: aGame ships shipInTurn ].
 
-	lastCardPlayed isInstantCard ifTrue: [
-			lastCardPlayed
-				withBoard: board;
-				withCardManager: cardManager;
-				withSpaceships: shipManager;
+	aGame lastCardPlayed isInstantCard ifTrue: [
+			aGame cards
 				affectsShipWithName: shipThatReceivesEffect;
 				cancelCard: cardToCancel;
-				applyInstantEffect ]
+				applyInstantEffectOnGame: aGame ]
 ]
 
 { #category : 'initialization' }

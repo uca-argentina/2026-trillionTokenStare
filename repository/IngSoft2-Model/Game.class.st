@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'ships',
 		'dicePool',
-		'playersTurn',
 		'board',
 		'cards',
 		'lastCardPlayed',
@@ -43,6 +42,24 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool and
 		  andDeck: aDeck 
 ]
 
+{ #category : 'accessing' }
+Game >> board [
+
+	^ board
+]
+
+{ #category : 'accessing' }
+Game >> cards [
+
+	^ cards
+]
+
+{ #category : 'accessing' }
+Game >> deck [
+
+	^ deck
+]
+
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
@@ -65,13 +82,20 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
 
 	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
-
-	currentCard
+	
+	currentCard applyInstantEffectOnGame: self "apply effect on game"
+	"currentCard
 		withBoard: board;
 		withCardManager: cards;
 		withSpaceships: ships;
 		withLastCardPlayed: lastCardPlayed ;
-		applyInstantEffect
+		applyInstantEffect"
+]
+
+{ #category : 'accessing' }
+Game >> lastCardPlayed [
+
+	^ lastCardPlayed
 ]
 
 { #category : 'accessing' }
@@ -88,7 +112,14 @@ Game >> locateWinningSpaceShip [
 
 { #category : 'accessing' }
 Game >> ranking [
-        ^ ships ranking
+
+	^ ships ranking
+]
+
+{ #category : 'accessing' }
+Game >> ships [
+
+	^ ships
 ]
 
 { #category : 'behaviour' }
@@ -98,7 +129,7 @@ Game >> throwDiceNextTurn [
 	ships validateIfGameIsOverInsideBoard: board.
 
 	amountToAdvance := cards
-		                   applyPermanentEffectOn: ships shipInTurn
+		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
 
 	ships shipInTurnMoves: amountToAdvance inside: board
@@ -115,7 +146,7 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
 
 	amountToAdvance := cards
-		                   applyPermanentEffectOn: ships shipInTurn
+		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
 
 	ships shipInTurnMoves: amountToAdvance inside: board

@@ -11,12 +11,6 @@ PermanentCard >> = aCard [
 	^ self class = aCard class
 ]
 
-{ #category : 'initialization' }
-PermanentCard >> affectsShipWithName: _shipToAffect [
-
-	^ self
-]
-
 { #category : 'comparing' }
 PermanentCard >> isPermanentCard [
 

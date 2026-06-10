@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'initialization' }
-Acceleration >> applyPermanentEffectOn: aShip overThrow: aThrow [
+Acceleration >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 
 	^ aThrow + 1
 ]

@@ -19,10 +19,10 @@ CardsTest >> test001OverloadCard [
 	card := Overload new affectsShipWithName: 'two'.
 
 	resultInShip1 := card
-		                 applyPermanentEffectOn: ships first
+		                 applyPermanentEffectOnShip: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := card
-		                 applyPermanentEffectOn: ships last
+		                 applyPermanentEffectOnShip: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 8.
@@ -43,10 +43,10 @@ CardsTest >> test002SpeedCard [
 	card := Speed new affectsShipWithName: 'two'.
 
 	resultInShip1 := card
-		                 applyPermanentEffectOn: ships first
+		                 applyPermanentEffectOnShip: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := card
-		                 applyPermanentEffectOn: ships last
+		                 applyPermanentEffectOnShip: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 8.
@@ -67,10 +67,10 @@ CardsTest >> test003AccelerationCard [
 	card := Acceleration new.
 
 	resultInShip1 := card
-		                 applyPermanentEffectOn: ships first
+		                 applyPermanentEffectOnShip: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := card
-		                 applyPermanentEffectOn: ships last
+		                 applyPermanentEffectOnShip: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 9.
@@ -94,10 +94,10 @@ CardsTest >> test004ActiveCards [
 			               (Overload new affectsShipWithName: 'two') }.
 
 	resultInShip1 := activeCards
-		                 applyPermanentEffectOn: ships first
+		                 applyPermanentEffectOnShip: ships first
 		                 overThrow: dicePool throw.
 	resultInShip2 := activeCards
-		                 applyPermanentEffectOn: ships last
+		                 applyPermanentEffectOnShip: ships last
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 10.
@@ -239,7 +239,7 @@ CardsTest >> test009cancellationCard [
 	activeCards cancel: Acceleration new.
 
 	resultInShip1 := activeCards
-		                 applyPermanentEffectOn: ships first
+		                 applyPermanentEffectOnShip: ships first
 		                 overThrow: dicePool throw.
 
 	self assert: resultInShip1 equals: 9"Acceleration was cancelled"

@@ -26,14 +26,14 @@ CardManager >> addPermanentCard: card from: shipInTurn [
 ]
 
 { #category : 'behavior' }
-CardManager >> applyPermanentEffectOn: aShip overThrow: aThrow [
+CardManager >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 
 	| resultingThrow |
 	resultingThrow := aThrow.
 
 	activeCards do: [ :card |
 			resultingThrow := card
-				                  applyPermanentEffectOn: aShip
+				                  applyPermanentEffectOnShip: aShip
 				                  overThrow: resultingThrow ].
 	^ resultingThrow
 ]
