@@ -12,7 +12,21 @@ PermanentCard >> = aCard [
 ]
 
 { #category : 'comparing' }
-PermanentCard >> isPermanentCard [
+PermanentCard >> affectsShipWithName: _shipToAffect [
 
-^true
+	^ self
+]
+
+{ #category : 'comparing' }
+PermanentCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
+
+	aGame cards
+		addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
+		from: aGame ships shipInTurn
+]
+
+{ #category : 'comparing' }
+PermanentCard >> setAsLastPlayedCardOnGame: aGame [
+
+	aGame setLastPlayedCard: self
 ]

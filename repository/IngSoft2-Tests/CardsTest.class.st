@@ -398,7 +398,7 @@ CardsTest >> test013redoCardWorksWithSpeed [
 
 	deckMock := DeckMock withSequence: {
 			            Speed new.
-			            Card new.
+			            Acceleration new.
 			            Redo new.
 			            Speed new }.
 

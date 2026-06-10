@@ -30,20 +30,8 @@ Card >> initialize [
 	^ self
 ]
 
-{ #category : 'comparing' }
-Card >> isInstantCard [
+{ #category : 'behavior' }
+Card >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 
-^false
-]
-
-{ #category : 'comparing' }
-Card >> isPermanentCard [
-
-^false
-]
-
-{ #category : 'comparing' }
-Card >> isRedo [
-
-^false
+self error: 'To use (Redo Card) firts a player needs to use a card.'
 ]

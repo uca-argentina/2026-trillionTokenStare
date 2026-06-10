@@ -21,11 +21,3 @@ Speed >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 	aShip name = shipToAffect ifTrue: [ ^ aThrow + 1 ].
 	^ aThrow
 ]
-
-{ #category : 'initialization' }
-Speed >> initialize [
-
-	super initialize.
-	shipToAffect := ''.
-	^ self
-]

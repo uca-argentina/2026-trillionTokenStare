@@ -21,11 +21,3 @@ Overload >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 	aShip name = shipToAffect ifTrue: [ ^ aThrow - 2 max: 1 ].
 	^ aThrow
 ]
-
-{ #category : 'initialization' }
-Overload >> initialize [
-
-	super initialize.
-	shipToAffect := ''.
-	^ self
-]

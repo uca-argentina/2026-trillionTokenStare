@@ -12,7 +12,22 @@ InstantCard >> = aCard [
 ]
 
 { #category : 'comparing' }
-InstantCard >> isInstantCard [
+InstantCard >> affectsShipWithName: _target [
 
-^true
+	^ self
+]
+
+{ #category : 'comparing' }
+InstantCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
+
+	self
+		affectsShipWithName: shipThatReceivesEffect;
+		withCardToCancel: cardToCancel;
+		applyInstantEffectOnGame: aGame
+]
+
+{ #category : 'comparing' }
+InstantCard >> withCardToCancel: aCard [
+
+	^ self
 ]

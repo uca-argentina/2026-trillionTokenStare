@@ -81,15 +81,10 @@ Game >> instantCard: aCard from: nameOfPlayer [
 
 	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
 
-	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
+	"currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ]."
+	"currentCard updateLastPlayedCardOnGame: self."
 	
-	currentCard applyInstantEffectOnGame: self "apply effect on game"
-	"currentCard
-		withBoard: board;
-		withCardManager: cards;
-		withSpaceships: ships;
-		withLastCardPlayed: lastCardPlayed ;
-		applyInstantEffect"
+	currentCard applyInstantEffectOnGame: self 
 ]
 
 { #category : 'accessing' }
@@ -114,6 +109,12 @@ Game >> locateWinningSpaceShip [
 Game >> ranking [
 
 	^ ships ranking
+]
+
+{ #category : 'accessing - editing state' }
+Game >> setLastPlayedCard: aCard [
+
+lastCardPlayed := aCard
 ]
 
 { #category : 'accessing' }
@@ -143,7 +144,7 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 
 	currentCard := cards addPermanentCard: aCard from: ships shipInTurn.
 	
-	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
+	currentCard setAsLastPlayedCardOnGame: self.
 
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn
