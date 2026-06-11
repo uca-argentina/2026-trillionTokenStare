@@ -40,7 +40,7 @@ Spaceship >> asDictionaryInBoard: aBoard [
 		  (#name -> name).
 		  (#position -> (self positionInBoard: aBoard)).
 		  (#lap -> (self lapsInBoard: aBoard)).
-		  (#activeCards -> (cards deepCopy)) } asDictionary
+		  (#cards -> (cards deepCopy)) } asDictionary
 ]
 
 { #category : 'initialization' }

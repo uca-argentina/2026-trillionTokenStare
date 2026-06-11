@@ -52,8 +52,14 @@ Game >> activeCards [
 Game >> addPermanentCard: aCard [
 
 	self setLastPlayedCard: aCard.
+	cards addPermanentCard: aCard from: ships shipInTurn
+]
 
-	^ cards addPermanentCard: aCard from: ships shipInTurn
+{ #category : 'delegating' }
+Game >> addPermanentCardDirectly: aCard [
+
+	self setLastPlayedCard: aCard.
+	cards addPermanentCardDirectly: aCard
 ]
 
 { #category : 'delegating' }

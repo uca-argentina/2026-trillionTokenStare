@@ -214,3 +214,46 @@ RedoCardTest >> test017RedoCardCopiesRepeatWhichCopiesSquareEffect [
 		assert: ((game spaceshipNamed: 'Ship2') at: 'position')
 		equals: 5
 ]
+
+{ #category : 'tests' }
+RedoCardTest >> test018RedoOfARedoCardTakesTheUnderlyingAppliedCardEffect [
+    | ships dicePool game deckMock |
+    ships := {
+                 (Spaceship withName: 'Ship1').
+                 (Spaceship withName: 'Ship2') }.
+
+    "Ship1: Speed, Redo. Ship2: Redo, Speed"
+    deckMock := DeckMock withSequence: {
+                        Speed new.
+                        Redo new.
+                        Redo new.
+                        Speed new }.
+
+    dicePool := DicePool withDice:
+                    { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+    game := GameBuilder new
+                withDeck: deckMock;
+                withSpaceships: ships;
+                withDicepool: dicePool;
+                build.
+
+    "1. Ship1 se tira Speed"
+    game throwDicePermanentCardNextTurn: (Speed new affectsShipWithName: 'Ship1'). "Termina en 6"
+
+    "2. Ship2 tira Redo para copiarse el Speed"
+    game instantCard: (Redo new affectsShipWithName: 'Ship2') from: 'Ship2'.
+
+    "3. Ship1 tira UN SEGUNDO REDO. Debe detectar que el Redo anterior aplicó un Speed"
+    "y otorgarle a Ship1 otro Speed adicional (+2 acumulado para Ship1)"
+    game instantCard: (Redo new affectsShipWithName: 'Ship1') from: 'Ship1'.
+
+    "Turno de Ship2 (Saca 4 + 1 de su Speed copiado = 5) -> Termina en 6"
+    game throwDiceNextTurn. 
+    
+    "Turno de Ship1 (Saca 4 + 1 del Speed original + 1 del Redo del Redo = 6) -> 6 que estaba + 6 = 12"
+    game throwDiceNextTurn. 
+
+    self assert: ((game spaceshipNamed: 'Ship1') at: 'position') equals: 2. "position 2 in lap 2 = absolute position 12"
+    self assert: ((game spaceshipNamed: 'Ship2') at: 'position') equals: 6.
+]

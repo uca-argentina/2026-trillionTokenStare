@@ -22,7 +22,13 @@ CardManager >> addPermanentCard: card from: shipInTurn [
 
 	activeCards add: lastCardPlayed.
 
-	^ lastCardPlayed
+]
+
+{ #category : 'behavior' }
+CardManager >> addPermanentCardDirectly: card [
+
+	activeCards add: card.
+	
 ]
 
 { #category : 'behavior' }

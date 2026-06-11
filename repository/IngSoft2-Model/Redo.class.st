@@ -24,18 +24,6 @@ Redo >> applyInstantEffectOnGame: aGame [
 		orCardToCancel: cardToCancel
 ]
 
-{ #category : 'behavior' }
-Redo >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
-
-	"aGame
-		repeatCardEffectForShipNamed: _shipThatReceivesEffect
-		orCardToCancel: _cardToCancel"
-		
-	"self error: 'Redo card can not be repeated'"
-	
-	"NO TIENE RAZON DE EXISTIR PQ NUNCA DEBERIA SER LLAMADA, SI NO SE GUARDA UNA CARTA CUANDO ES REDO"
-]
-
 { #category : 'initialization' }
 Redo >> withCardToCancel: aCard [
 
