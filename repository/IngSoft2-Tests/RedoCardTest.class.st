@@ -147,16 +147,70 @@ RedoCardTest >> test016RedoCardWorksWithCancellation [
 	game throwDicePermanentCardNextTurn: speedCard.
 	game throwDicePermanentCardNextTurn: accelerationCard.
 
-	"Ship2 usa Cancelación sobre la carta Speed"
+	"Ship2 uses Cancelación on Speed card"
 	game
 		instantCard: (Cancellation new withCardToCancel: speedCard)
 		from: 'Ship2'.
 
-	"Ship1 usa Redo copiando la Cancelación, pero elige destruir la Acceleration"
+	"Ship1 uses Redo copying Cancellation, aims to delete Acceleration"
 	game
 		instantCard: (Redo new withCardToCancel: accelerationCard)
 		from: 'Ship1'.
 
-	"Verificamos que el pool de cartas activas en el juego quedó completamente vacío"
 	self assert: game activeCards isEmpty
+]
+
+{ #category : 'tests' }
+RedoCardTest >> test017RedoCardCopiesRepeatWhichCopiesSquareEffect [
+
+	| boardBuilder ships dicePool game deckMock |
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new. "1"
+			                Speedup new. "2"
+			                Square new. "3"
+			                Square new. "4"
+			                Square new. "5"
+			                Square new. "6"
+			                Square new. "7"
+			                Square new. "8"
+			                Square new. "9"
+			                Square new "10" }.
+
+	ships := {
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+
+	deckMock := DeckMock withSequence: {
+			            Redo new.
+			            Speed new.
+			            Repeat new.
+			            Speed new }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 1 )) }.
+
+	game := GameBuilder new
+		        withDeck: deckMock;
+		        withSpaceships: ships;
+		        withBoardBuilder: boardBuilder;
+		        withDicepool: dicePool;
+		        build.
+
+
+	game throwDiceNextTurn. "ship1 lands on speed up... 2+4 = 6"
+
+	game
+		instantCard: (Repeat new affectsShipWithName: 'Ship2')
+		from: 'Ship2'. "ship2 uses repeat on itself, repeats speedup... 1+4 = 5"
+
+	game
+		instantCard: (Redo new affectsShipWithName: 'Ship1')
+		from: 'Ship1'. " ship1 casts redo on itself, drawing repeat which repeats speedup... 6+4 = 10"
+
+	self
+		assert: ((game spaceshipNamed: 'Ship1') at: 'position')
+		equals: 10.
+	self
+		assert: ((game spaceshipNamed: 'Ship2') at: 'position')
+		equals: 5
 ]
