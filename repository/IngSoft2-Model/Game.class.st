@@ -42,19 +42,19 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool and
 		  andDeck: aDeck 
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> addPermanentCard: aCard [
 
 	^ cards addPermanentCard: aCard from: ships shipInTurn
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> applyEffectsOf: actualShip [
 
 	board applyEffectsOf: actualShip inGame: self
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> cancelCard: cardToCancel [
 
 	cards cancel: cardToCancel
@@ -96,25 +96,25 @@ Game >> locateWinningSpaceShip [
 	^ ships winningSpaceShipAsDictionaryIn: board
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> moveAllShipsBut: certainShip backward: anAmount [
 
 	ships moveAllShipsBut: certainShip backward: anAmount
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> moveAllShipsToPosition: position [
 
 	ships moveAllShipsToPosition: position inBoard: board
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> moveShip: certainShip backward: anAmount [
 
 	ships moveShip: certainShip backward: anAmount
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> moveShip: certainShip forward: anAmount [
 
 	ships moveShip: certainShip forward: anAmount
@@ -126,7 +126,7 @@ Game >> ranking [
 	^ ships ranking
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> repeatCardEffectForShipNamed: shipName orCardToCancel: cardToCancel [
 
 	lastCardPlayed
@@ -135,28 +135,22 @@ Game >> repeatCardEffectForShipNamed: shipName orCardToCancel: cardToCancel [
 		andGame: self
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> repeatLastEffectsOn: actualShip [
 
 	board repeatLastEffectsOn: actualShip inGame: self
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'delegating' }
 Game >> repeatSquareEffectForShipNamed: shipName [
 
-	ships shipNamed: shipName repeatsEffectinsGame: self
+	ships shipNamed: shipName repeatsEffectInGame: self
 ]
 
-{ #category : 'accessing - editing state' }
+{ #category : 'changing state' }
 Game >> setLastPlayedCard: aCard [
 
 	lastCardPlayed := aCard
-]
-
-{ #category : 'accessing' }
-Game >> ships [
-
-	^ ships
 ]
 
 { #category : 'behaviour' }

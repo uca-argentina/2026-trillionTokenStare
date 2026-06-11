@@ -11,22 +11,20 @@ PermanentCard >> = aCard [
 	^ self class = aCard class
 ]
 
-{ #category : 'comparing' }
+{ #category : 'initialization' }
 PermanentCard >> affectsShipWithName: _shipToAffect [
 
 	^ self
 ]
 
-{ #category : 'comparing' }
+{ #category : 'behavior' }
 PermanentCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
 	
 	aGame addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
-	"aGame cards
-		addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
-		from: aGame ships shipInTurn"
+
 ]
 
-{ #category : 'comparing' }
+{ #category : 'behavior' }
 PermanentCard >> setAsLastPlayedCardOnGame: aGame [
 
 	aGame setLastPlayedCard: self

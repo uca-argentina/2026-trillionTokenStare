@@ -1,14 +1,11 @@
 Class {
 	#name : 'Speedup',
 	#superclass : 'Square',
-	#instVars : [
-		'boardSize'
-	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Speedup >> applyEffectToShip: certainShip inGame: aGame [
 
 	aGame moveShip: certainShip forward: 4

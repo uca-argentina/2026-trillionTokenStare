@@ -8,7 +8,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Moonwalk >> applyEffectToShip: certainShip inGame: aGame [
 
 	aGame moveAllShipsBut: certainShip backward: backtrack
@@ -16,7 +16,8 @@ Moonwalk >> applyEffectToShip: certainShip inGame: aGame [
 
 { #category : 'accessing' }
 Moonwalk >> backtrack [
-        ^ backtrack
+
+	^ backtrack
 ]
 
 { #category : 'initialization' }

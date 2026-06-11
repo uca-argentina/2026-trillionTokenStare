@@ -15,7 +15,7 @@ Repeat >> affectsShipWithName: _target [
 	^ self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 Repeat >> applyInstantEffectOnGame: aGame [
 
 	aGame setLastPlayedCard: self.

@@ -5,7 +5,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 Wormhole >> applyEffectToShip: certainShip inGame: aGame [
 
 	aGame moveShip: certainShip backward: 4

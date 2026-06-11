@@ -5,19 +5,13 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'comparing' }
-InstantCard >> = aCard [
-
-	^ self class = aCard class
-]
-
-{ #category : 'comparing' }
+{ #category : 'initialization' }
 InstantCard >> affectsShipWithName: _target [
 
 	^ self
 ]
 
-{ #category : 'comparing' }
+{ #category : 'behavior' }
 InstantCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
 
 	self
@@ -26,7 +20,7 @@ InstantCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCard
 		applyInstantEffectOnGame: aGame
 ]
 
-{ #category : 'comparing' }
+{ #category : 'initialization' }
 InstantCard >> withCardToCancel: aCard [
 
 	^ self

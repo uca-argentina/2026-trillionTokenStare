@@ -1,14 +1,11 @@
 Class {
 	#name : 'AtomicBomb',
 	#superclass : 'Square',
-	#instVars : [
-		'boardSize'
-	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'behavior' }
 AtomicBomb >> applyEffectToShip: certainShip inGame: aGame [
 
 	aGame moveAllShipsToPosition: 1

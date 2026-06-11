@@ -9,7 +9,7 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'comparing' }
+{ #category : 'initialization' }
 Redo >> affectsShipWithName: _target [
 
 	shipThatReceivesEffect := _target.
@@ -31,7 +31,7 @@ Redo >> initialize [
 	^ self
 ]
 
-{ #category : 'comparing' }
+{ #category : 'behavior' }
 Redo >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 
 	aGame
@@ -39,7 +39,7 @@ Redo >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCanc
 		orCardToCancel: _cardToCancel
 ]
 
-{ #category : 'comparing' }
+{ #category : 'initialization' }
 Redo >> withCardToCancel: aCard [
 
 	cardToCancel := aCard.
