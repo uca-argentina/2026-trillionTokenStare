@@ -41,7 +41,7 @@ CardManager >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 { #category : 'behavior' }
 CardManager >> cancel: card [
 
-	activeCards remove: card ifAbsent: [ self error: 'No permanent card of this type found' ]
+	activeCards remove: card ifAbsent: [ self error: 'Impossible to cancel a card that is not active' ]
 ]
 
 { #category : 'initialization' }

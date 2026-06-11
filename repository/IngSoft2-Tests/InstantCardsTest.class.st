@@ -27,7 +27,23 @@ InstantCardsTest >> test009EffectOfcancellationCardOnCertainShip [
 		                 applyPermanentEffectOnShip: ships first
 		                 overThrow: dicePool throw.
 
-	self assert: resultInShip1 equals: 9"Acceleration was cancelled"
+	self assert: resultInShip1 equals: 9. "Acceleration was cancelled"
+	
+	self assert: activeCards permanentCards equals: {
+			(Speed new affectsShipWithName: 'one').
+			(Overload new affectsShipWithName: 'two') } asOrderedCollection 
+]
+
+{ #category : 'tests' }
+InstantCardsTest >> test010cantCancelifNothingToCancel [
+
+	| activeCards |
+	activeCards := CardManager withActiveCards: {  }.
+
+	self
+		should: [ activeCards cancel: Acceleration new ]
+		raiseErrorWithMessageText:
+		'Impossible to cancel a card that is not active'
 ]
 
 { #category : 'tests' }
