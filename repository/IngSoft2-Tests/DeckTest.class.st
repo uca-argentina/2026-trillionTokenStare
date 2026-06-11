@@ -42,10 +42,10 @@ DeckTest >> test004BeforeGameStartsTheDeckGivesTwoCardsForEachPlayer [
 	
 	spaceshipManager giveTwoCardsToEachSpaceship: mockDeck.
 	
-	self assert:( (spaceshipManager locateSpaceShip: 'player_1') playCard: (sequence at: 1) ) equals: (sequence at: 1).
-	self assert:( (spaceshipManager locateSpaceShip: 'player_1') playCard: (sequence at: 2) ) equals: (sequence at: 2).
-	self assert:( (spaceshipManager locateSpaceShip: 'player_2') playCard: (sequence at: 3) ) equals: (sequence at: 3).
-	self assert:( (spaceshipManager locateSpaceShip: 'player_2') playCard: (sequence at: 4) ) equals: (sequence at: 4).
+	self assert:( (spaceshipManager spaceshipNamed: 'player_1') playCard: (sequence at: 1) ) equals: (sequence at: 1).
+	self assert:( (spaceshipManager spaceshipNamed: 'player_1') playCard: (sequence at: 2) ) equals: (sequence at: 2).
+	self assert:( (spaceshipManager spaceshipNamed: 'player_2') playCard: (sequence at: 3) ) equals: (sequence at: 3).
+	self assert:( (spaceshipManager spaceshipNamed: 'player_2') playCard: (sequence at: 4) ) equals: (sequence at: 4).
 
 	
 	

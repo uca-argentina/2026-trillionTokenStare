@@ -14,10 +14,10 @@ SpaceshipManagerTest >> test001SpaceShipManagerReceivesListOfShipsAndCanAccesEac
 			               (Spaceship withName: 'two') }.
 
 	self
-		assert: (shipManager locateSpaceShip: 'one')
+		assert: (shipManager spaceshipNamed: 'one')
 		equals: (Spaceship withName: 'one' andPosition: 1).
 	self
-		assert: (shipManager locateSpaceShip: 'two')
+		assert: (shipManager spaceshipNamed: 'two')
 		equals: (Spaceship withName: 'two' andPosition: 1)
 ]
 
@@ -30,7 +30,7 @@ SpaceshipManagerTest >> test002CantAccessShipThatDoestnExist [
 			               (Spaceship withName: 'two') }.
 
 	self
-		should: [ shipManager locateSpaceShip: 'three' ]
+		should: [ shipManager spaceshipNamed: 'three' ]
 		raiseErrorWithMessageText: 'This spaceship does not exist'
 ]
 

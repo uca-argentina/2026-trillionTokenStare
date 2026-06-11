@@ -214,7 +214,7 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
 	1 to: 10 do: [ :turn | game throwDiceNextTurn ].
 
-	self assert: ((game locateSpaceShip: '1') at: #position) equals: 4
+	self assert: ((game spaceshipNamed: '1') at: #position) equals: 4
 ]
 
 { #category : 'tests' }
@@ -228,7 +228,7 @@ GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion
 		        build.
 
 	self
-		should: [ game locateSpaceShip: '5' ]
+		should: [ game spaceshipNamed: '5' ]
 		raiseErrorWithMessageText:
 		'This spaceship does not exist'
 ]
@@ -264,7 +264,7 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 
 	5 timesRepeat: [ game throwDiceNextTurn ].
 
-	self assert: ((game locateSpaceShip: 'one') at: #position) equals: 1
+	self assert: ((game spaceshipNamed: 'one') at: #position) equals: 1
 ]
 
 { #category : 'tests' }
@@ -310,7 +310,7 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
 	lapsExpected do: [ :lap |
 			self
-				assert: ((game locateSpaceShip: lap first) at: #lap)
+				assert: ((game spaceshipNamed: lap first) at: #lap)
 				identicalTo: lap second ]
 ]
 
@@ -353,7 +353,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 		equals: positionsExpected.
 	lapsExpected do: [ :lap |
 			self
-				assert: ((game locateSpaceShip: lap first) at: #lap)
+				assert: ((game spaceshipNamed: lap first) at: #lap)
 				identicalTo: lap second ]
 ]
 
