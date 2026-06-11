@@ -19,7 +19,8 @@ PermanentCard >> affectsShipWithName: _shipToAffect [
 
 { #category : 'behavior' }
 PermanentCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
-	
-	aGame addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
+	"aGame addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)"
 
+	^ aGame addPermanentCard:
+		  (self class new affectsShipWithName: shipThatReceivesEffect)
 ]
