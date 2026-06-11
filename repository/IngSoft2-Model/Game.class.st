@@ -45,6 +45,8 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool and
 { #category : 'delegating' }
 Game >> addPermanentCard: aCard [
 
+	self setLastPlayedCard: aCard.
+
 	^ cards addPermanentCard: aCard from: ships shipInTurn
 ]
 
@@ -169,12 +171,10 @@ Game >> throwDiceNextTurn [
 { #category : 'behaviour' }
 Game >> throwDicePermanentCardNextTurn: aCard [
 
-	| amountToAdvance currentCard |
+	| amountToAdvance |
 	ships validateIfGameIsOverInsideBoard: board.
 
-	currentCard := self addPermanentCard: aCard.
-
-	currentCard setAsLastPlayedCardOnGame: self.
+	self addPermanentCard: aCard.
 
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn

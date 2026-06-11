@@ -23,9 +23,3 @@ PermanentCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCa
 	aGame addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
 
 ]
-
-{ #category : 'behavior' }
-PermanentCard >> setAsLastPlayedCardOnGame: aGame [
-
-	aGame setLastPlayedCard: self
-]
