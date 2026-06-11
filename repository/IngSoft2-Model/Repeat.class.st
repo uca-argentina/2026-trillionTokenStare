@@ -19,9 +19,10 @@ Repeat >> affectsShipWithName: _target [
 Repeat >> applyInstantEffectOnGame: aGame [
 
 	aGame setLastPlayedCard: self.
-	aGame ships
+	aGame repeatSquareEffectForShipNamed: shipThatReceivesEffect
+	"aGame ships
 		shipNamed: shipThatReceivesEffect
-		repeatsEffectinsGame: aGame
+		repeatsEffectinsGame: aGame"
 ]
 
 { #category : 'initialization' }

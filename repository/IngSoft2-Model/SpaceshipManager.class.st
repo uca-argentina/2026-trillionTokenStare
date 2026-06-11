@@ -87,31 +87,20 @@ SpaceshipManager >> shipInTurnMoves: amountToAdvance inGame: aGame [
 	newShipPosition := self shipInTurn movesForward: amountToAdvance.
 	ships at: playersTurn put: newShipPosition.
 
-	aGame board applyEffectsOf: newShipPosition inGame: aGame.
+	aGame applyEffectsOf: newShipPosition.
+	"aGame board applyEffectsOf: newShipPosition inGame: aGame."
+
 
 	playersTurn := playersTurn % ships size + 1
 ]
 
 { #category : 'behavior' }
 SpaceshipManager >> shipNamed: playersName repeatsEffectinsGame: aGame [
-	"ships := board
-		         repeatLastEffectOn:
-		         (self locateSpaceShip: playersName )
-		         fromShips: ships"
 
 	| ship |
 	ship := self locateSpaceShip: playersName.
-
-	aGame board repeatLastEffectsOn: ship inGame: aGame
-]
-
-{ #category : 'behavior' }
-SpaceshipManager >> shipNamed: playersName repeatsEffectinside: board [
-
-	ships := board
-		         repeatLastEffectOn:
-		         (self locateSpaceShip: playersName )
-		         fromShips: ships
+	
+	aGame repeatLastEffectsOn: ship
 ]
 
 { #category : 'accessing' }

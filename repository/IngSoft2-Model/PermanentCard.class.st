@@ -19,10 +19,11 @@ PermanentCard >> affectsShipWithName: _shipToAffect [
 
 { #category : 'comparing' }
 PermanentCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
-
-	aGame cards
+	
+	aGame addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
+	"aGame cards
 		addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
-		from: aGame ships shipInTurn
+		from: aGame ships shipInTurn"
 ]
 
 { #category : 'comparing' }

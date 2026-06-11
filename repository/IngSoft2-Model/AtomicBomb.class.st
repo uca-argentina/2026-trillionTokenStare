@@ -11,9 +11,7 @@ Class {
 { #category : 'as yet unclassified' }
 AtomicBomb >> applyEffectToShip: certainShip inGame: aGame [
 
-	aGame ships moveAllShipsToPosition: 1 inBoard: aGame board
-
-	"^ aShip movesToPosition: 1 InBoard: aBoard"
+	aGame moveAllShipsToPosition: 1
 ]
 
 { #category : 'behavior' }

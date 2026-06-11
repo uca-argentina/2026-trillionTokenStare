@@ -11,7 +11,7 @@ Class {
 { #category : 'behavior' }
 Cancellation >> applyInstantEffectOnGame: aGame [
 
-	aGame cards cancel: cardToCancel.
+	aGame cancelCard: cardToCancel.
 	aGame setLastPlayedCard: self
 ]
 

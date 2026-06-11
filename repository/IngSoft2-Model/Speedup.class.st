@@ -11,11 +11,7 @@ Class {
 { #category : 'as yet unclassified' }
 Speedup >> applyEffectToShip: certainShip inGame: aGame [
 
-	aGame ships moveShip: certainShip forward: 4
-
-	"aCondition ifTrue: [
-		^ aShip movesForward: 4 ].
-	^ aShip"
+	aGame moveShip: certainShip forward: 4
 ]
 
 { #category : 'behavior' }

@@ -11,10 +11,7 @@ Class {
 { #category : 'as yet unclassified' }
 Moonwalk >> applyEffectToShip: certainShip inGame: aGame [
 
-	aGame ships moveAllShipsBut: certainShip backward: backtrack 
-
-	"aCondition ifTrue: [ ^ aShip ].
-	^ aShip movesBackward: backtrack"
+	aGame moveAllShipsBut: certainShip backward: backtrack
 ]
 
 { #category : 'accessing' }

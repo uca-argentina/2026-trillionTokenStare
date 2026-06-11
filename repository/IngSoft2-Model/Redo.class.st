@@ -19,10 +19,9 @@ Redo >> affectsShipWithName: _target [
 { #category : 'behavior' }
 Redo >> applyInstantEffectOnGame: aGame [
 
-	aGame lastCardPlayed
-		redoCardWithShipThatReceivesEffect: shipThatReceivesEffect
+	aGame
+		repeatCardEffectForShipNamed: shipThatReceivesEffect
 		orCardToCancel: cardToCancel
-		andGame: aGame
 ]
 
 { #category : 'initialization' }
@@ -35,10 +34,9 @@ Redo >> initialize [
 { #category : 'comparing' }
 Redo >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 
-	aGame lastCardPlayed
-		affectsShipWithName: _shipThatReceivesEffect;
-		withCardToCancel: _cardToCancel;
-		applyInstantEffectOnGame: aGame
+	aGame
+		repeatCardEffectForShipNamed: _shipThatReceivesEffect
+		orCardToCancel: _cardToCancel
 ]
 
 { #category : 'comparing' }

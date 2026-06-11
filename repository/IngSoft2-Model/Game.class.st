@@ -42,22 +42,22 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool and
 		  andDeck: aDeck 
 ]
 
-{ #category : 'accessing' }
-Game >> board [
+{ #category : 'accessing - editing state' }
+Game >> addPermanentCard: aCard [
 
-	^ board
+	^ cards addPermanentCard: aCard from: ships shipInTurn
 ]
 
-{ #category : 'accessing' }
-Game >> cards [
+{ #category : 'accessing - editing state' }
+Game >> applyEffectsOf: actualShip [
 
-	^ cards
+	board applyEffectsOf: actualShip inGame: self
 ]
 
-{ #category : 'accessing' }
-Game >> deck [
+{ #category : 'accessing - editing state' }
+Game >> cancelCard: cardToCancel [
 
-	^ deck
+	cards cancel: cardToCancel
 ]
 
 { #category : 'initialization' }
@@ -85,12 +85,6 @@ Game >> instantCard: aCard from: nameOfPlayer [
 ]
 
 { #category : 'accessing' }
-Game >> lastCardPlayed [
-
-	^ lastCardPlayed
-]
-
-{ #category : 'accessing' }
 Game >> locateSpaceShip: nameOfSpaceship [
 
 	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
@@ -102,6 +96,30 @@ Game >> locateWinningSpaceShip [
 	^ ships winningSpaceShipAsDictionaryIn: board
 ]
 
+{ #category : 'accessing - editing state' }
+Game >> moveAllShipsBut: certainShip backward: anAmount [
+
+	ships moveAllShipsBut: certainShip backward: anAmount
+]
+
+{ #category : 'accessing - editing state' }
+Game >> moveAllShipsToPosition: position [
+
+	ships moveAllShipsToPosition: position inBoard: board
+]
+
+{ #category : 'accessing - editing state' }
+Game >> moveShip: certainShip backward: anAmount [
+
+	ships moveShip: certainShip backward: anAmount
+]
+
+{ #category : 'accessing - editing state' }
+Game >> moveShip: certainShip forward: anAmount [
+
+	ships moveShip: certainShip forward: anAmount
+]
+
 { #category : 'accessing' }
 Game >> ranking [
 
@@ -109,9 +127,30 @@ Game >> ranking [
 ]
 
 { #category : 'accessing - editing state' }
+Game >> repeatCardEffectForShipNamed: shipName orCardToCancel: cardToCancel [
+
+	lastCardPlayed
+		redoCardWithShipThatReceivesEffect: shipName
+		orCardToCancel: cardToCancel
+		andGame: self
+]
+
+{ #category : 'accessing - editing state' }
+Game >> repeatLastEffectsOn: actualShip [
+
+	board repeatLastEffectsOn: actualShip inGame: self
+]
+
+{ #category : 'accessing - editing state' }
+Game >> repeatSquareEffectForShipNamed: shipName [
+
+	ships shipNamed: shipName repeatsEffectinsGame: self
+]
+
+{ #category : 'accessing - editing state' }
 Game >> setLastPlayedCard: aCard [
 
-lastCardPlayed := aCard
+	lastCardPlayed := aCard
 ]
 
 { #category : 'accessing' }
@@ -139,13 +178,13 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 	| amountToAdvance currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
 
-	currentCard := cards addPermanentCard: aCard from: ships shipInTurn.
-	
+	currentCard := self addPermanentCard: aCard.
+
 	currentCard setAsLastPlayedCardOnGame: self.
 
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
-	
+
 	ships shipInTurnMoves: amountToAdvance inGame: self
 ]
