@@ -2,7 +2,8 @@ Class {
 	#name : 'Redo',
 	#superclass : 'InstantCard',
 	#instVars : [
-		'lastCardPlayed'
+		'shipThatReceivesEffect',
+		'cardToCancel'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -11,28 +12,16 @@ Class {
 { #category : 'initialization' }
 Redo >> affectsShipWithName: _target [
 
-	shipThatReceivesEffect := _target .
-
+	shipThatReceivesEffect := _target.
 	^ self
 ]
 
 { #category : 'behavior' }
-Redo >> applyInstantEffect [
+Redo >> applyInstantEffectOnGame: aGame [
 
-	lastCardPlayed isPermanentCard ifTrue: [
-			cardManager
-				addPermanentCard:
-				(lastCardPlayed affectsShipWithName: shipThatReceivesEffect)
-				from: shipManager shipInTurn ].
-
-	lastCardPlayed isInstantCard ifTrue: [
-			lastCardPlayed
-				withBoard: board;
-				withCardManager: cardManager;
-				withSpaceships: shipManager;
-				affectsShipWithName: shipThatReceivesEffect;
-				cancelCard: cardToCancel;
-				applyInstantEffect ]
+	aGame
+		repeatCardEffectForShipNamed: shipThatReceivesEffect
+		orCardToCancel: cardToCancel
 ]
 
 { #category : 'initialization' }
@@ -42,23 +31,17 @@ Redo >> initialize [
 	^ self
 ]
 
-{ #category : 'comparing' }
-Redo >> isRedo [
+{ #category : 'behavior' }
+Redo >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 
-^true
+	aGame
+		repeatCardEffectForShipNamed: _shipThatReceivesEffect
+		orCardToCancel: _cardToCancel
 ]
 
 { #category : 'initialization' }
 Redo >> withCardToCancel: aCard [
 
 	cardToCancel := aCard.
-	^ self
-]
-
-{ #category : 'initialization' }
-Redo >> withLastCardPlayed: aCard [
-
-	lastCardPlayed := aCard.
-
 	^ self
 ]

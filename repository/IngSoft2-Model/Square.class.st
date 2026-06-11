@@ -16,9 +16,9 @@ Square >> = aSquareClass [
 ]
 
 { #category : 'behavior' }
-Square >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+Square >> applyEffectToShip: certainShip inGame: aGame [
 
-	^ aShip
+	
 ]
 
 { #category : 'accessing' }
@@ -39,12 +39,6 @@ Square >> initialize [
 	^ self
 ]
 
-{ #category : 'behavior' }
-Square >> noEffect [
-
-^ true
-]
-
 { #category : 'accessing' }
 Square >> parsecs [
 
@@ -55,6 +49,10 @@ Square >> parsecs [
 Square >> position [
 
 	^ number
+]
+
+{ #category : 'behavior' }
+Square >> setLastEffectIn: aBoard [
 ]
 
 { #category : 'accessing' }

@@ -17,8 +17,15 @@ PermanentCard >> affectsShipWithName: _shipToAffect [
 	^ self
 ]
 
-{ #category : 'comparing' }
-PermanentCard >> isPermanentCard [
+{ #category : 'behavior' }
+PermanentCard >> redoCardWithShipThatReceivesEffect: shipThatReceivesEffect orCardToCancel: cardToCancel andGame: aGame [
+	
+	aGame addPermanentCard: (self affectsShipWithName: shipThatReceivesEffect)
 
-^true
+]
+
+{ #category : 'behavior' }
+PermanentCard >> setAsLastPlayedCardOnGame: aGame [
+
+	aGame setLastPlayedCard: self
 ]

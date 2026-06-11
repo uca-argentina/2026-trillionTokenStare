@@ -1,23 +1,18 @@
 Class {
 	#name : 'Speedup',
 	#superclass : 'Square',
-	#instVars : [
-		'boardSize'
-	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-Speedup >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+{ #category : 'behavior' }
+Speedup >> applyEffectToShip: certainShip inGame: aGame [
 
-	aCondition ifTrue: [
-		^ aShip movesForward: 4 ].
-	^ aShip
+	aGame moveShip: certainShip forward: 4
 ]
 
-{ #category : 'as yet unclassified' }
-Speedup >> noEffect [
+{ #category : 'behavior' }
+Speedup >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]

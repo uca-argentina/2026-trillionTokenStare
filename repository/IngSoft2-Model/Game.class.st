@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'ships',
 		'dicePool',
-		'playersTurn',
 		'board',
 		'cards',
 		'lastCardPlayed',
@@ -43,6 +42,24 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool and
 		  andDeck: aDeck 
 ]
 
+{ #category : 'delegating' }
+Game >> addPermanentCard: aCard [
+
+	^ cards addPermanentCard: aCard from: ships shipInTurn
+]
+
+{ #category : 'delegating' }
+Game >> applyEffectsOf: actualShip [
+
+	board applyEffectsOf: actualShip inGame: self
+]
+
+{ #category : 'delegating' }
+Game >> cancelCard: cardToCancel [
+
+	cards cancel: cardToCancel
+]
+
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
@@ -63,15 +80,8 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	ships validateIfGameIsOverInsideBoard: board.
 
 	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
-
-	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
-
-	currentCard
-		withBoard: board;
-		withCardManager: cards;
-		withSpaceships: ships;
-		withLastCardPlayed: lastCardPlayed ;
-		applyInstantEffect
+	
+	currentCard applyInstantEffectOnGame: self 
 ]
 
 { #category : 'accessing' }
@@ -86,9 +96,61 @@ Game >> locateWinningSpaceShip [
 	^ ships winningSpaceShipAsDictionaryIn: board
 ]
 
+{ #category : 'delegating' }
+Game >> moveAllShipsBut: certainShip backward: anAmount [
+
+	ships moveAllShipsBut: certainShip backward: anAmount
+]
+
+{ #category : 'delegating' }
+Game >> moveAllShipsToPosition: position [
+
+	ships moveAllShipsToPosition: position inBoard: board
+]
+
+{ #category : 'delegating' }
+Game >> moveShip: certainShip backward: anAmount [
+
+	ships moveShip: certainShip backward: anAmount
+]
+
+{ #category : 'delegating' }
+Game >> moveShip: certainShip forward: anAmount [
+
+	ships moveShip: certainShip forward: anAmount
+]
+
 { #category : 'accessing' }
 Game >> ranking [
-        ^ ships ranking
+
+	^ ships ranking
+]
+
+{ #category : 'delegating' }
+Game >> repeatCardEffectForShipNamed: shipName orCardToCancel: cardToCancel [
+
+	lastCardPlayed
+		redoCardWithShipThatReceivesEffect: shipName
+		orCardToCancel: cardToCancel
+		andGame: self
+]
+
+{ #category : 'delegating' }
+Game >> repeatLastEffectsOn: actualShip [
+
+	board repeatLastEffectsOn: actualShip inGame: self
+]
+
+{ #category : 'delegating' }
+Game >> repeatSquareEffectForShipNamed: shipName [
+
+	ships shipNamed: shipName repeatsEffectInGame: self
+]
+
+{ #category : 'changing state' }
+Game >> setLastPlayedCard: aCard [
+
+	lastCardPlayed := aCard
 ]
 
 { #category : 'behaviour' }
@@ -98,10 +160,10 @@ Game >> throwDiceNextTurn [
 	ships validateIfGameIsOverInsideBoard: board.
 
 	amountToAdvance := cards
-		                   applyPermanentEffectOn: ships shipInTurn
+		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
-
-	ships shipInTurnMoves: amountToAdvance inside: board
+	
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]
 
 { #category : 'behaviour' }
@@ -110,13 +172,13 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 	| amountToAdvance currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
 
-	currentCard := cards addPermanentCard: aCard from: ships shipInTurn.
-	
-	currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ].
+	currentCard := self addPermanentCard: aCard.
+
+	currentCard setAsLastPlayedCardOnGame: self.
 
 	amountToAdvance := cards
-		                   applyPermanentEffectOn: ships shipInTurn
+		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
 
-	ships shipInTurnMoves: amountToAdvance inside: board
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]

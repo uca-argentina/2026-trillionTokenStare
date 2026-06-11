@@ -15,17 +15,9 @@ Overload >> affectsShipWithName: _shipToAffect [
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
-Overload >> applyPermanentEffectOn: aShip overThrow: aThrow [
+{ #category : 'behavior' }
+Overload >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 
 	aShip name = shipToAffect ifTrue: [ ^ aThrow - 2 max: 1 ].
 	^ aThrow
-]
-
-{ #category : 'initialization' }
-Overload >> initialize [
-
-	super initialize.
-	shipToAffect := ''.
-	^ self
 ]

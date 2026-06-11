@@ -8,16 +8,16 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-Moonwalk >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+{ #category : 'behavior' }
+Moonwalk >> applyEffectToShip: certainShip inGame: aGame [
 
-	aCondition ifTrue: [ ^ aShip ].
-	^ aShip movesBackward: backtrack
+	aGame moveAllShipsBut: certainShip backward: backtrack
 ]
 
 { #category : 'accessing' }
 Moonwalk >> backtrack [
-        ^ backtrack
+
+	^ backtrack
 ]
 
 { #category : 'initialization' }
@@ -31,10 +31,10 @@ Moonwalk >> initialize [
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
-Moonwalk >> noEffect [
+{ #category : 'behavior' }
+Moonwalk >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]
 
 { #category : 'initialization' }

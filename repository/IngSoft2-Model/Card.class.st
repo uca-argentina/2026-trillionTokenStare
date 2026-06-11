@@ -12,13 +12,13 @@ Card >> = aCard [
 ]
 
 { #category : 'behavior' }
-Card >> applyInstantEffect [
+Card >> applyInstantEffectOnGame: aGame [
 
 	self error: 'Not an instant effect card'
 ]
 
 { #category : 'behavior' }
-Card >> applyPermanentEffectOn: aShip overThrow: aThrow [
+Card >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 
 	self error: 'Not a permanent effect card.'
 ]
@@ -30,20 +30,8 @@ Card >> initialize [
 	^ self
 ]
 
-{ #category : 'comparing' }
-Card >> isInstantCard [
+{ #category : 'behavior' }
+Card >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 
-^false
-]
-
-{ #category : 'comparing' }
-Card >> isPermanentCard [
-
-^false
-]
-
-{ #category : 'comparing' }
-Card >> isRedo [
-
-^false
+self error: 'To use (Redo Card) firts a player needs to use a card.'
 ]

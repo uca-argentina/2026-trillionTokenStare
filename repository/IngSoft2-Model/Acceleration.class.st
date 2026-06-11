@@ -5,8 +5,8 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'initialization' }
-Acceleration >> applyPermanentEffectOn: aShip overThrow: aThrow [
+{ #category : 'behavior' }
+Acceleration >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 
 	^ aThrow + 1
 ]

@@ -1,6 +1,9 @@
 Class {
 	#name : 'Repeat',
 	#superclass : 'InstantCard',
+	#instVars : [
+		'shipThatReceivesEffect'
+	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
@@ -8,26 +11,23 @@ Class {
 { #category : 'initialization' }
 Repeat >> affectsShipWithName: _target [
 
-	shipThatReceivesEffect := _target .
-
+	shipThatReceivesEffect := _target.
 	^ self
 ]
 
-{ #category : 'initialization' }
-Repeat >> applyInstantEffect [
+{ #category : 'behavior' }
+Repeat >> applyInstantEffectOnGame: aGame [
 
-	shipManager
+	aGame setLastPlayedCard: self.
+	aGame repeatSquareEffectForShipNamed: shipThatReceivesEffect
+	"aGame ships
 		shipNamed: shipThatReceivesEffect
-		repeatsEffectinside: board
-	"board repeatLastEffectOn: shipThatReceivesEffect fromShips: shipManager"
+		repeatsEffectinsGame: aGame"
 ]
 
 { #category : 'initialization' }
 Repeat >> initialize [
 
 	super initialize.
-	shipThatReceivesEffect := Spaceship withName: ''.
-	shipManager := SpaceshipManager withSpaceships: {  }.
-	board := BoardBuilder new build.
 	^ self
 ]

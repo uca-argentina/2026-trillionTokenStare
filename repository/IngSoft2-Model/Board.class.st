@@ -63,18 +63,16 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 ]
 
 { #category : 'behavior' }
-Board >> applyEffectsOf: certainShip to: listOfShips [
+Board >> applyEffectsOf: certainShip inGame: aGame [
 
 	| square |
+	(self shipInsideBoard: certainShip) ifFalse: [ ^ self ].
+	
 	square := squares at: (certainShip positionInBoard: self).
-
-	square noEffect ifFalse: [ lastEffect := square ].
-
-	^ listOfShips collect: [ :ship |
-			  square
-				  applyEffectTo: ship
-				  in: self
-				  withCondition: (ship positionInBoard: self) = square position ]
+	square setLastEffectIn: self.
+	
+	
+	square applyEffectToShip: certainShip inGame: aGame
 ]
 
 { #category : 'initialization' }
@@ -84,6 +82,12 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 	laps := aNumberOfLaps.
 	lastEffect := Square new.
 	
+]
+
+{ #category : 'accessing - editing state' }
+Board >> lastEffect: _lastEffect [
+
+	lastEffect := _lastEffect
 ]
 
 { #category : 'accessing' }
@@ -97,16 +101,12 @@ Board >> occurrencesOf: aSquareType [
 ]
 
 { #category : 'behavior' }
-Board >> repeatLastEffectOn: targetShip fromShips: listOfShips [
+Board >> repeatLastEffectsOn: ship inGame: aGame [
 
-	^ listOfShips collect: [ :ship |
-			  lastEffect
-				  applyEffectTo: ship
-				  in: self
-				  withCondition: targetShip = ship ]
+	lastEffect applyEffectToShip: ship inGame: aGame
 ]
 
-{ #category : 'behavior' }
+{ #category : 'accessing' }
 Board >> shipInsideBoard: aShip [
 
 	^ (aShip lapsInBoard: self ) <= laps

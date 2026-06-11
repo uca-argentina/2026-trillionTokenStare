@@ -40,6 +40,34 @@ SpaceshipManager >> locateSpaceShip: nameOfSpaceship [
 		  ifNone: [ self error: 'This spaceship does not exist' ]
 ]
 
+{ #category : 'accessing - editing state' }
+SpaceshipManager >> moveAllShipsBut: certainShip backward: ammount [ 
+
+	ships := ships collect: [ :ship |
+		         ship = certainShip ifFalse: [ ship movesBackward: ammount ] ifTrue:[ ship ] ]
+]
+
+{ #category : 'accessing - editing state' }
+SpaceshipManager >> moveAllShipsToPosition: position inBoard: aBoard [
+
+	ships := ships collect: [ :ship |
+		         ship movesToPosition: position InBoard: aBoard ]
+]
+
+{ #category : 'accessing - editing state' }
+SpaceshipManager >> moveShip: certainShip backward: ammount [
+
+	ships := ships collect: [ :ship |
+		         ship = certainShip ifTrue: [ ship movesBackward: ammount ] ifFalse:[ ship ]]
+]
+
+{ #category : 'accessing - editing state' }
+SpaceshipManager >> moveShip: certainShip forward: ammount [
+
+	ships := ships collect: [ :ship |
+		         ship = certainShip ifTrue: [ ship movesForward: ammount ] ifFalse:[ship] ]
+]
+
 { #category : 'accessing' }
 SpaceshipManager >> ranking [
 
@@ -53,25 +81,25 @@ SpaceshipManager >> shipInTurn [
 ]
 
 { #category : 'behavior' }
-SpaceshipManager >> shipInTurnMoves: amountToAdvance inside: board [
+SpaceshipManager >> shipInTurnMoves: amountToAdvance inGame: aGame [
 
 	| newShipPosition |
 	newShipPosition := self shipInTurn movesForward: amountToAdvance.
+	
 	ships at: playersTurn put: newShipPosition.
 
-	(board shipInsideBoard: newShipPosition) ifTrue: [
-		ships := board applyEffectsOf: newShipPosition to: ships ].
+	aGame applyEffectsOf: newShipPosition.
 
 	playersTurn := playersTurn % ships size + 1
 ]
 
 { #category : 'behavior' }
-SpaceshipManager >> shipNamed: playersName repeatsEffectinside: board [
+SpaceshipManager >> shipNamed: playersName repeatsEffectInGame: aGame [
 
-	ships := board
-		         repeatLastEffectOn:
-		         (self locateSpaceShip: playersName )
-		         fromShips: ships
+	| ship |
+	ship := self locateSpaceShip: playersName.
+	
+	aGame repeatLastEffectsOn: ship
 ]
 
 { #category : 'accessing' }

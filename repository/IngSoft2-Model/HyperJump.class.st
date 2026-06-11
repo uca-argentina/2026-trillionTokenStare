@@ -9,15 +9,16 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-HyperJump >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+{ #category : 'behavior' }
+HyperJump >> applyEffectToShip: certainShip inGame: aGame [
 
 	| currentJump |
-	aCondition ifTrue: [
-			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
-			jumpIndex := jumpIndex % jumps size + 1.
-			^ aShip movesForward: currentJump ].
-	^ aShip
+	currentJump := ((jumps at: jumpIndex) / parsecs) floor.
+	jumpIndex := jumpIndex % jumps size + 1.
+
+	
+	aGame moveShip: certainShip forward: currentJump 
+
 ]
 
 { #category : 'accessing' }
@@ -32,10 +33,10 @@ HyperJump >> initialize [
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
-HyperJump >> noEffect [
+{ #category : 'behavior' }
+HyperJump >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]
 
 { #category : 'accessing' }

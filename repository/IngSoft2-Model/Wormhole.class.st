@@ -5,16 +5,14 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-Wormhole >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+{ #category : 'behavior' }
+Wormhole >> applyEffectToShip: certainShip inGame: aGame [
 
-	aCondition ifTrue: [
-		^ aShip movesBackward: 4 ].
-	^ aShip
+	aGame moveShip: certainShip backward: 4
 ]
 
-{ #category : 'as yet unclassified' }
-Wormhole >> noEffect [
+{ #category : 'behavior' }
+Wormhole >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]
