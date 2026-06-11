@@ -238,20 +238,19 @@ RedoCardTest >> test018RedoOfARedoCardTakesTheUnderlyingAppliedCardEffect [
                 withDicepool: dicePool;
                 build.
 
-    "1. Ship1 se tira Speed"
-    game throwDicePermanentCardNextTurn: (Speed new affectsShipWithName: 'Ship1'). "Termina en 6"
+    "ship1 draws Speed"
+    game throwDicePermanentCardNextTurn: (Speed new affectsShipWithName: 'Ship1'). "dice + Speed : lands on 6"
 
-    "2. Ship2 tira Redo para copiarse el Speed"
+    "ship2 draws Redo, copying Speed"
     game instantCard: (Redo new affectsShipWithName: 'Ship2') from: 'Ship2'.
 
-    "3. Ship1 tira UN SEGUNDO REDO. Debe detectar que el Redo anterior aplicó un Speed"
-    "y otorgarle a Ship1 otro Speed adicional (+2 acumulado para Ship1)"
+    "redo of a redo, copies Speed again"
     game instantCard: (Redo new affectsShipWithName: 'Ship1') from: 'Ship1'.
 
-    "Turno de Ship2 (Saca 4 + 1 de su Speed copiado = 5) -> Termina en 6"
+    "ship2 uses speed from redo + dice"
     game throwDiceNextTurn. 
     
-    "Turno de Ship1 (Saca 4 + 1 del Speed original + 1 del Redo del Redo = 6) -> 6 que estaba + 6 = 12"
+    "uses first speed + second speed from redo of a redo + dice"
     game throwDiceNextTurn. 
 
     self assert: ((game spaceshipNamed: 'Ship1') at: 'position') equals: 2. "position 2 in lap 2 = absolute position 12"

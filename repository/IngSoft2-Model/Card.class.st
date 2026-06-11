@@ -28,3 +28,9 @@ Card >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCanc
 
 self error: 'To use (Redo Card) firts a player needs to use a card.'
 ]
+
+{ #category : 'validation' }
+Card >> validateIfCanBeDrawnOnGame: aGame [
+
+	
+]

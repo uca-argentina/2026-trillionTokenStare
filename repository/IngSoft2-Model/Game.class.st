@@ -98,10 +98,11 @@ Game >> instantCard: aCard from: nameOfPlayer [
 
 	| currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
+	aCard validateIfCanBeDrawnOnGame: self.
 
 	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
-	
-	currentCard applyInstantEffectOnGame: self 
+
+	currentCard applyInstantEffectOnGame: self
 ]
 
 { #category : 'delegating' }

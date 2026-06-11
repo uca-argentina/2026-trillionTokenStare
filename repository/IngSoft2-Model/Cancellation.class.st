@@ -15,6 +15,14 @@ Cancellation >> applyInstantEffectOnGame: aGame [
 	aGame setLastPlayedCard: self
 ]
 
+{ #category : 'validation' }
+Cancellation >> validateIfCanBeDrawnOnGame: aGame [
+
+	aGame activeCards isEmpty ifTrue: [
+			self error:
+				'Unable to use Cantellation card if no active cards are in game.' ]
+]
+
 { #category : 'initialization' }
 Cancellation >> withCardToCancel: aCard [
 

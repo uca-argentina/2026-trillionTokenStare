@@ -375,3 +375,35 @@ InstantCardsTest >> test019playerUsesRepeatCardOnNormalSquareHasNoEffect [
     self assert: ((game spaceshipNamed: 'one') at:'position') equals: 2.
     self assert: ((game spaceshipNamed: 'two') at:'position') equals: 2.
 ]
+
+{ #category : 'tests' }
+InstantCardsTest >> test021CancellationThrowsErrorIfNoPermanentCardsAreActive [
+
+	| ships dicePool game deckMock |
+	ships := {
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+
+	deckMock := DeckMock withSequence: {
+			            Cancellation new.
+			            Speed new.
+			            Speed new.
+			            Speed new }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withDeck: deckMock;
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        build.
+
+	self
+		should: [
+				game
+					instantCard: (Cancellation new withCardToCancel: Speed new)
+					from: 'Ship1' ]
+		raiseErrorWithMessageText:
+		'Unable to use Cantellation card if no active cards are in game.'
+]
