@@ -109,11 +109,11 @@ Game >> instantCard: aCard from: nameOfPlayer [
 
 	| currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
-	aCard validateIfCanBeDrawnOnGame: self context .
+	aCard validateIfCanBeDrawnOnGame: self.
 
 	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
 
-	currentCard applyInstantEffectOnGame: self context
+	currentCard applyInstantEffectOnGame: self
 ]
 
 { #category : 'delegating' }
@@ -188,8 +188,8 @@ Game >> throwDiceNextTurn [
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
-	
-	ships shipInTurnMoves: amountToAdvance inGame: self context
+
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]
 
 { #category : 'behaviour' }
@@ -204,7 +204,7 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
 
-	ships shipInTurnMoves: amountToAdvance inGame: self context
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]
 
 { #category : 'accessing' }
