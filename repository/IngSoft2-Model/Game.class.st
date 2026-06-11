@@ -80,6 +80,17 @@ Game >> cardsDrawnByShip: certainShip [
 	ships ship: certainShip drawsCardFromDeck: deck
 ]
 
+{ #category : 'private' }
+Game >> context [
+
+	^ GameContextManager
+		  withGame: self
+		  spaceships: ships
+		  cards: cards
+		  lastCardPlayed: lastCardPlayed
+		  board: board
+]
+
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
@@ -98,11 +109,11 @@ Game >> instantCard: aCard from: nameOfPlayer [
 
 	| currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
-	aCard validateIfCanBeDrawnOnGame: self.
+	aCard validateIfCanBeDrawnOnGame: self context .
 
 	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
 
-	currentCard applyInstantEffectOnGame: self
+	currentCard applyInstantEffectOnGame: self context
 ]
 
 { #category : 'delegating' }
@@ -178,7 +189,7 @@ Game >> throwDiceNextTurn [
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
 	
-	ships shipInTurnMoves: amountToAdvance inGame: self
+	ships shipInTurnMoves: amountToAdvance inGame: self context
 ]
 
 { #category : 'behaviour' }
@@ -193,7 +204,7 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
 
-	ships shipInTurnMoves: amountToAdvance inGame: self
+	ships shipInTurnMoves: amountToAdvance inGame: self context
 ]
 
 { #category : 'accessing' }
