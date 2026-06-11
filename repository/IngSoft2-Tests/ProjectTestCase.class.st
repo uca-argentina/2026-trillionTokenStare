@@ -6,39 +6,17 @@ Class {
 }
 
 { #category : 'asserting' }
-ProjectTestCase >> assertDictionary: unDiccionario contains: diccionarioEsperado [
+ProjectTestCase >> assertDictionary: dictionary contains: expected [
 
-	| cumpleTodo |
-	"Transformamos el diccionario esperado en una colección de asociaciones estándar"
-	cumpleTodo := diccionarioEsperado associations allSatisfy: [
-			              :asociacion |
-			              | clave valorEsperado |
-			              clave := asociacion key.
-			              valorEsperado := asociacion value.
+	| complies |
+	complies := expected associations allSatisfy: [ :asociation |
+			            | key value |
+			            key := asociation key.
+			            value := asociation value.
 
-			              "Buscamos la clave en el diccionario del juego y comparamos el valor"
-			              (unDiccionario at: clave ifAbsent: [ nil ])
-			              = valorEsperado ].
+			            (dictionary at: key ifAbsent: [ nil ]) = value ].
 
-	self assert: cumpleTodo
-]
-
-{ #category : 'asserting' }
-ProjectTestCase >> assertDictionary: unDiccionario contieneDato: diccionarioEsperado [
-
-	| cumpleTodo |
-	"Recorremos las asociaciones (clave-valor) del diccionario esperado"
-	cumpleTodo := diccionarioEsperado associationsAllSatisfy: [
-			              :asociacion |
-			              | clave valorEsperado |
-			              clave := asociacion key.
-			              valorEsperado := asociacion value.
-
-			              "Verificamos que en el diccionario real coincida el valor"
-			              (unDiccionario at: clave ifAbsent: [ nil ])
-			              = valorEsperado ].
-
-	self assert: cumpleTodo
+	self assert: complies
 ]
 
 { #category : 'asserting' }
@@ -66,4 +44,18 @@ ProjectTestCase >> should: anErrorBlock raiseErrorWithMessageText: anErrorMessag
 		raise: Error
 		withExceptionDo: [ :error |
 			self assert: error messageText equals: anErrorMessage ]
+]
+
+{ #category : 'asserting' }
+ProjectTestCase >> statusOf: spaceshipNames afterTurns: numberOfTurns in: game [ 
+
+	^ (1 to: numberOfTurns) collect: [ :turn |
+			  game throwDiceNextTurn.
+			  self statusOf: spaceshipNames in: game ]
+]
+
+{ #category : 'asserting' }
+ProjectTestCase >> statusOf: spaceshipNames in: game [
+
+	^ spaceshipNames collect: [ :name | game spaceshipNamed: name ]
 ]
