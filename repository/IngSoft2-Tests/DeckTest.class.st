@@ -85,14 +85,15 @@ DeckTest >> test005ShipSteppsOnSquareThatDroppsCards [
 	game throwDiceNextTurn.
 	game throwDiceNextTurn.
 
-	self assert: (game locateSpaceshipNamed: 'one') cards equals: {
+	self assert: ((game spaceshipNamed: 'one') at: 'cards') equals: {
 			Speed new.
 			Speed new.
 			Acceleration new } asOrderedCollection.
-	self assert: (game locateSpaceshipNamed: 'two') cards equals: {
+	self assert: ((game spaceshipNamed: 'two') at: 'cards') equals: {
 			Speed new.
 			Speed new.
-			Repeat new } asOrderedCollection
+			Repeat new } asOrderedCollection.
+	
 ]
 
 { #category : 'tests' }
@@ -126,11 +127,11 @@ DeckTest >> test006ShipUsesRepeatCardToGetTheCardDropEffect [
 	game throwDiceNextTurn.
 	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'.
 
-	self assert: (game locateSpaceshipNamed: 'one') cards equals: {
+	self assert: ((game spaceshipNamed: 'one') at: 'cards') equals: {
 			Speed new.
 			Speed new.
 			Acceleration new } asOrderedCollection.
-	self assert: (game locateSpaceshipNamed: 'two') cards equals: {
+	self assert: ((game spaceshipNamed: 'two') at: 'cards') equals: {
 			Speed new.
 			Overload new } asOrderedCollection
 ]

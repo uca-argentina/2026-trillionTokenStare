@@ -90,18 +90,6 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	currentCard applyInstantEffectOnGame: self 
 ]
 
-{ #category : 'accessing' }
-Game >> locateSpaceshipNamed: nameOfSpaceship [
-
-	^ ships spaceshipNamed: nameOfSpaceship
-]
-
-{ #category : 'accessing' }
-Game >> locateWinningSpaceShip [
-
-	^ ships winningSpaceShipAsDictionaryIn: board
-]
-
 { #category : 'delegating' }
 Game >> moveAllShipsBut: certainShip backward: anAmount [
 
@@ -162,7 +150,7 @@ Game >> setLastPlayedCard: aCard [
 { #category : 'accessing' }
 Game >> spaceshipNamed: nameOfSpaceship [
 
-	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
+	^ ships spaceShipWithCardsAsDictionary: nameOfSpaceship in: board
 ]
 
 { #category : 'behaviour' }
@@ -193,4 +181,10 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 		                   overThrow: dicePool throw.
 
 	ships shipInTurnMoves: amountToAdvance inGame: self
+]
+
+{ #category : 'accessing' }
+Game >> winningSpaceship [
+
+	^ ships winningSpaceShipAsDictionaryIn: board
 ]

@@ -158,7 +158,9 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 
 	1 to: 5 do: [ :turn | game throwDiceNextTurn ].
 
-	self assert: game locateWinningSpaceShip equals: {
+	game winningSpaceship.
+
+	self assertDictionary: game winningSpaceship contains: {
 			(#name -> 'one').
 			(#position -> 4).
 			(#lap -> 2) } asDictionary
@@ -194,7 +196,7 @@ GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 		        build.
 
 	self
-		should: [ game locateWinningSpaceShip ]
+		should: [ game winningSpaceship ]
 		raiseErrorWithMessageText: 'Game is not over'
 ]
 
@@ -230,7 +232,7 @@ GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion
 	self
 		should: [ game spaceshipNamed: '5' ]
 		raiseErrorWithMessageText:
-		'This spaceship does not exist'
+		'Ship not found.'
 ]
 
 { #category : 'tests' }
@@ -246,7 +248,7 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 	5 timesRepeat: [ game throwDiceNextTurn ].
 
 	self
-		should: [ game locateWinningSpaceShip ]
+		should: [ game winningSpaceship ]
 		raiseErrorWithMessageText: 'Game is not over'
 ]
 

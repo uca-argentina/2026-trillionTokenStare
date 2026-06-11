@@ -104,18 +104,18 @@ SpaceshipManager >> shipNamed: playersName repeatsEffectInGame: aGame [
 ]
 
 { #category : 'accessing' }
-SpaceshipManager >> spaceShipAsDictionary: nameOfSpaceship in: board [
+SpaceshipManager >> spaceShipWithCardsAsDictionary: nameOfSpaceship in: board [
 
-	^ (self spaceshipNamed: nameOfSpaceship )
-		  asDictionaryInBoard: board
+	^ (self spaceshipNamed: nameOfSpaceship)
+		  asDictionaryWithCardsInBoard: board
 ]
 
 { #category : 'accessing' }
-SpaceshipManager >> spaceshipNamed: nameOfSpaceship [
+SpaceshipManager >> spaceshipNamed: nameOfSpaceship [ 
 
-	^ ships
-		  detect: [ :ship | ship name = nameOfSpaceship ]
-		  ifNone: [ self error: 'This spaceship does not exist' ]
+	^ (ships
+		   detect: [ :ship | ship name = nameOfSpaceship ]
+		   ifNone: [ self error: 'Ship not found.' ])
 ]
 
 { #category : 'validation' }
@@ -132,6 +132,6 @@ SpaceshipManager >> winningSpaceShipAsDictionaryIn: board [
 
 	^ (ships
 		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
-		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
+		   ifNone: [ self error: 'Game is not over' ]) asDictionaryWithCardsInBoard: 
 		  board
 ]

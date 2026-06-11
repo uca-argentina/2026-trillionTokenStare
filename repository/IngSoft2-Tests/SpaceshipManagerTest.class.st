@@ -31,7 +31,7 @@ SpaceshipManagerTest >> test002CantAccessShipThatDoestnExist [
 
 	self
 		should: [ shipManager spaceshipNamed: 'three' ]
-		raiseErrorWithMessageText: 'This spaceship does not exist'
+		raiseErrorWithMessageText: 'Ship not found.'
 ]
 
 { #category : 'tests' }
@@ -47,14 +47,14 @@ SpaceshipManagerTest >> test007managerProvidesDescriptionOfShipAsDictionary [
 		         build.
 
 	self
-		assert: (shipManager spaceShipAsDictionary: 'one' in: board)
-		equals: {
+		assertDictionary: (shipManager spaceShipWithCardsAsDictionary: 'one' in: board)
+		contains: {
 				(#name -> 'one').
 				(#position -> 5).
 				(#lap -> 1) } asDictionary.
 	self
-		assert: (shipManager spaceShipAsDictionary: 'two' in: board)
-		equals: {
+		assertDictionary: (shipManager spaceShipWithCardsAsDictionary: 'two' in: board)
+		contains: {
 				(#name -> 'two').
 				(#position -> 2).
 				(#lap -> 2) } asDictionary.
@@ -90,8 +90,8 @@ SpaceshipManagerTest >> test009AskingForWinningSpaceShip [
 		         build.
 
 	self
-		assert: (shipManager winningSpaceShipAsDictionaryIn: board)
-		equals: {
+		assertDictionary: (shipManager winningSpaceShipAsDictionaryIn: board)
+		contains: {
 				(#name -> 'two').
 				(#position -> 1).
 				(#lap -> 2) } asDictionary.

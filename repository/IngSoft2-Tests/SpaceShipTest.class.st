@@ -45,7 +45,7 @@ SpaceShipTest >> test005shiPpresentsItselfAsDictionaryWithInformation [
 	ship := Spaceship withName: 'Ship1' andPosition: 15.
 	board := MockBoardBuilder new build.
 
-	self assert: (ship asDictionaryInBoard: board) equals: {
+	self assertDictionary: (ship asDictionaryWithCardsInBoard: board) contains: {
 			(#name -> 'Ship1').
 			(#position -> 5).
 			(#lap -> 2) } asDictionary
@@ -60,7 +60,7 @@ SpaceShipTest >> test006ShipMovesToCertainPositionRelativeToBoardWithoutChaingin
 
 	updatedShip := ship movesToPosition: 1 InBoard: board.
 
-	self assert: (updatedShip asDictionaryInBoard: board) equals: {
+	self assertDictionary: (updatedShip asDictionaryWithCardsInBoard: board) contains: {
 			(#name -> 'Ship1').
 			(#position -> 1).
 			(#lap -> 2) } asDictionary
