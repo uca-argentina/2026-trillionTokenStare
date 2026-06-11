@@ -15,8 +15,8 @@ Wormhole >> applyEffectToShip: certainShip inGame: aGame [
 	^ aShip"
 ]
 
-{ #category : 'as yet unclassified' }
-Wormhole >> noEffect [
+{ #category : 'behavior' }
+Wormhole >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]

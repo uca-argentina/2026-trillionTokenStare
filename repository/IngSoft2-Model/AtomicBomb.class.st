@@ -16,8 +16,8 @@ AtomicBomb >> applyEffectToShip: certainShip inGame: aGame [
 	"^ aShip movesToPosition: 1 InBoard: aBoard"
 ]
 
-{ #category : 'as yet unclassified' }
-AtomicBomb >> noEffect [
+{ #category : 'behavior' }
+AtomicBomb >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]

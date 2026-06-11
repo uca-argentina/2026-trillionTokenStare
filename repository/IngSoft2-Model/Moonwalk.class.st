@@ -33,10 +33,10 @@ Moonwalk >> initialize [
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
-Moonwalk >> noEffect [
+{ #category : 'behavior' }
+Moonwalk >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]
 
 { #category : 'initialization' }

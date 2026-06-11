@@ -18,8 +18,8 @@ Speedup >> applyEffectToShip: certainShip inGame: aGame [
 	^ aShip"
 ]
 
-{ #category : 'as yet unclassified' }
-Speedup >> noEffect [
+{ #category : 'behavior' }
+Speedup >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]

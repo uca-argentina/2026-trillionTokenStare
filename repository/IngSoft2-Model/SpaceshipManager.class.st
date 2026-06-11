@@ -93,6 +93,19 @@ SpaceshipManager >> shipInTurnMoves: amountToAdvance inGame: aGame [
 ]
 
 { #category : 'behavior' }
+SpaceshipManager >> shipNamed: playersName repeatsEffectinsGame: aGame [
+	"ships := board
+		         repeatLastEffectOn:
+		         (self locateSpaceShip: playersName )
+		         fromShips: ships"
+
+	| ship |
+	ship := self locateSpaceShip: playersName.
+
+	aGame board repeatLastEffectsOn: ship inGame: aGame
+]
+
+{ #category : 'behavior' }
 SpaceshipManager >> shipNamed: playersName repeatsEffectinside: board [
 
 	ships := board

@@ -38,10 +38,10 @@ HyperJump >> initialize [
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
-HyperJump >> noEffect [
+{ #category : 'behavior' }
+HyperJump >> setLastEffectIn: aBoard [
 
-^ false
+	aBoard lastEffect: self
 ]
 
 { #category : 'accessing' }

@@ -14,7 +14,7 @@ CardManager class >> withActiveCards: cards [
 ^self new initializeWithActiveCards: cards 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'behavior' }
 CardManager >> addPermanentCard: card from: shipInTurn [
 
 	| lastCardPlayed |
