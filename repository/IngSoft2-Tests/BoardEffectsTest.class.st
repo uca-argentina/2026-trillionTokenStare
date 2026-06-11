@@ -245,6 +245,49 @@ BoardEffectsTest >> test018WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
 ]
 
 { #category : 'tests' }
+BoardEffectsTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
+
+	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	mockSquarePool := MockBoardBuilder new withEffects: {
+			                  Square new.
+			                  AtomicBomb new.
+			                  Square new.
+			                  Square new.
+			                  Square new}.
+	game := GameBuilder new
+		        withLaps: 4;
+		        withSpaceships:
+			        ((1 to: 3) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        withDicepool: dicePool;
+		        withBoardBuilder: mockSquarePool;
+		        build.
+
+
+	9 timesRepeat: [ game throwDiceNextTurn ].
+
+	lapsExpected := {
+		                { '1'. 2 }.
+		                { '2'. 2 }.
+		                { '3'. 2 } }.
+
+	positionsExpected := {
+		                     { '1'. 1 }.
+		                     { '2'. 1 }.
+		                     { '3'. 1 } }.
+
+	self
+		assert: (self positionOf: #( '1' '2' '3' ) in: game)
+		equals: positionsExpected.
+	lapsExpected do: [ :lap |
+			self
+				assert: ((game spaceshipNamed: lap first) at: #lap)
+				identicalTo: lap second ]
+]
+
+{ #category : 'tests' }
 BoardEffectsTest >> test020WhenParsecsBetweenSquaresAreNotUniformThenIsNotValid [
 
 	| squareList |

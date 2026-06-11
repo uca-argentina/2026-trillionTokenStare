@@ -74,3 +74,27 @@ RankingTest >> test003whenThaSpaceShipAreInSrartFirstPositionThenTheyAreTecnical
 
    self assert: rankingActually equals: rakingExpexted
 ]
+
+{ #category : 'tests' }
+RankingTest >> test020GameCanProvideTheCurrentRankingOfShips [
+
+	| preloadedDice dicePool game ranking namesAt |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := GameBuilder new
+		        withSpaceships:
+			        ((1 to: 3) collect: [ :number |
+					         Spaceship withName: number asString ]);
+		        withDicepool: dicePool;
+		        build.
+
+	3 timesRepeat: [ game throwDiceNextTurn ].
+
+	ranking := game ranking.
+	namesAt := [ :rank |
+	           ((ranking at: rank) collect: [ :ship | ship name ])
+		           asArray ].
+	self assert: (namesAt value: #first) equals: #( '1' ).
+	self assert: (namesAt value: #second) equals: #( '2' ).
+	self assert: (namesAt value: #third) equals: #( '3' )
+]
