@@ -25,7 +25,7 @@ Moonwalk >> initialize [
 
 	super initialize.
 	backtrack := 3.
-	number := 1.
+	position := 1.
 	parsecs := 1.
 
 	^ self

@@ -24,13 +24,6 @@ Redo >> applyInstantEffectOnGame: aGame [
 		orCardToCancel: cardToCancel
 ]
 
-{ #category : 'initialization' }
-Redo >> initialize [
-
-	super initialize.
-	^ self
-]
-
 { #category : 'behavior' }
 Redo >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 

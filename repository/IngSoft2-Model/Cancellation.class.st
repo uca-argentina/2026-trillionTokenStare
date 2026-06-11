@@ -16,13 +16,6 @@ Cancellation >> applyInstantEffectOnGame: aGame [
 ]
 
 { #category : 'initialization' }
-Cancellation >> initialize [
-
-	super initialize.
-	^ self
-]
-
-{ #category : 'initialization' }
 Cancellation >> withCardToCancel: aCard [
 
 	cardToCancel := aCard.

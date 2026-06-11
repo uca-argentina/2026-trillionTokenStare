@@ -25,7 +25,7 @@ HyperJump >> applyEffectToShip: certainShip inGame: aGame [
 HyperJump >> initialize [
 
 	super initialize.
-	number := 1.
+	position := 1.
 	parsecs := 1.
 	jumps := { 300. 200 }.
 	jumpIndex := 1.

@@ -23,13 +23,6 @@ Card >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 	self error: 'Not a permanent effect card.'
 ]
 
-{ #category : 'initialization' }
-Card >> initialize [
-
-	super initialize.
-	^ self
-]
-
 { #category : 'behavior' }
 Card >> redoCardWithShipThatReceivesEffect: _shipThatReceivesEffect orCardToCancel: _cardToCancel andGame: aGame [
 

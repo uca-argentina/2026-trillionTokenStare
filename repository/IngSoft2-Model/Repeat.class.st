@@ -22,10 +22,3 @@ Repeat >> applyInstantEffectOnGame: aGame [
 	aGame repeatSquareEffectForShipNamed: shipThatReceivesEffect
 
 ]
-
-{ #category : 'initialization' }
-Repeat >> initialize [
-
-	super initialize.
-	^ self
-]
