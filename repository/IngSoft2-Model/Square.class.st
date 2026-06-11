@@ -16,9 +16,9 @@ Square >> = aSquareClass [
 ]
 
 { #category : 'behavior' }
-Square >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+Square >> applyEffectToShip: certainShip inGame: aGame [
 
-	^ aShip
+	
 ]
 
 { #category : 'accessing' }

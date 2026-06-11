@@ -40,155 +40,139 @@ BoardTest >> test003BoardConfirmsASpaceshipIsInside [
 ]
 
 { #category : 'tests' }
-BoardTest >> test005BoardUpdatesThePlayersPositionsInTurn [
-
-	| preloadedSquares board ships finalPositions newShipPosition |
-	preloadedSquares := MockBoardBuilder new.
-	board := preloadedSquares build.
-	ships := {
-		         (Spaceship withName: '1' andPosition: 1).
-		         (Spaceship withName: '2' andPosition: 3) }.
-
-	newShipPosition := ships first movesForward: 2.
-	ships at: 1 put: newShipPosition.
-
-	(board shipInsideBoard: newShipPosition) ifTrue: [
-		ships := board applyEffectsOf: newShipPosition to: ships ].
-
-	finalPositions := {
-		                  (Spaceship withName: '1' andPosition: 3).
-		                  (Spaceship withName: '2' andPosition: 3) }.
-
-
-	self assert: ships equals: finalPositions
-]
-
-{ #category : 'tests' }
 BoardTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 
-	| preloadedSquares board ships  finalPositions newShipPosition |
-	preloadedSquares := MockBoardBuilder new withEffects: {
-			                    Square new.
-			                    Speedup new.
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Square new }.
-	board := preloadedSquares build.
-	ships := {
-		         (Spaceship withName: '1' andPosition: 1).
-		         (Spaceship withName: '2' andPosition: 3) }.
+	| preloadedDice dicePool game listOfShips boardBuilder |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                Speedup new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new }.
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        withBoardBuilder: boardBuilder;
+		        build.
 
+	game throwDiceNextTurn.
 
-	newShipPosition := ships first movesForward: 1.
-	ships at: 1 put: newShipPosition.
+	listOfShips := {
+		               { 'one'. 6 }.
+		               { 'two'. 1 } }.
 
-	(board shipInsideBoard: newShipPosition) ifTrue: [
-		ships := board applyEffectsOf: newShipPosition to: ships ].
-
-	finalPositions := {
-		                  (Spaceship withName: '1' andPosition: 6).
-		                  (Spaceship withName: '2' andPosition: 3) }.
-
-
-	self assert: ships equals: finalPositions
+	self
+		assert: (self positionOf: #( 'one' 'two' ) in: game)
+		equals: listOfShips
 ]
 
 { #category : 'tests' }
 BoardTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 
-	| preloadedSquares board ships  finalPositions newShipPosition |
-	preloadedSquares := MockBoardBuilder new withEffects: {
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Wormhole new}.
-	board := preloadedSquares build.
-	ships := {
-		         (Spaceship withName: '1' andPosition: 5).
-		         (Spaceship withName: '2' andPosition: 3) }.
+	| preloadedDice dicePool game listOfShips boardBuilder |
+	preloadedDice := DiceMock withSides: 6 andSequence: #( 5 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Wormhole new }.
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        withBoardBuilder: boardBuilder;
+		        build.
 
+	game throwDiceNextTurn.
 
-	newShipPosition := ships first movesForward: 1.
-	ships at: 1 put: newShipPosition.
+	listOfShips := {
+		               { 'one'. 2 }.
+		               { 'two'. 1 } }.
 
-	(board shipInsideBoard: newShipPosition) ifTrue: [
-		ships := board applyEffectsOf: newShipPosition to: ships ].
-
-	finalPositions := {
-		                  (Spaceship withName: '1' andPosition: 2).
-		                  (Spaceship withName: '2' andPosition: 3) }.
-
-
-	self assert: ships equals: finalPositions
+	self
+		assert: (self positionOf: #( 'one' 'two' ) in: game)
+		equals: listOfShips
 ]
 
 { #category : 'tests' }
 BoardTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 
-	| preloadedSquares board ships  finalPositions newShipPosition |
-	preloadedSquares := MockBoardBuilder new withEffects: {
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Moonwalk new.
-			                    Square new }.
-	board := preloadedSquares build.
+	| preloadedDice dicePool game listOfShips boardBuilder ships |
+	preloadedDice := DiceMock withSides: 6 andSequence: #( 4 4 5 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Moonwalk new.
+			                Square new }.
 	ships := {
-		         (Spaceship withName: '1' andPosition: 4).
-		         (Spaceship withName: '2' andPosition: 4).
-		         (Spaceship withName: '3' andPosition: 4) }.
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two').
+		         (Spaceship withName: 'three') }.
 
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        withBoardBuilder: boardBuilder;
+		        withSpaceships: ships;
+		        build.
 
-	newShipPosition := ships first movesForward: 1.
-	ships at: 1 put: newShipPosition.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
 
-	(board shipInsideBoard: newShipPosition) ifTrue: [
-		ships := board applyEffectsOf: newShipPosition to: ships ].
+	listOfShips := {
+		               { 'one'. 2 }.
+		               { 'two'. 2 }.
+		               { 'three'. 6 } }.
 
-	finalPositions := {
-		                  (Spaceship withName: '1' andPosition: 5).
-		                  (Spaceship withName: '2' andPosition: 1).
-		                  (Spaceship withName: '3' andPosition: 1) }.
-
-
-	self assert: ships equals: finalPositions
+	self
+		assert: (self positionOf: #( 'one' 'two' 'three' ) in: game)
+		equals: listOfShips
 ]
 
 { #category : 'tests' }
 BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 
-	| preloadedSquares board ships  finalPositions newShipPosition |
-	preloadedSquares := MockBoardBuilder new withEffects: {
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    Square new.
-			                    AtomicBomb new.
-			                    Square new}.
-	board := preloadedSquares build.
+	| preloadedDice dicePool game listOfShips boardBuilder ships |
+	preloadedDice := DiceMock withSides: 6 andSequence: #( 4 4 5 ).
+	dicePool := DicePool withDice: { preloadedDice }.
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                AtomicBomb new.
+			                Square new }.
 	ships := {
-		         (Spaceship withName: '1' andPosition: 4).
-		         (Spaceship withName: '2' andPosition: 4).
-		         (Spaceship withName: '3' andPosition: 4) }.
+		         (Spaceship withName: 'one').
+		         (Spaceship withName: 'two').
+		         (Spaceship withName: 'three') }.
 
+	game := GameBuilder new
+		        withDicepool: dicePool;
+		        withBoardBuilder: boardBuilder;
+		        withSpaceships: ships;
+		        build.
 
-	newShipPosition := ships first movesForward: 1.
-	ships at: 1 put: newShipPosition.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
 
-	(board shipInsideBoard: newShipPosition) ifTrue: [
-		ships := board applyEffectsOf: newShipPosition to: ships ].
+	listOfShips := {
+		               { 'one'. 1 }.
+		               { 'two'. 1 }.
+		               { 'three'. 1 } }.
 
-	finalPositions := {
-		                  (Spaceship withName: '1' andPosition: 1).
-		                  (Spaceship withName: '2' andPosition: 1).
-		                  (Spaceship withName: '3' andPosition: 1) }.
-
-
-	self assert: ships equals: finalPositions
+	self
+		assert: (self positionOf: #( 'one' 'two' 'three' ) in: game)
+		equals: listOfShips 
 ]
 
 { #category : 'tests' }

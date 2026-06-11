@@ -9,9 +9,11 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-AtomicBomb >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+AtomicBomb >> applyEffectToShip: certainShip inGame: aGame [
 
-	^ aShip movesToPosition: 1 InBoard: aBoard
+	aGame ships moveAllShipsToPosition: 1 inBoard: aGame board
+
+	"^ aShip movesToPosition: 1 InBoard: aBoard"
 ]
 
 { #category : 'as yet unclassified' }

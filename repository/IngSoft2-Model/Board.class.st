@@ -63,18 +63,16 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 ]
 
 { #category : 'behavior' }
-Board >> applyEffectsOf: certainShip to: listOfShips [
+Board >> applyEffectsOf: certainShip inGame: aGame [
 
 	| square |
+	(self shipInsideBoard: certainShip) ifFalse: [ ^ self ].
+	
 	square := squares at: (certainShip positionInBoard: self).
-
+	
 	square noEffect ifFalse: [ lastEffect := square ].
-
-	^ listOfShips collect: [ :ship |
-			  square
-				  applyEffectTo: ship
-				  in: self
-				  withCondition: (ship positionInBoard: self) = square position ]
+	
+	square applyEffectToShip: certainShip inGame: aGame
 ]
 
 { #category : 'initialization' }

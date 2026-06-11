@@ -6,11 +6,13 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Wormhole >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+Wormhole >> applyEffectToShip: certainShip inGame: aGame [
 
-	aCondition ifTrue: [
+	aGame ships moveShip: certainShip backward: 4
+
+	"aCondition ifTrue: [
 		^ aShip movesBackward: 4 ].
-	^ aShip
+	^ aShip"
 ]
 
 { #category : 'as yet unclassified' }

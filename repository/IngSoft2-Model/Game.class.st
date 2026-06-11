@@ -80,9 +80,6 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	ships validateIfGameIsOverInsideBoard: board.
 
 	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
-
-	"currentCard isRedo ifFalse: [ lastCardPlayed := currentCard ]."
-	"currentCard updateLastPlayedCardOnGame: self."
 	
 	currentCard applyInstantEffectOnGame: self 
 ]
@@ -132,8 +129,8 @@ Game >> throwDiceNextTurn [
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
-
-	ships shipInTurnMoves: amountToAdvance inside: board
+	
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]
 
 { #category : 'behaviour' }
@@ -149,6 +146,6 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn
 		                   overThrow: dicePool throw.
-
-	ships shipInTurnMoves: amountToAdvance inside: board
+	
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]

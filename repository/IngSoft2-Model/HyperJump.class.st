@@ -10,14 +10,20 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-HyperJump >> applyEffectTo: aShip in: aBoard withCondition: aCondition [
+HyperJump >> applyEffectToShip: certainShip inGame: aGame [
 
 	| currentJump |
+	currentJump := ((jumps at: jumpIndex) / parsecs) floor.
+	jumpIndex := jumpIndex % jumps size + 1.
+
+	aGame ships moveShip: certainShip forward: currentJump
+
+	"| currentJump |
 	aCondition ifTrue: [
 			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
 			jumpIndex := jumpIndex % jumps size + 1.
 			^ aShip movesForward: currentJump ].
-	^ aShip
+	^ aShip"
 ]
 
 { #category : 'accessing' }
