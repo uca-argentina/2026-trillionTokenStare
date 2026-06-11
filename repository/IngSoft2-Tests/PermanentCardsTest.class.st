@@ -1,12 +1,12 @@
 Class {
-	#name : 'CardsTest',
+	#name : 'PermanentCardsTest',
 	#superclass : 'ProjectTestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
-CardsTest >> test001EffectOfOverloadCardOverCertainShips [
+PermanentCardsTest >> test001EffectOfOverloadCardOverCertainShips [
 
 	| card ships dicePool resultInShip1 resultInShip2 |
 	dicePool := DicePool withDice: {
@@ -30,7 +30,7 @@ CardsTest >> test001EffectOfOverloadCardOverCertainShips [
 ]
 
 { #category : 'tests' }
-CardsTest >> test002EffectOfSpeedCardOverCertainShips [
+PermanentCardsTest >> test002EffectOfSpeedCardOverCertainShips [
 
 	| card ships dicePool resultInShip1 resultInShip2 |
 	dicePool := DicePool withDice: {
@@ -54,7 +54,7 @@ CardsTest >> test002EffectOfSpeedCardOverCertainShips [
 ]
 
 { #category : 'tests' }
-CardsTest >> test003EffectOfAccelerationCardOverCertainShips [
+PermanentCardsTest >> test003EffectOfAccelerationCardOverCertainShips [
 
 	| card ships dicePool resultInShip1 resultInShip2 |
 	dicePool := DicePool withDice: {
@@ -78,7 +78,7 @@ CardsTest >> test003EffectOfAccelerationCardOverCertainShips [
 ]
 
 { #category : 'tests' }
-CardsTest >> test004EffectOfManyActivePermanentCardsOverCertainShips [
+PermanentCardsTest >> test004EffectOfManyActivePermanentCardsOverCertainShips [
 
 	| ships dicePool resultInShip1 resultInShip2 activeCards |
 	dicePool := DicePool withDice: {
@@ -105,7 +105,7 @@ CardsTest >> test004EffectOfManyActivePermanentCardsOverCertainShips [
 ]
 
 { #category : 'tests' }
-CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
+PermanentCardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -132,7 +132,7 @@ CardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 ]
 
 { #category : 'tests' }
-CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
+PermanentCardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -160,7 +160,7 @@ CardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 ]
 
 { #category : 'tests' }
-CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
+PermanentCardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -191,7 +191,7 @@ CardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 ]
 
 { #category : 'tests' }
-CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
+PermanentCardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -218,204 +218,4 @@ CardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 		equals: {
 				#( 'Ship1' 9 ).
 				#( 'Ship2' 3 ) }
-]
-
-{ #category : 'tests' }
-CardsTest >> test009EffectOfcancellationCardOnCertainShip [
-
-	| ships dicePool activeCards resultInShip1 |
-	dicePool := DicePool withDice: {
-			            (DiceMock withSides: 4 andSequence: #( 4 )).
-			            (DiceMock withSides: 4 andSequence: #( 4 )) }.
-	ships := {
-		         (Spaceship withName: 'one').
-		         (Spaceship withName: 'two') }.
-
-	activeCards := CardManager withActiveCards: {
-			               Acceleration new.
-			               (Speed new affectsShipWithName: 'one').
-			               (Overload new affectsShipWithName: 'two') }.
-
-	activeCards cancel: Acceleration new.
-
-	resultInShip1 := activeCards
-		                 applyPermanentEffectOnShip: ships first
-		                 overThrow: dicePool throw.
-
-	self assert: resultInShip1 equals: 9"Acceleration was cancelled"
-]
-
-{ #category : 'tests' }
-CardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
-
-	| ships dicePool game deckMock |
-	ships := {
-		         (Spaceship withName: 'Ship1').
-		         (Spaceship withName: 'Ship2') }.
-
-	deckMock := DeckMock withSequence: {
-			            Overload new.
-			            Cancellation new.
-			            Repeat new.
-			            Speed new }.
-
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: #( 4 2 2 2 )) }.
-
-	game := GameBuilder new
-		        withSpaceships: ships;
-		        withDicepool: dicePool;
-		        withDeck: deckMock;
-		        withBoardBuilder: (MockBoardBuilder new withEffects: {
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new });
-		        build.
-
-	game throwDiceNextTurn.
-	game throwDicePermanentCardNextTurn:
-		(Speed new affectsShipWithName: 'Ship2').
-
-	game
-		instantCard: (Cancellation new withCardToCancel: Speed new)
-		from: 'Ship1'.
-
-	game throwDiceNextTurn.
-	game throwDiceNextTurn.
-
-
-	self
-		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
-		equals: {
-				#( 'Ship1' 7 ).
-				#( 'Ship2' 6 ) }
-]
-
-{ #category : 'tests' }
-CardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
-
-	| ships dicePool game deckMock |
-	ships := {
-		         (Spaceship withName: 'Ship1').
-		         (Spaceship withName: 'Ship2') }.
-
-	deckMock := DeckMock withSequence: {
-			            Overload new.
-			            Cancellation new.
-			            Repeat new.
-			            Speed new }.
-
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: #( 2 3 )) }.
-
-	game := GameBuilder new
-		        withSpaceships: ships;
-		        withDicepool: dicePool;
-		        withDeck: deckMock;
-		        withBoardBuilder: (MockBoardBuilder new withEffects: {
-						         Square new.
-						         Square new.
-						         Speedup new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new.
-						         Square new });
-		        build.
-
-	game throwDiceNextTurn.
-	game throwDiceNextTurn.
-
-	game
-		instantCard: (Repeat new affectsShipWithName: 'Ship2')
-		from: 'Ship2'.
-
-
-
-	self
-		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
-		equals: {
-				#( 'Ship1' 7 ).
-				#( 'Ship2' 8 ) }
-]
-
-{ #category : 'tests' }
-CardsTest >> test013redoCardWorksWithSpeed [
-
-	| ships dicePool game deckMock |
-	ships := {
-		         (Spaceship withName: 'Ship1').
-		         (Spaceship withName: 'Ship2') }.
-
-	deckMock := DeckMock withSequence: {
-			            Speed new.
-			            Acceleration new.
-			            Redo new.
-			            Speed new }.
-
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: #( 2 3 )) }.
-
-	game := GameBuilder new
-		        withDeck: deckMock;
-		        withSpaceships: ships;
-		        withDicepool: dicePool;
-		        build.
-
-	game throwDicePermanentCardNextTurn:
-		(Speed new affectsShipWithName: 'Ship1').
-	game
-		instantCard: (Redo new affectsShipWithName: 'Ship2')
-		from: 'Ship2'.
-	game throwDiceNextTurn.
-
-	self
-		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
-		equals: {
-				#( 'Ship1' 4 ).
-				#( 'Ship2' 6 ) }
-]
-
-{ #category : 'tests' }
-CardsTest >> test014playerUsesRepeatCard [
-
-	| boardBuilder dice game deckMock |
-	boardBuilder := MockBoardBuilder new withEffects: {
-			                Square new.
-			                Speedup new.
-			                Square new.
-			                Square new.
-			                Square new.
-			                Square new.
-			                Square new.
-			                Square new.
-			                Square new }.
-
-	deckMock := DeckMock withSequence: {
-			            Speed new.
-			            Speed new.
-			            Repeat new.
-			            Speed new }.
-
-	dice := DicePool withDice:
-		        { (DiceMock withSides: 4 andSequence: #( 1 3 )) }.
-
-	game := GameBuilder new
-		        withDicepool: dice;
-		        withBoardBuilder: boardBuilder;
-		        withDeck: deckMock;
-		        build.
-
-	game throwDiceNextTurn.
-	game throwDiceNextTurn.
-	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'
 ]

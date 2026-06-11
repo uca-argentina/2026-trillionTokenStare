@@ -1,12 +1,12 @@
 Class {
-	#name : 'GameTest',
+	#name : 'GameInteractionTest',
 	#superclass : 'ProjectTestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
-GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
+GameInteractionTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
 
 	| gameBuilder |
 	gameBuilder := GameBuilder new withParsecs: 999.
@@ -17,7 +17,7 @@ GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
+GameInteractionTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
 	| gameBuilder |
 	gameBuilder := GameBuilder new withSquares: 0.
@@ -27,7 +27,7 @@ GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
+GameInteractionTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 
 	| gameBuilder |
 	gameBuilder := GameBuilder new withSpaceships:
@@ -39,7 +39,7 @@ GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
+GameInteractionTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 
 	| preloadedDice dicePool gameBuilder |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
@@ -50,7 +50,7 @@ GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
+GameInteractionTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
 
 	| preloadedDice1 preloadedDice2 dicePool gameBuilder |
 	preloadedDice1 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
@@ -64,7 +64,7 @@ GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVal
 ]
 
 { #category : 'tests' }
-GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
+GameInteractionTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 
 	| game ships listOfShips |
 	ships := {
@@ -83,7 +83,7 @@ GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 ]
 
 { #category : 'tests' }
-GameTest >> test006FirstPlayerShouldThrowDicesFirst [
+GameInteractionTest >> test006FirstPlayerShouldThrowDicesFirst [
 
 	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 ).
@@ -103,7 +103,7 @@ GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 ]
 
 { #category : 'tests' }
-GameTest >> test007SecondPlayerThrowsDice [
+GameInteractionTest >> test007SecondPlayerThrowsDice [
 
 	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -124,7 +124,7 @@ GameTest >> test007SecondPlayerThrowsDice [
 ]
 
 { #category : 'tests' }
-GameTest >> test008TwoPlayerPlaysTwoTimesEach [
+GameInteractionTest >> test008TwoPlayerPlaysTwoTimesEach [
 
 	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -146,7 +146,7 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 ]
 
 { #category : 'tests' }
-GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
+GameInteractionTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -167,7 +167,7 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 ]
 
 { #category : 'tests' }
-GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
+GameInteractionTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -185,7 +185,7 @@ GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 ]
 
 { #category : 'tests' }
-GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
+GameInteractionTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -201,7 +201,7 @@ GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 ]
 
 { #category : 'tests' }
-GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
+GameInteractionTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
@@ -220,7 +220,7 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 ]
 
 { #category : 'tests' }
-GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion [
+GameInteractionTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion [
 
 	| game |
 	game := GameBuilder new
@@ -236,7 +236,7 @@ GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion
 ]
 
 { #category : 'tests' }
-GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
+GameInteractionTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
@@ -253,7 +253,7 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 ]
 
 { #category : 'tests' }
-GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
+GameInteractionTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
@@ -270,7 +270,7 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 ]
 
 { #category : 'tests' }
-GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
+GameInteractionTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
@@ -291,7 +291,7 @@ GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreT
 ]
 
 { #category : 'tests' }
-GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
+GameInteractionTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
 	| preloadedDice dicePool game lapsExpected |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 1 3 ).
@@ -317,7 +317,7 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 ]
 
 { #category : 'tests' }
-GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
+GameInteractionTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
 
 	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
@@ -360,7 +360,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 ]
 
 { #category : 'tests' }
-GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
+GameInteractionTest >> test020GameCanProvideTheCurrentRankingOfShips [
 
 	| preloadedDice dicePool game ranking namesAt |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).
@@ -384,7 +384,7 @@ GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
 ]
 
 { #category : 'tests' }
-GameTest >> test021spaceshipsStartTheGameWithTwoCartsFromDesk [
+GameInteractionTest >> test021spaceshipsStartTheGameWithTwoCartsFromDesk [
 
 	| mockDeck sequence spaceshipManager spaceships game |
 	sequence := { Redo new. Acceleration new . Speed new } .
