@@ -178,8 +178,8 @@ BoardTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 { #category : 'tests' }
 BoardTest >> test010HyperJumpSquareWithParsecs [
 
-	| finalPositions ships boardBuilder game hyperJumpSquare |
-	hyperJumpSquare := HyperJump new withJumpsInParsecs: { 300 . 200 }.
+	| ships boardBuilder game hyperJumpSquare allTurnsResults |
+	hyperJumpSquare := HyperJump new withJumpsInParsecs: { 300. 200 }.
 	ships := {
 		         (Spaceship withName: 'one').
 		         (Spaceship withName: 'two').
@@ -203,25 +203,21 @@ BoardTest >> test010HyperJumpSquareWithParsecs [
 			        (DicePool withDice:
 					         { (DiceMock withSides: 4 andSequence: #( 1 )) });
 		        build.
-	finalPositions := {
-		                  {
-			                  { 'one'. 5 }.
-			                  { 'two'. 1 }.
-			                  { 'three'. 1 } }.
-		                  {
-			                  { 'one'. 5 }.
-			                  { 'two'. 4 }.
-			                  { 'three'. 1 } }.
-		                  {
-			                  { 'one'. 5 }.
-			                  { 'two'. 4 }.
-			                  { 'three'. 5 } } }.
 
 
+	allTurnsResults := {
+		                   {
+			                   { 'one'. 5 }.
+			                   { 'two'. 1 } }.
+		                   {
+			                   { 'one'. 5 }.
+			                   { 'two'. 4 } }.
+		                   {
+			                   { 'one'. 6 }.
+			                   { 'two'. 4 } } }.
 	self
-		assert:
-		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
-		equals: finalPositions
+		assert: (self positionOf: #( 'one' 'two' ) in: game afterTurns: 3)
+		equals: allTurnsResults
 ]
 
 { #category : 'tests' }
@@ -289,7 +285,8 @@ BoardTest >> test012BoardDistribution [
 		                    build.
 
 	self assert: distributedBoard size equals: 100.
-	self assert: (distributedBoard occurrencesOf: Square) equals: 40.
+	self assert: (distributedBoard occurrencesOf: Square) equals: 30.
+	self assert: (distributedBoard occurrencesOf: CardDropper ) equals: 10.
 	self assert: (distributedBoard occurrencesOf: Wormhole) equals: 20.
 	self assert: (distributedBoard occurrencesOf: Speedup) equals: 20.
 	self assert: (distributedBoard occurrencesOf: Moonwalk) equals: 10.

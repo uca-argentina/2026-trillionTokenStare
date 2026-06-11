@@ -158,7 +158,9 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 
 	1 to: 5 do: [ :turn | game throwDiceNextTurn ].
 
-	self assert: game locateWinningSpaceShip equals: {
+	game winningSpaceship.
+
+	self assertDictionary: game winningSpaceship contains: {
 			(#name -> 'one').
 			(#position -> 4).
 			(#lap -> 2) } asDictionary
@@ -194,7 +196,7 @@ GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 		        build.
 
 	self
-		should: [ game locateWinningSpaceShip ]
+		should: [ game winningSpaceship ]
 		raiseErrorWithMessageText: 'Game is not over'
 ]
 
@@ -214,7 +216,7 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
 	1 to: 10 do: [ :turn | game throwDiceNextTurn ].
 
-	self assert: ((game locateSpaceShip: '1') at: #position) equals: 4
+	self assert: ((game spaceshipNamed: '1') at: #position) equals: 4
 ]
 
 { #category : 'tests' }
@@ -228,9 +230,9 @@ GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion
 		        build.
 
 	self
-		should: [ game locateSpaceShip: '5' ]
+		should: [ game spaceshipNamed: '5' ]
 		raiseErrorWithMessageText:
-		'This spaceship does not exist'
+		'Ship not found.'
 ]
 
 { #category : 'tests' }
@@ -246,7 +248,7 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 	5 timesRepeat: [ game throwDiceNextTurn ].
 
 	self
-		should: [ game locateWinningSpaceShip ]
+		should: [ game winningSpaceship ]
 		raiseErrorWithMessageText: 'Game is not over'
 ]
 
@@ -264,7 +266,7 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 
 	5 timesRepeat: [ game throwDiceNextTurn ].
 
-	self assert: ((game locateSpaceShip: 'one') at: #position) equals: 1
+	self assert: ((game spaceshipNamed: 'one') at: #position) equals: 1
 ]
 
 { #category : 'tests' }
@@ -310,7 +312,7 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
 	lapsExpected do: [ :lap |
 			self
-				assert: ((game locateSpaceShip: lap first) at: #lap)
+				assert: ((game spaceshipNamed: lap first) at: #lap)
 				identicalTo: lap second ]
 ]
 
@@ -353,7 +355,7 @@ GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheF
 		equals: positionsExpected.
 	lapsExpected do: [ :lap |
 			self
-				assert: ((game locateSpaceShip: lap first) at: #lap)
+				assert: ((game spaceshipNamed: lap first) at: #lap)
 				identicalTo: lap second ]
 ]
 

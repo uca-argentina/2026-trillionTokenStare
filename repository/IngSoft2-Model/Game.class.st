@@ -60,6 +60,12 @@ Game >> cancelCard: cardToCancel [
 	cards cancel: cardToCancel
 ]
 
+{ #category : 'delegating' }
+Game >> cardsDrawnByShip: certainShip [
+
+	ships ship: certainShip drawsCardFromDeck: deck
+]
+
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
@@ -79,21 +85,9 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	| currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
 
-	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
+	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
 	
 	currentCard applyInstantEffectOnGame: self 
-]
-
-{ #category : 'accessing' }
-Game >> locateSpaceShip: nameOfSpaceship [
-
-	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
-]
-
-{ #category : 'accessing' }
-Game >> locateWinningSpaceShip [
-
-	^ ships winningSpaceShipAsDictionaryIn: board
 ]
 
 { #category : 'delegating' }
@@ -153,6 +147,12 @@ Game >> setLastPlayedCard: aCard [
 	lastCardPlayed := aCard
 ]
 
+{ #category : 'accessing' }
+Game >> spaceshipNamed: nameOfSpaceship [
+
+	^ ships spaceShipWithCardsAsDictionary: nameOfSpaceship in: board
+]
+
 { #category : 'behaviour' }
 Game >> throwDiceNextTurn [
 
@@ -181,4 +181,10 @@ Game >> throwDicePermanentCardNextTurn: aCard [
 		                   overThrow: dicePool throw.
 
 	ships shipInTurnMoves: amountToAdvance inGame: self
+]
+
+{ #category : 'accessing' }
+Game >> winningSpaceship [
+
+	^ ships winningSpaceShipAsDictionaryIn: board
 ]

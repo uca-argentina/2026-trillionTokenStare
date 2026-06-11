@@ -48,12 +48,13 @@ Spaceship >> = unaNave [
 ]
 
 { #category : 'accessing' }
-Spaceship >> asDictionaryInBoard: aBoard [
+Spaceship >> asDictionaryWithCardsInBoard: aBoard [
 
 	^ {
 		  (#name -> name).
 		  (#position -> (self positionInBoard: aBoard)).
-		  (#lap -> (self lapsInBoard: aBoard)) } asDictionary
+		  (#lap -> (self lapsInBoard: aBoard)).
+		  (#cards -> (cards deepCopy)) } asDictionary
 ]
 
 { #category : 'initialization' }
