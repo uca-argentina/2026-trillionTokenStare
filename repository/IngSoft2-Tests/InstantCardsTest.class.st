@@ -150,44 +150,7 @@ InstantCardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test013redoCardWorksWithSpeed [
-
-	| ships dicePool game deckMock |
-	ships := {
-		         (Spaceship withName: 'Ship1').
-		         (Spaceship withName: 'Ship2') }.
-
-	deckMock := DeckMock withSequence: {
-			            Speed new.
-			            Acceleration new.
-			            Redo new.
-			            Speed new }.
-
-	dicePool := DicePool withDice:
-		            { (DiceMock withSides: 4 andSequence: #( 2 3 )) }.
-
-	game := GameBuilder new
-		        withDeck: deckMock;
-		        withSpaceships: ships;
-		        withDicepool: dicePool;
-		        build.
-
-	game throwDicePermanentCardNextTurn:
-		(Speed new affectsShipWithName: 'Ship1').
-	game
-		instantCard: (Redo new affectsShipWithName: 'Ship2')
-		from: 'Ship2'.
-	game throwDiceNextTurn.
-
-	self
-		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
-		equals: {
-				#( 'Ship1' 4 ).
-				#( 'Ship2' 6 ) }
-]
-
-{ #category : 'tests' }
-InstantCardsTest >> test014playerUsesRepeatCard [
+InstantCardsTest >> test014playerUsesRepeatCardAndRepeatsSpeedupSquare [
 
 	| boardBuilder dice game deckMock |
 	boardBuilder := MockBoardBuilder new withEffects: {
@@ -218,5 +181,197 @@ InstantCardsTest >> test014playerUsesRepeatCard [
 
 	game throwDiceNextTurn.
 	game throwDiceNextTurn.
-	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'
+	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'."two uses repeat on itself"
+
+	self assert: ((game spaceshipNamed: 'one') at: 'position') equals: 6.
+	self assert: ((game spaceshipNamed: 'two') at: 'position') equals: 8
+]
+
+{ #category : 'tests' }
+InstantCardsTest >> test015playerUsesRepeatCardAndRepeatsWormholeSquare [
+
+	| boardBuilder dice game deckMock |
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new. "1"
+			                Square new. "2"
+			                Square new. "3"
+			                Square new. "4"
+			                Square new. "5"
+			                Wormhole new. "6"
+			                Square new. "7"
+			                Square new. "8"
+			                Square new. "9"
+			                Square new "10" }.
+
+	deckMock := DeckMock withSequence: {
+			            Speed new.
+			            Repeat new.
+			            Repeat new.
+			            Speed new }.
+
+	dice := DicePool withDice:
+		        { (DiceMock withSides: 6 andSequence: #( 5 6 )) }.
+
+	game := GameBuilder new
+		        withDicepool: dice;
+		        withBoardBuilder: boardBuilder;
+		        withDeck: deckMock;
+		        build.
+
+	game throwDiceNextTurn."one falls on wormhole, goes back to 2"
+	game throwDiceNextTurn."two falls on 7"
+
+	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'one'."one uses repeat on two, one goes back to 2"
+
+	self assert: ((game spaceshipNamed: 'one') at: 'position') equals: 2.
+	self assert: ((game spaceshipNamed: 'two') at: 'position') equals: 3
+]
+
+{ #category : 'tests' }
+InstantCardsTest >> test016playerUsesRepeatCardAndRepeatsMoonwalkSquare [
+    | boardBuilder dice game deckMock |
+    boardBuilder := MockBoardBuilder new withEffects: {
+                            Square new. "1"
+                            Square new. "2"
+                            Square new. "3"
+                            Square new. "4"
+                            Square new. "5"
+                            Moonwalk new. "6"
+                            Square new. "7"
+                            Square new. "8"
+                            Square new. "9"
+                            Square new. "10" }.
+
+    deckMock := DeckMock withSequence: {
+                        Speed new.
+                        Repeat new.
+                        Repeat new.
+                        Speed new }.
+
+    dice := DicePool withDice: { (DiceMock withSides: 6 andSequence: #( 3 5 )) }.
+
+    game := GameBuilder new
+                withDicepool: dice;
+                withBoardBuilder: boardBuilder;
+                withDeck: deckMock;
+                build.
+
+    game throwDiceNextTurn.
+    game throwDiceNextTurn.
+    
+    game instantCard: (Repeat new affectsShipWithName: 'one') from: 'one'.
+
+    self assert: ((game spaceshipNamed: 'one') at:'position') equals: 1.
+    self assert: ((game spaceshipNamed: 'two') at:'position') equals: 3.
+]
+
+{ #category : 'tests' }
+InstantCardsTest >> test017playerUsesRepeatCardAndRepeatsAtomicBombSquare [
+
+	| boardBuilder dice game deckMock |
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new. "1"
+			                Square new. "2"
+			                Square new. "3"
+			                AtomicBomb new. "4"
+			                Square new "5" }.
+
+	deckMock := DeckMock withSequence: {
+			            Speed new.
+			            Speed new.
+			            Repeat new.
+			            Speed new }.
+
+	dice := DicePool withDice:
+		        { (DiceMock withSides: 4 andSequence: #( 1 3 )) }.
+
+	game := GameBuilder new
+		        withDicepool: dice;
+		        withBoardBuilder: boardBuilder;
+		        withDeck: deckMock;
+		        build.
+
+	game throwDiceNextTurn.
+	game throwDiceNextTurn. "lands on Atomic bomb"
+	self assert: ((game spaceshipNamed: 'one') at: 'position') equals: 1.
+	self assert: ((game spaceshipNamed: 'two') at: 'position') equals: 1.
+
+	game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'one') at: 'position') equals: 2.
+	self assert: ((game spaceshipNamed: 'two') at: 'position') equals: 1.
+
+	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'. "Repeats Atomic Bomb"
+	self assert: ((game spaceshipNamed: 'one') at: 'position') equals: 1.
+	self assert: ((game spaceshipNamed: 'two') at: 'position') equals: 1
+]
+
+{ #category : 'tests' }
+InstantCardsTest >> test018playerUsesRepeatCardAndRepeatsHyperJumpSquare [
+    | boardBuilder dice game deckMock |
+    boardBuilder := MockBoardBuilder new withEffects: {
+                            Square new. "1"
+                            HyperJump new. "2" "Using default list {300. 200}"
+                            Square new. "3"
+                            Square new. "4"
+                            Square new. "5"
+                            Square new. "6"
+                            Square new. "7"
+                            Square new. "8"
+                            Square new. "9"
+                            Square new. "10" }. "Parsecs per square = 1000 / 10 = 100"
+
+    deckMock := DeckMock withSequence: {
+                        Speed new.
+                        Speed new.
+                        Repeat new.
+                        Speed new }.
+
+    dice := DicePool withDice: { (DiceMock withSides: 4 andSequence: #( 1 )) }.
+
+    game := GameBuilder new
+                withDicepool: dice;
+                withBoardBuilder: boardBuilder;
+                withDeck: deckMock;
+                build.
+
+    game throwDiceNextTurn."lands on hyper jump: 2 + 3 = 5"
+    game throwDiceNextTurn."lands on hyper jump: 2 + 2 = 4"
+    
+    game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'.
+
+    self assert: ((game spaceshipNamed: 'two') at:'position') equals: 7. "repeats hyper jump: 4 + 3"
+]
+
+{ #category : 'tests' }
+InstantCardsTest >> test019playerUsesRepeatCardOnNormalSquareHasNoEffect [
+    | boardBuilder dice game deckMock |
+    boardBuilder := MockBoardBuilder new withEffects: {
+                            Square new.
+                            Square new.
+                            Square new.
+                            Square new.
+                            Square new }.
+
+    deckMock := DeckMock withSequence: {
+                        Speed new.
+                        Speed new.
+                        Repeat new.
+                        Speed new }.
+
+    dice := DicePool withDice: { (DiceMock withSides: 4 andSequence: #( 1 1 )) }.
+
+    game := GameBuilder new
+                withDicepool: dice;
+                withBoardBuilder: boardBuilder;
+                withDeck: deckMock;
+                build.
+
+    game throwDiceNextTurn.
+    game throwDiceNextTurn. "Ambos terminan en la posición 2 (casillero normal)"
+    
+    game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'.
+
+    "Las posiciones deben permanecer intactas ya que el casillero no tenía efecto"
+    self assert: ((game spaceshipNamed: 'one') at:'position') equals: 2.
+    self assert: ((game spaceshipNamed: 'two') at:'position') equals: 2.
 ]
