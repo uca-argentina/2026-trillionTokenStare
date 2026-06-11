@@ -56,6 +56,12 @@ Spaceship >> asDictionaryInBoard: aBoard [
 		  (#lap -> (self lapsInBoard: aBoard)) } asDictionary
 ]
 
+{ #category : 'accessing' }
+Spaceship >> cards [
+
+	^ cards deepCopy
+]
+
 { #category : 'initialization' }
 Spaceship >> initializeWithName: aName andPosition: aPosition andCards: _cards [
 	super initialize .

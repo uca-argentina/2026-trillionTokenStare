@@ -60,6 +60,12 @@ Game >> cancelCard: cardToCancel [
 	cards cancel: cardToCancel
 ]
 
+{ #category : 'delegating' }
+Game >> cardsDrawnByShip: certainShip [
+
+	ships ship: certainShip drawsCardFromDeck: deck
+]
+
 { #category : 'initialization' }
 Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
@@ -79,15 +85,15 @@ Game >> instantCard: aCard from: nameOfPlayer [
 	| currentCard |
 	ships validateIfGameIsOverInsideBoard: board.
 
-	currentCard := (ships locateSpaceShip: nameOfPlayer) playCard: aCard.
+	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
 	
 	currentCard applyInstantEffectOnGame: self 
 ]
 
 { #category : 'accessing' }
-Game >> locateSpaceShip: nameOfSpaceship [
+Game >> locateSpaceshipNamed: nameOfSpaceship [
 
-	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
+	^ ships spaceshipNamed: nameOfSpaceship
 ]
 
 { #category : 'accessing' }
@@ -151,6 +157,12 @@ Game >> repeatSquareEffectForShipNamed: shipName [
 Game >> setLastPlayedCard: aCard [
 
 	lastCardPlayed := aCard
+]
+
+{ #category : 'accessing' }
+Game >> spaceshipNamed: nameOfSpaceship [
+
+	^ships spaceShipAsDictionary: nameOfSpaceship in: board 
 ]
 
 { #category : 'behaviour' }

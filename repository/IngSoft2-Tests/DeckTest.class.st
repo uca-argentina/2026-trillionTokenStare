@@ -53,3 +53,84 @@ DeckTest >> test004BeforeGameStartsTheDeckGivesTwoCardsForEachPlayer [
 	
 	
 ]
+
+{ #category : 'tests' }
+DeckTest >> test005ShipSteppsOnSquareThatDroppsCards [
+
+	| boardBuilder deck game dicePool |
+	deck := DeckMock withSequence: {
+			        Speed new.
+			        Speed new.
+			        Speed new.
+			        Speed new.
+			        Acceleration new.
+			        Repeat new }.
+
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                CardDropper new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new }.
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 1 )) }.
+
+	game := GameBuilder new
+		        withBoardBuilder: boardBuilder;
+		        withDeck: deck;
+		        withDicepool: dicePool;
+		        build.
+
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
+
+	self assert: (game locateSpaceshipNamed: 'one') cards equals: {
+			Speed new.
+			Speed new.
+			Acceleration new } asOrderedCollection.
+	self assert: (game locateSpaceshipNamed: 'two') cards equals: {
+			Speed new.
+			Speed new.
+			Repeat new } asOrderedCollection
+]
+
+{ #category : 'tests' }
+DeckTest >> test006ShipUsesRepeatCardToGetTheCardDropEffect [
+
+	| boardBuilder deck game dicePool |
+	deck := DeckMock withSequence: {
+			        Speed new.
+			        Speed new.
+			        Repeat new.
+			        Speed new.
+			        Acceleration new.
+			        Overload new }.
+
+	boardBuilder := MockBoardBuilder new withEffects: {
+			                Square new.
+			                CardDropper new.
+			                Square new.
+			                Square new.
+			                Square new.
+			                Square new }.
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 1 )) }.
+
+	game := GameBuilder new
+		        withBoardBuilder: boardBuilder;
+		        withDeck: deck;
+		        withDicepool: dicePool;
+		        build.
+
+	game throwDiceNextTurn.
+	game instantCard: (Repeat new affectsShipWithName: 'two') from: 'two'.
+
+	self assert: (game locateSpaceshipNamed: 'one') cards equals: {
+			Speed new.
+			Speed new.
+			Acceleration new } asOrderedCollection.
+	self assert: (game locateSpaceshipNamed: 'two') cards equals: {
+			Speed new.
+			Overload new } asOrderedCollection
+]

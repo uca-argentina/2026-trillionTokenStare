@@ -32,14 +32,6 @@ SpaceshipManager >> initializeWithShips: _ships [
 	playersTurn := 1
 ]
 
-{ #category : 'accessing' }
-SpaceshipManager >> locateSpaceShip: nameOfSpaceship [
-
-	^ ships
-		  detect: [ :ship | ship name = nameOfSpaceship ]
-		  ifNone: [ self error: 'This spaceship does not exist' ]
-]
-
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveAllShipsBut: certainShip backward: ammount [ 
 
@@ -74,6 +66,15 @@ SpaceshipManager >> ranking [
 	^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
 ]
 
+{ #category : 'behavior' }
+SpaceshipManager >> ship: certainShip drawsCardFromDeck: deck [
+
+	ships := ships collect: [ :aShip |
+			         aShip = certainShip
+				         ifTrue: [ aShip receivesCard: deck drawCard ]
+				         ifFalse: [ aShip ] ]
+]
+
 { #category : 'accessing' }
 SpaceshipManager >> shipInTurn [
 
@@ -97,7 +98,7 @@ SpaceshipManager >> shipInTurnMoves: amountToAdvance inGame: aGame [
 SpaceshipManager >> shipNamed: playersName repeatsEffectInGame: aGame [
 
 	| ship |
-	ship := self locateSpaceShip: playersName.
+	ship := self spaceshipNamed: playersName.
 	
 	aGame repeatLastEffectsOn: ship
 ]
@@ -105,8 +106,16 @@ SpaceshipManager >> shipNamed: playersName repeatsEffectInGame: aGame [
 { #category : 'accessing' }
 SpaceshipManager >> spaceShipAsDictionary: nameOfSpaceship in: board [
 
-	^ (self locateSpaceShip: nameOfSpaceship )
+	^ (self spaceshipNamed: nameOfSpaceship )
 		  asDictionaryInBoard: board
+]
+
+{ #category : 'accessing' }
+SpaceshipManager >> spaceshipNamed: nameOfSpaceship [
+
+	^ ships
+		  detect: [ :ship | ship name = nameOfSpaceship ]
+		  ifNone: [ self error: 'This spaceship does not exist' ]
 ]
 
 { #category : 'validation' }
