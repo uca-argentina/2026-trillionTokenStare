@@ -25,9 +25,12 @@ SpaceShipTest >> test002ShipMovesForwardWhenToldTo [
 { #category : 'tests' }
 SpaceShipTest >> test003ShipMovesBackwardWhenToldTo [
 
-	| ship shipNewPosition board |
-	ship := Spaceship withName: 'Ship1' andPosition: 15.
-	board := MockBoardBuilder new build
+	| ship board shipNewPosition |
+	ship := (Spaceship withName: 'Ship1') movesForward: 14.
+	board := MockBoardBuilder new build.
+
+	shipNewPosition := ship movesBackward: 3.
+	self assert: shipNewPosition position equals: 12
 ]
 
 { #category : 'tests' }
@@ -39,13 +42,13 @@ SpaceShipTest >> test004shipIsValidOnlyWithNameAsText [
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test005shiPpresentsItselfAsDictionaryWithInformation [
+SpaceShipTest >> test005SpaceshipPresentsItselfAsDictionaryWithInformation [
 
 	| ship board |
-	ship := Spaceship withName: 'Ship1' andPosition: 15.
+	ship := (Spaceship withName: 'Ship1') movesForward: 14.
 	board := MockBoardBuilder new build.
 
-	self assertDictionary: (ship asDictionaryWithCardsInBoard: board) contains: {
+	self assertDictionary: (ship asDictionaryInBoard: board) contains: {
 			(#name -> 'Ship1').
 			(#position -> 5).
 			(#lap -> 2) } asDictionary
@@ -55,28 +58,24 @@ SpaceShipTest >> test005shiPpresentsItselfAsDictionaryWithInformation [
 SpaceShipTest >> test006ShipMovesToCertainPositionRelativeToBoardWithoutChaingingLap [
 
 	| ship board updatedShip |
-	ship := Spaceship withName: 'Ship1' andPosition: 15.
+	ship := (Spaceship withName: 'Ship1') movesForward: 14.
 	board := MockBoardBuilder new build.
 
 	updatedShip := ship movesToPosition: 1 InBoard: board.
 
-	self assertDictionary: (updatedShip asDictionaryWithCardsInBoard: board) contains: {
+	self assertDictionary: (updatedShip asDictionaryInBoard: board) contains: {
 			(#name -> 'Ship1').
 			(#position -> 1).
 			(#lap -> 2) } asDictionary
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test007shipsWithCards [
+SpaceShipTest >> test007SpaceshipReceivesCardAndCanPlayIt [
 
 	| ships cardExpected |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Acceleration new.
-				          Speed new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Card new.
-				          Overload new }) }.
+		         (Spaceship withName: 'Ship1') receivesCard: Speed new.
+		         (Spaceship withName: 'Ship2') }.
 
 	cardExpected := ships first playCard:
 		                (Speed new affectsShipWithName: 'Ship1').
@@ -89,42 +88,24 @@ SpaceShipTest >> test008shipsTriesToPlayCardThatDoesntPosess [
 
 	| ships |
 	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-				          Acceleration new.
-				          Speed new }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {
-				          Card new.
-				          Overload new }) }.
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
 
-	self should: [ ships first playCard:
-		                (Overload new affectsShipWithName: 'Ship2'). ] raiseErrorWithMessageText: 'Ship can not play a card that doesnt posess'
-	
-
-]
-
-{ #category : 'tests' }
-SpaceShipTest >> test009shipReceivesCard [
-
-	| ships cardExpected |
-	ships := {
-		         (Spaceship withName: 'Ship1' andPosition: 1 andCards: {  }).
-		         (Spaceship withName: 'Ship2' andPosition: 1 andCards: {  }) }.
-
-	ships first receivesCard: Acceleration new.
-
-	cardExpected := ships first playCard:
-		                (Acceleration new).
-
-	self assert: cardExpected equals: Acceleration new
+	self
+		should: [
+		ships first playCard: (Overload new affectsShipWithName: 'Ship2') ]
+		raiseErrorWithMessageText:
+		'Ship can not play a card that doesnt posess'
 ]
 
 { #category : 'tests' }
 SpaceShipTest >> test010ShipRunsOutOfCards [
 
 	| ships |
-	ships := { (Spaceship withName: 'Ship1' andPosition: 1 andCards: {
-			          Card new.
-			          Card new }) }.
+	ships := { (Spaceship withName: 'Ship1') }.
+	
+	ships first receivesCard: Card new.
+	ships first receivesCard: Card new.
 
 	self
 		should: [ 3 timesRepeat: [ ships first playCard: Card new ] ]

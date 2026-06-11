@@ -33,31 +33,30 @@ SpaceshipManager >> initializeWithShips: _ships [
 ]
 
 { #category : 'accessing - editing state' }
-SpaceshipManager >> moveAllShipsBut: certainShip backward: ammount [ 
+SpaceshipManager >> moveAllShipsBut: certainShip backward: ammount [
 
-	ships := ships collect: [ :ship |
-		         ship = certainShip ifFalse: [ ship movesBackward: ammount ] ifTrue:[ ship ] ]
+	ships do: [ :ship |
+		ship = certainShip ifFalse: [ ship movesBackward: ammount ] ]
 ]
 
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveAllShipsToPosition: position inBoard: aBoard [
 
-	ships := ships collect: [ :ship |
-		         ship movesToPosition: position InBoard: aBoard ]
+	ships do: [ :ship | ship movesToPosition: position InBoard: aBoard ]
 ]
 
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveShip: certainShip backward: ammount [
 
-	ships := ships collect: [ :ship |
-		         ship = certainShip ifTrue: [ ship movesBackward: ammount ] ifFalse:[ ship ]]
+	ships do: [ :ship |
+		ship = certainShip ifTrue: [ ship movesBackward: ammount ] ]
 ]
 
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveShip: certainShip forward: ammount [
 
-	ships := ships collect: [ :ship |
-		         ship = certainShip ifTrue: [ ship movesForward: ammount ] ifFalse:[ship] ]
+	ships do: [ :ship |
+		ship = certainShip ifTrue: [ ship movesForward: ammount ] ]
 ]
 
 { #category : 'accessing' }
@@ -66,13 +65,11 @@ SpaceshipManager >> ranking [
 	^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
 ]
 
-{ #category : 'behavior' }
+{ #category : 'accessing - editing state' }
 SpaceshipManager >> ship: certainShip drawsCardFromDeck: deck [
 
-	ships := ships collect: [ :aShip |
-			         aShip = certainShip
-				         ifTrue: [ aShip receivesCard: deck drawCard ]
-				         ifFalse: [ aShip ] ]
+	ships do: [ :aShip |
+		aShip = certainShip ifTrue: [ aShip receivesCard: deck drawCard ] ]
 ]
 
 { #category : 'accessing' }
@@ -84,13 +81,8 @@ SpaceshipManager >> shipInTurn [
 { #category : 'behavior' }
 SpaceshipManager >> shipInTurnMoves: amountToAdvance inGame: aGame [
 
-	| newShipPosition |
-	newShipPosition := self shipInTurn movesForward: amountToAdvance.
-	
-	ships at: playersTurn put: newShipPosition.
-
-	aGame applyEffectsOf: newShipPosition.
-
+	self moveShip: self shipInTurn forward: amountToAdvance.
+	aGame applyEffectsOf: self shipInTurn.
 	playersTurn := playersTurn % ships size + 1
 ]
 
@@ -107,7 +99,7 @@ SpaceshipManager >> shipNamed: playersName repeatsEffectInGame: aGame [
 SpaceshipManager >> spaceShipWithCardsAsDictionary: nameOfSpaceship in: board [
 
 	^ (self spaceshipNamed: nameOfSpaceship)
-		  asDictionaryWithCardsInBoard: board
+		  asDictionaryInBoard: board
 ]
 
 { #category : 'accessing' }
@@ -132,6 +124,6 @@ SpaceshipManager >> winningSpaceShipAsDictionaryIn: board [
 
 	^ (ships
 		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
-		   ifNone: [ self error: 'Game is not over' ]) asDictionaryWithCardsInBoard: 
+		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard: 
 		  board
 ]

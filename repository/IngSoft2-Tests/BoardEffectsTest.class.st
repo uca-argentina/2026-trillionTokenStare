@@ -21,7 +21,7 @@ BoardEffectsTest >> test002BoardConfirmsASpaceshipIsOutside [
 	| preloadedSquares board ship |
 	preloadedSquares := MockBoardBuilder new.
 	board := preloadedSquares build.
-	ship := Spaceship withName: 'ship' andPosition: 11.
+	ship := (Spaceship withName: 'ship' ) movesForward: 10.
 
 
 	self deny: (board shipInsideBoard: ship)
@@ -33,7 +33,7 @@ BoardEffectsTest >> test003BoardConfirmsASpaceshipIsInside [
 	| preloadedSquares board ship |
 	preloadedSquares := MockBoardBuilder new.
 	board := preloadedSquares build.
-	ship := Spaceship withName: 'ship' andPosition: 10.
+	ship := (Spaceship withName: 'ship') movesForward: 9.
 
 
 	self assert: (board shipInsideBoard: ship)
