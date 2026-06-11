@@ -42,6 +42,12 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool and
 		  andDeck: aDeck 
 ]
 
+{ #category : 'accessing' }
+Game >> activeCards [
+
+	^ cards permanentCards 
+]
+
 { #category : 'delegating' }
 Game >> addPermanentCard: aCard [
 

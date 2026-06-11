@@ -83,3 +83,80 @@ RedoCardTest >> test014aRedoCardWorksWithOverload [
 		assert: ((game spaceshipNamed: 'Ship2') at: 'position')
 		equals: 3
 ]
+
+{ #category : 'tests' }
+RedoCardTest >> test015RedoCardWorksWithAcceleration [
+    | ships dicePool game deckMock |
+    ships := {
+                 (Spaceship withName: 'Ship1').
+                 (Spaceship withName: 'Ship2') }.
+
+    deckMock := DeckMock withSequence: {
+                        Acceleration new.
+                        Speed new.
+                        Redo new.
+                        Acceleration new }.
+
+    dicePool := DicePool withDice:
+                    { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+    game := GameBuilder new
+                withDeck: deckMock;
+                withSpaceships: ships;
+                withDicepool: dicePool;
+                build.
+
+    game throwDicePermanentCardNextTurn: Acceleration new. "turn of Ship1: 1 + 4 (dice) + 2 (Acceleration) = 7"
+
+    game instantCard: (Redo new) from: 'Ship2'."ship2 casts redo (Acceleration) on itself"
+
+    game throwDiceNextTurn. "turn of Ship2: 1 + 4 (dice) + 2 (Acceleration) = 7"
+    game throwDiceNextTurn. "turn of Ship1: 6 + 4 (dice) + 2 (Acceleration) = 12"
+
+    self assert: ((game spaceshipNamed: 'Ship1') at: 'position') equals: 2." second lap in a board length 10 (absolute position 12)"
+    self assert: ((game spaceshipNamed: 'Ship2') at: 'position') equals: 7." still on first lap"
+]
+
+{ #category : 'tests' }
+RedoCardTest >> test016RedoCardWorksWithCancellation [
+
+	| ships dicePool game deckMock speedCard accelerationCard |
+	ships := {
+		         (Spaceship withName: 'Ship1').
+		         (Spaceship withName: 'Ship2') }.
+
+	deckMock := DeckMock withSequence: {
+			            Speed new.
+			            Redo new.
+			            Cancellation new.
+			            Acceleration new }.
+
+	dicePool := DicePool withDice:
+		            { (DiceMock withSides: 4 andSequence: #( 4 )) }.
+
+	game := GameBuilder new
+		        withDeck: deckMock;
+		        withSpaceships: ships;
+		        withDicepool: dicePool;
+		        build.
+
+	"cards to play"
+	speedCard := Speed new affectsShipWithName: 'Ship1'.
+	accelerationCard := Acceleration new.
+
+	game throwDicePermanentCardNextTurn: speedCard.
+	game throwDicePermanentCardNextTurn: accelerationCard.
+
+	"Ship2 usa Cancelación sobre la carta Speed"
+	game
+		instantCard: (Cancellation new withCardToCancel: speedCard)
+		from: 'Ship2'.
+
+	"Ship1 usa Redo copiando la Cancelación, pero elige destruir la Acceleration"
+	game
+		instantCard: (Redo new withCardToCancel: accelerationCard)
+		from: 'Ship1'.
+
+	"Verificamos que el pool de cartas activas en el juego quedó completamente vacío"
+	self assert: game activeCards isEmpty
+]
