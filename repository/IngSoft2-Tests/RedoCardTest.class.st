@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-RedoCardTest >> test013redoCardWorksWithSpeed [
+RedoCardTest >> test001redoCardWorksWithSpeed [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -43,7 +43,7 @@ RedoCardTest >> test013redoCardWorksWithSpeed [
 ]
 
 { #category : 'tests' }
-RedoCardTest >> test014aRedoCardWorksWithOverload [
+RedoCardTest >> test002aRedoCardWorksWithOverload [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -85,7 +85,7 @@ RedoCardTest >> test014aRedoCardWorksWithOverload [
 ]
 
 { #category : 'tests' }
-RedoCardTest >> test015RedoCardWorksWithAcceleration [
+RedoCardTest >> test003RedoCardWorksWithAcceleration [
     | ships dicePool game deckMock |
     ships := {
                  (Spaceship withName: 'Ship1').
@@ -118,7 +118,7 @@ RedoCardTest >> test015RedoCardWorksWithAcceleration [
 ]
 
 { #category : 'tests' }
-RedoCardTest >> test016RedoCardWorksWithCancellation [
+RedoCardTest >> test004RedoCardWorksWithCancellation [
 
 	| ships dicePool game deckMock speedCard accelerationCard |
 	ships := {
@@ -161,7 +161,7 @@ RedoCardTest >> test016RedoCardWorksWithCancellation [
 ]
 
 { #category : 'tests' }
-RedoCardTest >> test017RedoCardCopiesRepeatWhichCopiesSquareEffect [
+RedoCardTest >> test005RedoCardCopiesRepeatWhichCopiesSquareEffect [
 
 	| boardBuilder ships dicePool game deckMock |
 	boardBuilder := MockBoardBuilder new withEffects: {
@@ -216,7 +216,7 @@ RedoCardTest >> test017RedoCardCopiesRepeatWhichCopiesSquareEffect [
 ]
 
 { #category : 'tests' }
-RedoCardTest >> test018RedoOfARedoCardTakesTheUnderlyingAppliedCardEffect [
+RedoCardTest >> test006RedoOfARedoCardTakesTheUnderlyingAppliedCardEffect [
     | ships dicePool game deckMock |
     ships := {
                  (Spaceship withName: 'Ship1').

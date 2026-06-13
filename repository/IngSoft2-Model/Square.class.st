@@ -9,12 +9,6 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'comparing' }
-Square >> = aSquareClass [
-
-	^ aSquareClass = self class
-]
-
 { #category : 'behavior' }
 Square >> applyEffectToShip: certainShip inGame: aGame [
 

@@ -91,12 +91,12 @@ Board >> lastEffect: _lastEffect [
 ]
 
 { #category : 'accessing' }
-Board >> occurrencesOf: aSquareType [
+Board >> occurrencesOf: aSquareClass [
 
 	| count |
 	count := 0.
 	squares do: [ :each |
-		each = aSquareType ifTrue: [ count := count + 1 ] ].
+		each class = aSquareClass ifTrue: [ count := count + 1 ] ].
 	^ count
 ]
 

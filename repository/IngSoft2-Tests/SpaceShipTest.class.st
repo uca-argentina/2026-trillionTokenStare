@@ -99,7 +99,7 @@ SpaceShipTest >> test008shipsTriesToPlayCardThatDoesntPosess [
 ]
 
 { #category : 'tests' }
-SpaceShipTest >> test010ShipRunsOutOfCards [
+SpaceShipTest >> test009ShipRunsOutOfCards [
 
 	| ships |
 	ships := { (Spaceship withName: 'Ship1') }.
@@ -111,4 +111,34 @@ SpaceShipTest >> test010ShipRunsOutOfCards [
 		should: [ 3 timesRepeat: [ ships first playCard: Card new ] ]
 		raiseErrorWithMessageText:
 		'Ship can not play a card that doesnt posess'
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test010SpaceshipIsImmutableWhenMoving [
+
+	| shipOriginally shipThen |
+	shipOriginally := Spaceship withName: 'a spaceship'.
+	shipThen := shipOriginally movesForward: 3.
+
+	self assert: shipOriginally == shipThen equals: false.
+	self assert: shipOriginally position equals: 1.
+	self assert: shipThen position equals: 4
+	
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test011SpaceshipCanBeComparedWithAnotherShipByTheirPositions [
+
+	| ship1 ship2 ship3 |
+	ship1 := Spaceship withName: 'One' andPosition: 2 andCards: {}.
+	ship2 := Spaceship withName: 'Two' andPosition: 1 andCards: {}.
+	ship3 := Spaceship withName: 'Three' andPosition: 2 andCards: {}.
+
+	self assert: (ship1 isAheadOf: ship2).
+	self deny: (ship1 isAheadOf: ship3).
+	
+	self assert: (ship1 isInTheSamePositionAs: ship3).
+	self deny: (ship1 isInTheSamePositionAs: ship2).
+	
+	
 ]

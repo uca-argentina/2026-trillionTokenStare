@@ -40,7 +40,7 @@ BoardEffectsTest >> test003BoardConfirmsASpaceshipIsInside [
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
+BoardEffectsTest >> test004BoardExecutesSpeedUpActionOnSpaceShip [
 
 	| preloadedDice dicePool game listOfShips boardBuilder |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 ).
@@ -69,7 +69,7 @@ BoardEffectsTest >> test006BoardExecutesSpeedUpActionOnSpaceShip [
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test007BoardExecutesWormholeActionOnSpaceShip [
+BoardEffectsTest >> test005BoardExecutesWormholeActionOnSpaceShip [
 
 	| preloadedDice dicePool game listOfShips boardBuilder |
 	preloadedDice := DiceMock withSides: 6 andSequence: #( 5 ).
@@ -98,7 +98,7 @@ BoardEffectsTest >> test007BoardExecutesWormholeActionOnSpaceShip [
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
+BoardEffectsTest >> test006BoardExecutesAtomicBombActionOnSpaceShip [
 
 	| preloadedDice dicePool game listOfShips boardBuilder ships |
 	preloadedDice := DiceMock withSides: 6 andSequence: #( 4 4 5 ).
@@ -137,7 +137,7 @@ BoardEffectsTest >> test009BoardExecutesAtomicBombActionOnSpaceShip [
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
+BoardEffectsTest >> test007GameRunnsWithAllTheSpecialEffectSquares [
 
 	| mockBoardBuilder game preloadedDicePool allTurnsResults |
 	mockBoardBuilder := MockBoardBuilder new withEffects: {
@@ -190,7 +190,7 @@ BoardEffectsTest >> test011GameRunnsWithAllTheSpecialEffectSquares [
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEffectIsNotTriggered [
+BoardEffectsTest >> test008WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheSecondEffectIsNotTriggered [
 
 	| preloadedSquares game preloadedDicePool positionsExpected |
 	preloadedSquares := MockBoardBuilder new withEffects: {
@@ -217,7 +217,7 @@ BoardEffectsTest >> test013WhenAShipIsMovedByAnEffectOntoAnotherEffectSquareTheS
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test017WhenSquaresAreNotContiguousToEachOtherInItsPositionThenIsNotValid [
+BoardEffectsTest >> test009WhenSquaresAreNotContiguousToEachOtherInItsPositionThenIsNotValid [
 
 	| squareList |
 	squareList := {
@@ -232,7 +232,7 @@ BoardEffectsTest >> test017WhenSquaresAreNotContiguousToEachOtherInItsPositionTh
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test018WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
+BoardEffectsTest >> test010WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
 
 	| squareList |
 	squareList := {
@@ -245,7 +245,7 @@ BoardEffectsTest >> test018WhenTheFirstSquarePositionIsNotOneThenIsNotValid [
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
+BoardEffectsTest >> test011whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
 
 	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
@@ -288,7 +288,7 @@ BoardEffectsTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersRetu
 ]
 
 { #category : 'tests' }
-BoardEffectsTest >> test020WhenParsecsBetweenSquaresAreNotUniformThenIsNotValid [
+BoardEffectsTest >> test012WhenParsecsBetweenSquaresAreNotUniformThenIsNotValid [
 
 	| squareList |
 	squareList := {

@@ -40,6 +40,13 @@ HyperJump >> setLastEffectIn: aBoard [
 ]
 
 { #category : 'accessing' }
+HyperJump >> validateListOfJumps: listOfJumps [
+
+	(listOfJumps anySatisfy: [ :jump | jump <= 0 ]) ifTrue: [
+		self error: 'HyperJump distances must be greater than 0' ]
+]
+
+{ #category : 'accessing' }
 HyperJump >> withJumpsInLightYears: listOfJumps [
 
 	jumps := (listOfJumps sorted: [ :a :b | a > b ]) collect: [ :jump | jump * 3 ].
@@ -51,6 +58,7 @@ HyperJump >> withJumpsInLightYears: listOfJumps [
 { #category : 'accessing' }
 HyperJump >> withJumpsInParsecs: listOfJumps [
 
+	self validateListOfJumps: listOfJumps.
 	jumps := listOfJumps sorted: [ :a :b | a > b ].
 	jumpIndex := 1.
 

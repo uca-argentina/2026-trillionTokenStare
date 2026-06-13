@@ -8,7 +8,7 @@ Class {
 { #category : 'tests' }
 RankingTest >> test001youCanAskForTheRankOfTheThreeBestSpaceShipsByHowFarTheyHaveBeenMoving [
 
-	| listOfShips rakingExpexted ranking rankingActually |
+	| listOfShips rankingExpected ranking actualRanking |
 	listOfShips := {
 		               ((Spaceship withName: '1') movesForward: 3).
 		               ((Spaceship withName: '2') movesForward: 8).
@@ -17,14 +17,14 @@ RankingTest >> test001youCanAskForTheRankOfTheThreeBestSpaceShipsByHowFarTheyHav
 		               asOrderedCollection.
 	ranking := Ranking new.
 
-	rakingExpexted := Dictionary new.
-	rakingExpexted
+	rankingExpected := Dictionary new.
+	rankingExpected
 		at: #first put: { (listOfShips at: 2) } asOrderedCollection;
 		at: #second put: { (listOfShips at: 4) } asOrderedCollection;
 		at: #third put: { (listOfShips at: 3) } asOrderedCollection.
-	rankingActually := ranking bestThreeSpaceShips: listOfShips.
+	actualRanking := ranking bestThreeSpaceShips: listOfShips.
 
-	self assert: rankingActually equals: rakingExpexted
+	self assert: actualRanking equals: rankingExpected
 ]
 
 { #category : 'tests' }
@@ -79,7 +79,7 @@ RankingTest >> test003whenThaSpaceShipAreInSrartFirstPositionThenTheyAreTecnical
 ]
 
 { #category : 'tests' }
-RankingTest >> test020GameCanProvideTheCurrentRankingOfShips [
+RankingTest >> test004GameCanProvideTheCurrentRankingOfShips [
 
 	| preloadedDice dicePool game ranking namesAt |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).

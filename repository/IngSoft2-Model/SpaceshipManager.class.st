@@ -35,28 +35,38 @@ SpaceshipManager >> initializeWithShips: _ships [
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveAllShipsBut: certainShip backward: ammount [
 
-	ships do: [ :ship |
-		ship = certainShip ifFalse: [ ship movesBackward: ammount ] ]
+	ships := ships collect: [ :ship |
+		ship = certainShip 
+		   ifFalse: [ ship movesBackward: ammount ]
+		   ifTrue: [ ship ] 
+		]
 ]
 
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveAllShipsToPosition: position inBoard: aBoard [
 
-	ships do: [ :ship | ship movesToPosition: position InBoard: aBoard ]
+	ships := ships collect: [ :ship | ship movesToPosition: position InBoard: aBoard ]
+	
 ]
 
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveShip: certainShip backward: ammount [
 
-	ships do: [ :ship |
-		ship = certainShip ifTrue: [ ship movesBackward: ammount ] ]
+	ships := ships collect: [ :ship |
+		ship = certainShip 
+		   ifTrue: [ ship movesBackward: ammount ]
+		   ifFalse: [ ship ] 
+		]
 ]
 
 { #category : 'accessing - editing state' }
 SpaceshipManager >> moveShip: certainShip forward: ammount [
 
-	ships do: [ :ship |
-		ship = certainShip ifTrue: [ ship movesForward: ammount ] ]
+	ships := ships collect: [ :ship |
+		ship = certainShip 
+		   ifTrue: [ ship movesForward: ammount ]
+		   ifFalse: [ ship ] 
+		]
 ]
 
 { #category : 'accessing' }

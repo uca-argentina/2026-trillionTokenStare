@@ -23,6 +23,15 @@ Spaceship class >> withName: aName [
 	^ self new initializeWithName: aName andPosition: 1 andCards: {  }
 ]
 
+{ #category : 'as yet unclassified' }
+Spaceship class >> withName: aName andPosition: aPosition andCards: _cards [
+   ^ self new
+	   initializeWithName: aName 
+	   andPosition: aPosition 
+	   andCards: _cards
+	
+]
+
 { #category : 'accessing' }
 Spaceship >> = aShip [
 
@@ -51,6 +60,17 @@ Spaceship >> initializeWithName: aName andPosition: aPosition andCards: _cards [
 	cards:= _cards asOrderedCollection 
 ]
 
+{ #category : 'behavior' }
+Spaceship >> isAheadOf: anotherShip [
+	^ self position > anotherShip position
+]
+
+{ #category : 'behavior' }
+Spaceship >> isInTheSamePositionAs: anotherShip [
+   ^ self position = anotherShip position.
+	
+]
+
 { #category : 'accessing' }
 Spaceship >> lapsInBoard: board [
 
@@ -60,37 +80,37 @@ Spaceship >> lapsInBoard: board [
 { #category : 'behavior' }
 Spaceship >> movesBackward: anAmmountOfSquares [
 
-	position := position - anAmmountOfSquares max: 1
+	"position := position - anAmmountOfSquares max: 1"
 
-	"| newPosition |
+	| newPosition |
 	newPosition := position - anAmmountOfSquares max: 1.
 
-	^ self class withName: name andPosition: newPosition andCards: cards"
+	^ self class withName: name andPosition: newPosition andCards: cards
 ]
 
 { #category : 'behavior' }
 Spaceship >> movesForward: anAmmountOfSquares [
 
-	position := position + anAmmountOfSquares.
+	"position := position + anAmmountOfSquares."
 
-	"| newPosition |
+	| newPosition |
 	newPosition := position + anAmmountOfSquares.
 
-	^ self class withName: name andPosition: newPosition andCards: cards"
+	^ self class withName: name andPosition: newPosition andCards: cards
 ]
 
 { #category : 'behavior' }
 Spaceship >> movesToPosition: aPosition InBoard: board [
 
-	| currentNumericalLap |
+	"| currentNumericalLap |
 	currentNumericalLap := (self lapsInBoard: board) - 1.
-	position := currentNumericalLap * board size + aPosition.
+	position := currentNumericalLap * board size + aPosition."
 
-	"| currentNumericalLap newAbsolutePosition |
+	| currentNumericalLap newAbsolutePosition |
 	currentNumericalLap := (self lapsInBoard: board) - 1.
 	newAbsolutePosition := currentNumericalLap * board size + aPosition.
 
-	^ self class withName: name andPosition: newAbsolutePosition andCards: cards" 
+	^ self class withName: name andPosition: newAbsolutePosition andCards: cards 
 ]
 
 { #category : 'accessing' }

@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-MoonwalkTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
+MoonwalkTest >> test001BoardExecutesMoonwalkActionOnSpaceShip [
 
 	| preloadedDice dicePool game listOfShips boardBuilder ships |
 	preloadedDice := DiceMock withSides: 6 andSequence: #( 4 4 5 ).
@@ -45,10 +45,17 @@ MoonwalkTest >> test008BoardExecutesMoonwalkActionOnSpaceShip [
 ]
 
 { #category : 'tests' }
-MoonwalkTest >> test014RandomMoonwalksHaveVaryingBacktracks [
+MoonwalkTest >> test002RandomMoonwalksHaveVaryingBacktracks [
         | moonwalks backtracks |
         moonwalks := (1 to: 100) collect: [ :i |
                 Moonwalk new atPosition: i; withParsecs: 100; withBacktrack: (2 to: 6) atRandom. ].
         backtracks := (moonwalks collect: [ :m | m backtrack ]) asSet.
         self assert: backtracks size > 1
+]
+
+{ #category : 'tests' }
+MoonwalkTest >> test003MoonwalkBacktrackShouldBePositive [
+   self
+      should: [ Moonwalk new withBacktrack: 0 ]
+      raiseErrorWithMessageText: 'Backtrack must be greater than 0'
 ]

@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-BoardDistributionTest >> test012BoardDistribution [
+BoardDistributionTest >> test001BoardDistribution [
 
 	| numberOfSquares distributedBoard |
 	numberOfSquares := 100.

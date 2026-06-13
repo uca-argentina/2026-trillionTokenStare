@@ -35,7 +35,7 @@ SpaceshipManagerTest >> test002CantAccessShipThatDoestnExist [
 ]
 
 { #category : 'tests' }
-SpaceshipManagerTest >> test007managerProvidesDescriptionOfShipAsDictionary [
+SpaceshipManagerTest >> test003managerProvidesDescriptionOfShipAsDictionary [
 
 	| shipManager board |
 	shipManager := SpaceshipManager withSpaceships: {
@@ -63,7 +63,7 @@ SpaceshipManagerTest >> test007managerProvidesDescriptionOfShipAsDictionary [
 ]
 
 { #category : 'tests' }
-SpaceshipManagerTest >> test008AskingForWinningSpaceshipWhenGameIsNotOver [
+SpaceshipManagerTest >> test004AskingForWinningSpaceshipWhenGameIsNotOver [
 
 	| shipManager board |
 	shipManager := SpaceshipManager withSpaceships: {
@@ -80,7 +80,7 @@ SpaceshipManagerTest >> test008AskingForWinningSpaceshipWhenGameIsNotOver [
 ]
 
 { #category : 'tests' }
-SpaceshipManagerTest >> test009AskingForWinningSpaceShip [
+SpaceshipManagerTest >> test005AskingForWinningSpaceShip [
 
 	| shipManager board |
 	shipManager := SpaceshipManager withSpaceships: {

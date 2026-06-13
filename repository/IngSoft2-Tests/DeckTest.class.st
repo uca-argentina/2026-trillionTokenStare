@@ -137,7 +137,7 @@ DeckTest >> test006ShipUsesRepeatCardToGetTheCardDropEffect [
 ]
 
 { #category : 'tests' }
-DeckTest >> test021spaceshipsStartTheGameWithTwoCartsFromDesk [
+DeckTest >> test007spaceshipsStartTheGameWithTwoCartsFromDesk [
 
 	| mockDeck sequence spaceshipManager spaceships game |
 	sequence := { Redo new. Acceleration new . Speed new } .

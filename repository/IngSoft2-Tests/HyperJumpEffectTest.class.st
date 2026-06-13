@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-HyperJumpEffectTest >> test010HyperJumpSquareWithCustomParsecsAndThreeShips [
+HyperJumpEffectTest >> test001HyperJumpSquareWithCustomParsecsAndThreeShips [
 
 	| ships boardBuilder game customHyperJumpSquare allTurnsResults |
 	customHyperJumpSquare := HyperJump new withJumpsInParsecs:
@@ -57,7 +57,7 @@ HyperJumpEffectTest >> test010HyperJumpSquareWithCustomParsecsAndThreeShips [
 ]
 
 { #category : 'tests' }
-HyperJumpEffectTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsUnsorted [
+HyperJumpEffectTest >> test002HyperJumpAppliesJumpsFromHighestToLowestEvenWhenInputListIsUnsorted [
 
 	| finalPositions boardBuilder game ships |
 	
@@ -108,7 +108,7 @@ HyperJumpEffectTest >> test015HyperJumpAppliesJumpsFromHighestToLowestEvenWhenIn
 ]
 
 { #category : 'tests' }
-HyperJumpEffectTest >> test016HyperJumpLoopsWhenTItRunsOurOfJumps [
+HyperJumpEffectTest >> test003HyperJumpLoopsWhenTItRunsOurOfJumps [
 
 	| finalPositions boardBuilder game ships |
 	ships := {
@@ -167,7 +167,7 @@ HyperJumpEffectTest >> test016HyperJumpLoopsWhenTItRunsOurOfJumps [
 ]
 
 { #category : 'tests' }
-HyperJumpEffectTest >> test019HyperJumpSquareWithLightYears [
+HyperJumpEffectTest >> test004HyperJumpSquareWithLightYears [
 
 	| finalPositions ships boardBuilder game hyperJumpSquare |
 	hyperJumpSquare := HyperJump new withJumpsInLightYears: { 101. 67 }.
@@ -214,4 +214,12 @@ HyperJumpEffectTest >> test019HyperJumpSquareWithLightYears [
 		assert:
 		(self positionOf: #( 'one' 'two' 'three' ) in: game afterTurns: 3)
 		equals: finalPositions
+]
+
+{ #category : 'tests' }
+HyperJumpEffectTest >> test005HyperJumpValuesShouldBePositive [
+
+	self
+		should: [ HyperJump new withJumpsInParsecs: { -100 . 0 } ]
+	   raiseErrorWithMessageText: 'HyperJump distances must be greater than 0'
 ]

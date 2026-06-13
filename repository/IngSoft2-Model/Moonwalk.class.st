@@ -38,7 +38,16 @@ Moonwalk >> setLastEffectIn: aBoard [
 ]
 
 { #category : 'initialization' }
+Moonwalk >> validateBacktrack: aBacktrack [
+
+	aBacktrack > 0 ifFalse: [
+		self error: 'Backtrack must be greater than 0' ]
+]
+
+{ #category : 'initialization' }
 Moonwalk >> withBacktrack: aBacktrack [
+
+	self validateBacktrack: aBacktrack.
 	backtrack := aBacktrack.
 
 	^ self

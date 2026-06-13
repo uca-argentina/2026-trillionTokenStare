@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-InstantCardsTest >> test009EffectOfcancellationCardOnCertainShip [
+InstantCardsTest >> test001EffectOfcancellationCardOnCertainShip [
 
 	| ships dicePool activeCards resultInShip1 |
 	dicePool := DicePool withDice: {
@@ -35,7 +35,7 @@ InstantCardsTest >> test009EffectOfcancellationCardOnCertainShip [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test010cantCancelifNothingToCancel [
+InstantCardsTest >> test002cantCancelifNothingToCancel [
 
 	| activeCards |
 	activeCards := CardManager withActiveCards: {  }.
@@ -47,7 +47,7 @@ InstantCardsTest >> test010cantCancelifNothingToCancel [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
+InstantCardsTest >> test003OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAfter [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -100,7 +100,7 @@ InstantCardsTest >> test011OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAft
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
+InstantCardsTest >> test004Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
 
 	| ships dicePool game deckMock |
 	ships := {
@@ -150,7 +150,7 @@ InstantCardsTest >> test012Ship1LandsOnSpeedupThenShip2UsesRepeatCardOnItself [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test014playerUsesRepeatCardAndRepeatsSpeedupSquare [
+InstantCardsTest >> test005playerUsesRepeatCardAndRepeatsSpeedupSquare [
 
 	| boardBuilder dice game deckMock |
 	boardBuilder := MockBoardBuilder new withEffects: {
@@ -188,7 +188,7 @@ InstantCardsTest >> test014playerUsesRepeatCardAndRepeatsSpeedupSquare [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test015playerUsesRepeatCardAndRepeatsWormholeSquare [
+InstantCardsTest >> test006playerUsesRepeatCardAndRepeatsWormholeSquare [
 
 	| boardBuilder dice game deckMock |
 	boardBuilder := MockBoardBuilder new withEffects: {
@@ -228,7 +228,7 @@ InstantCardsTest >> test015playerUsesRepeatCardAndRepeatsWormholeSquare [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test016playerUsesRepeatCardAndRepeatsMoonwalkSquare [
+InstantCardsTest >> test007playerUsesRepeatCardAndRepeatsMoonwalkSquare [
     | boardBuilder dice game deckMock |
     boardBuilder := MockBoardBuilder new withEffects: {
                             Square new. "1"
@@ -266,7 +266,7 @@ InstantCardsTest >> test016playerUsesRepeatCardAndRepeatsMoonwalkSquare [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test017playerUsesRepeatCardAndRepeatsAtomicBombSquare [
+InstantCardsTest >> test008playerUsesRepeatCardAndRepeatsAtomicBombSquare [
 
 	| boardBuilder dice game deckMock |
 	boardBuilder := MockBoardBuilder new withEffects: {
@@ -306,7 +306,7 @@ InstantCardsTest >> test017playerUsesRepeatCardAndRepeatsAtomicBombSquare [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test018playerUsesRepeatCardAndRepeatsHyperJumpSquare [
+InstantCardsTest >> test009playerUsesRepeatCardAndRepeatsHyperJumpSquare [
     | boardBuilder dice game deckMock |
     boardBuilder := MockBoardBuilder new withEffects: {
                             Square new. "1"
@@ -343,7 +343,7 @@ InstantCardsTest >> test018playerUsesRepeatCardAndRepeatsHyperJumpSquare [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test019playerUsesRepeatCardOnNormalSquareHasNoEffect [
+InstantCardsTest >> test010playerUsesRepeatCardOnNormalSquareHasNoEffect [
     | boardBuilder dice game deckMock |
     boardBuilder := MockBoardBuilder new withEffects: {
                             Square new.
@@ -377,7 +377,7 @@ InstantCardsTest >> test019playerUsesRepeatCardOnNormalSquareHasNoEffect [
 ]
 
 { #category : 'tests' }
-InstantCardsTest >> test021CancellationThrowsErrorIfNoPermanentCardsAreActive [
+InstantCardsTest >> test011CancellationThrowsErrorIfNoPermanentCardsAreActive [
 
 	| ships dicePool game deckMock |
 	ships := {
