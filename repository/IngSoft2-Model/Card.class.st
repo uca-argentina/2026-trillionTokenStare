@@ -13,7 +13,6 @@ Card >> = aCard [
 
 { #category : 'behavior' }
 Card >> applyInstantEffectOnGame: aGame [
-
 	self error: 'Not an instant effect card'
 ]
 

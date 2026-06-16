@@ -110,7 +110,7 @@ Spaceship >> movesToPosition: aPosition InBoard: board [
 	currentNumericalLap := (self lapsInBoard: board) - 1.
 	newAbsolutePosition := currentNumericalLap * board size + aPosition.
 
-	^ self class withName: name andPosition: newAbsolutePosition andCards: cards 
+	^ self initializeWithName: name andPosition: newAbsolutePosition andCards: cards 
 ]
 
 { #category : 'accessing' }
@@ -142,5 +142,11 @@ Spaceship >> positionInBoard: board [
 { #category : 'behavior' }
 Spaceship >> receivesCard: _card [
 
-	cards add: _card
+   | newCards |
+	newCards := cards copy.
+	newCards add: _card.
+	^ self class
+	   withName: name
+	   andPosition: position 
+	   andCards: newCards 
 ]

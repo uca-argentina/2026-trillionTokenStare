@@ -139,7 +139,7 @@ DeckTest >> test006ShipUsesRepeatCardToGetTheCardDropEffect [
 { #category : 'tests' }
 DeckTest >> test007spaceshipsStartTheGameWithTwoCartsFromDesk [
 
-	| mockDeck sequence spaceshipManager spaceships game |
+	| mockDeck sequence spaceshipManager spaceships game player1Cards player2Cards player1ExpectedCards player2ExpectedCards |
 	sequence := { Redo new. Acceleration new . Speed new } .
 	mockDeck := DeckMock withSequence: sequence.
 	spaceships := { Spaceship withName: 'player_1' . Spaceship withName: 'player_2' } .
@@ -151,8 +151,12 @@ DeckTest >> test007spaceshipsStartTheGameWithTwoCartsFromDesk [
 	   build
 	.
 	
-	self assert:( (spaceships at: 1) playCard: (sequence at: 1) ) equals: (sequence at: 1).
-	self assert:( (spaceships at: 1) playCard: (sequence at: 2) ) equals: (sequence at: 2).
-	self assert:( (spaceships at: 2) playCard: (sequence at: 3) ) equals: (sequence at: 3).
-	self assert:( (spaceships at: 2) playCard: (sequence at: 1) ) equals: (sequence at: 1).
+	player1Cards := (game spaceshipNamed: 'player_1') at: #cards.
+	player1ExpectedCards := { Redo new. Acceleration new } asOrderedCollection.
+	player2Cards := (game spaceshipNamed: 'player_2') at: #cards.
+	player2ExpectedCards := { Speed new . Redo new } asOrderedCollection.
+
+	
+	self assert: player1Cards equals: player1ExpectedCards.
+	self assert: player2Cards equals: player2ExpectedCards
 ]

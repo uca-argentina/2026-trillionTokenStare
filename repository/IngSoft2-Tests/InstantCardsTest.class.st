@@ -81,8 +81,8 @@ InstantCardsTest >> test003OnePlayerUsesSpeedCardAndOtherUsesCancellationCardAft
 		        build.
 
 	game throwDiceNextTurn.
-	game throwDicePermanentCardNextTurn:
-		(Speed new affectsShipWithName: 'Ship2').
+	game permanentCard: (Speed new affectsShipWithName: 'Ship2') from: 'Ship2'.
+	game throwDiceNextTurn.
 
 	game
 		instantCard: (Cancellation new withCardToCancel: Speed new)

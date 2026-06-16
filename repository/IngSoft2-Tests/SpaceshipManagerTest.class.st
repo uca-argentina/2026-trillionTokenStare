@@ -99,3 +99,24 @@ SpaceshipManagerTest >> test005AskingForWinningSpaceShip [
 				(#position -> 1).
 				(#lap -> 2) } asDictionary
 ]
+
+{ #category : 'tests' }
+SpaceshipManagerTest >> test006managerUpdatesShipWhenCardsAreDrawingCardFromDeck [
+
+	| shipManager mockDeck originalShip updatedShip cardToDraw mockBoard |
+	cardToDraw := Speed new.
+	mockDeck := DeckMock withSequence: { cardToDraw }.
+	mockBoard := MockBoardBuilder new build.
+	
+	shipManager := SpaceshipManager withSpaceships: { 
+		Spaceship withName: 'One' andPosition: 1 andCards: {}
+	 
+	}.
+	originalShip := shipManager spaceshipNamed: 'One'.
+	shipManager ship: originalShip drawsCardFromDeck: mockDeck.
+	updatedShip := shipManager spaceshipNamed: 'One'.
+	
+	self deny: originalShip == updatedShip.
+	self assert: ((updatedShip asDictionaryInBoard: mockBoard) at: #cards) size equals: 1
+	
+]

@@ -28,8 +28,9 @@ RedoCardTest >> test001redoCardWorksWithSpeed [
 		        withDicepool: dicePool;
 		        build.
 
-	game throwDicePermanentCardNextTurn:
-		(Speed new affectsShipWithName: 'Ship1').
+	game permanentCard: (Speed new affectsShipWithName: 'Ship1') from: 'Ship1'.
+		
+	game throwDiceNextTurn.
 	game
 		instantCard: (Redo new affectsShipWithName: 'Ship2')
 		from: 'Ship2'.
@@ -66,9 +67,9 @@ RedoCardTest >> test002aRedoCardWorksWithOverload [
 		        withDicepool: dicePool;
 		        build.
 
-	game throwDicePermanentCardNextTurn:
-		(Overload new affectsShipWithName: 'Ship2'). "lands on 5 and casts overload on ship2"
-
+	game permanentCard: (Overload new affectsShipWithName: 'Ship2') from: 'Ship1'.
+		
+	game throwDiceNextTurn.
 	game
 		instantCard: (Redo new affectsShipWithName: 'Ship1')"casts redo on ship1 (overload)"
 		from: 'Ship2'.
@@ -106,7 +107,10 @@ RedoCardTest >> test003RedoCardWorksWithAcceleration [
                 withDicepool: dicePool;
                 build.
 
-    game throwDicePermanentCardNextTurn: Acceleration new. "turn of Ship1: 1 + 4 (dice) + 2 (Acceleration) = 7"
+	game permanentCard: (Acceleration new) from: 'Ship1'.
+		
+	game throwDiceNextTurn.
+    "turn of Ship1: 1 + 4 (dice) + 2 (Acceleration) = 7"
 
     game instantCard: (Redo new) from: 'Ship2'."ship2 casts redo (Acceleration) on itself"
 
@@ -143,9 +147,12 @@ RedoCardTest >> test004RedoCardWorksWithCancellation [
 	"cards to play"
 	speedCard := Speed new affectsShipWithName: 'Ship1'.
 	accelerationCard := Acceleration new.
+	
+	game permanentCard: speedCard  from: 'Ship1'.
+	game throwDiceNextTurn.
+	game permanentCard: accelerationCard  from: 'Ship2'.
+	game throwDiceNextTurn.
 
-	game throwDicePermanentCardNextTurn: speedCard.
-	game throwDicePermanentCardNextTurn: accelerationCard.
 
 	"Ship2 uses Cancelación on Speed card"
 	game
@@ -239,7 +246,8 @@ RedoCardTest >> test006RedoOfARedoCardTakesTheUnderlyingAppliedCardEffect [
                 build.
 
     "ship1 draws Speed"
-    game throwDicePermanentCardNextTurn: (Speed new affectsShipWithName: 'Ship1'). "dice + Speed : lands on 6"
+    game permanentCard: (Speed new affectsShipWithName: 'Ship1')  from: 'Ship1'.
+	game throwDiceNextTurn. "dice + Speed : lands on 6"
 
     "ship2 draws Redo, copying Speed"
     game instantCard: (Redo new affectsShipWithName: 'Ship2') from: 'Ship2'.

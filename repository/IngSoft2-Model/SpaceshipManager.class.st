@@ -17,10 +17,8 @@ SpaceshipManager class >> withSpaceships: _ships [
 
 { #category : 'behavior' }
 SpaceshipManager >> giveTwoCardsToEachSpaceship: deck [
-	ships do: [ :aShip |
-		aShip 
-		     receivesCard: deck drawCard ;
-		     receivesCard: deck drawCard 
+	ships := ships collect: [ :aShip |
+		(aShip receivesCard: deck drawCard) receivesCard: deck drawCard
 	]
    
 ]
@@ -78,8 +76,11 @@ SpaceshipManager >> ranking [
 { #category : 'accessing - editing state' }
 SpaceshipManager >> ship: certainShip drawsCardFromDeck: deck [
 
-	ships do: [ :aShip |
-		aShip = certainShip ifTrue: [ aShip receivesCard: deck drawCard ] ]
+	ships := ships collect: [ :aShip |
+		aShip = certainShip 
+		   ifTrue: [ aShip receivesCard: deck drawCard ]
+	      ifFalse: [ aShip ]
+	]
 ]
 
 { #category : 'accessing' }
@@ -127,6 +128,12 @@ SpaceshipManager >> validateIfGameIsOverInsideBoard: board [
 	outside := ships anySatisfy: [ :ship |
 		           (board shipInsideBoard: ship) not ].
 	outside ifTrue: [ self error: 'Game is over, no more turns allowed' ]
+]
+
+{ #category : 'as yet unclassified' }
+SpaceshipManager >> validatePlayerHasTurn: aShipName [ 
+	(self shipInTurn name = aShipName)
+	   ifFalse: [ self error: 'The player must have a turn in the game to use a permanent card' ]
 ]
 
 { #category : 'accessing' }

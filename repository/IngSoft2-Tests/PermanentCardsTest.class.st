@@ -125,8 +125,8 @@ PermanentCardsTest >> test005PlayerInputsCardThatDoesNotPosess [
 
 	self
 		should: [
-				game throwDicePermanentCardNextTurn:
-					(Overload new affectsShipWithName: 'Ship2') ]
+			game permanentCard: (Overload new affectsShipWithName: 'Ship2') from: 'Ship1'.
+	      game throwDiceNextTurn ]
 		raiseErrorWithMessageText:
 		'Ship can not play a card that doesnt posess'
 ]
@@ -149,8 +149,8 @@ PermanentCardsTest >> test006PlayerPlaysAccelerationCardAndItAffectsAllPlayers [
 		        withDeck: deckMock;
 		        build.
 
-	game throwDicePermanentCardNextTurn: Acceleration new.
-	game throwDiceNextTurn.
+	game permanentCard: Acceleration new from: 'Ship1'.
+	 2 timesRepeat: [ game throwDiceNextTurn ].
 
 	self
 		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
@@ -178,10 +178,9 @@ PermanentCardsTest >> test007PlayerPlaysSpeedCardAndItAffectsItSelf [
 		        withDeck: deckMock;
 		        build.
 
-	game throwDicePermanentCardNextTurn:
-		(Speed new affectsShipWithName: 'Ship1').
-	game throwDiceNextTurn.
-	game throwDiceNextTurn.
+	game permanentCard: (Speed new affectsShipWithName: 'Ship1') from: 'Ship1'.
+	3 timesRepeat: [ game throwDiceNextTurn ].
+	
 
 	self
 		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)
@@ -208,10 +207,8 @@ PermanentCardsTest >> test008PlayerPlaysOverloadCardAndItAffectsTheOtherPlayer [
 		        withDeck: deckMock;
 		        build.
 
-	game throwDicePermanentCardNextTurn:
-		(Overload new affectsShipWithName: 'Ship2').
-	game throwDiceNextTurn.
-	game throwDiceNextTurn.
+	game permanentCard: (Overload new affectsShipWithName: 'Ship2') from: 'Ship1'.
+	3 timesRepeat: [ game throwDiceNextTurn ].
 
 	self
 		assert: (self positionOf: #( 'Ship1' 'Ship2' ) in: game)

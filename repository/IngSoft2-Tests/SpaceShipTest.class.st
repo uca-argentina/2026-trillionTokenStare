@@ -142,3 +142,31 @@ SpaceShipTest >> test011SpaceshipCanBeComparedWithAnotherShipByTheirPositions [
 	
 	
 ]
+
+{ #category : 'tests' }
+SpaceShipTest >> test012PlayingACardRemovesItFromHand [
+
+	| card ship mockBoard |
+	card := Speed new.
+	ship := Spaceship withName: 'One' andPosition: 1 andCards: { card }.
+	mockBoard := MockBoardBuilder new build.
+	
+	self assert: ((ship asDictionaryInBoard: mockBoard) at: #cards) size equals: 1. 
+	self assert: (ship playCard: card) equals: card.
+	self assert: ((ship asDictionaryInBoard: mockBoard) at: #cards) isEmpty
+	
+]
+
+{ #category : 'tests' }
+SpaceShipTest >> test013SpaceshipIsImmutableWhenReceivingACard [
+	| originalShip newShip card mockBoard |
+	originalShip := Spaceship withName: 'spaceship' andPosition: 1 andCards: {  }.
+	card := Speed new.
+	mockBoard := MockBoardBuilder new build.
+	newShip := originalShip receivesCard: card.
+	
+	self assert: originalShip == newShip equals: false.
+	self assert: ((originalShip asDictionaryInBoard: mockBoard) at: #cards) isEmpty.
+	self assert: ((newShip asDictionaryInBoard: mockBoard) at: #cards) size equals: 1
+
+]

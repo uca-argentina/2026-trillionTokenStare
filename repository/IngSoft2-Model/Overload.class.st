@@ -18,6 +18,6 @@ Overload >> affectsShipWithName: _shipToAffect [
 { #category : 'behavior' }
 Overload >> applyPermanentEffectOnShip: aShip overThrow: aThrow [
 
-	aShip name = shipToAffect ifTrue: [ ^ aThrow - 2 max: 1 ].
+	aShip name = shipToAffect ifTrue: [ ^ aThrow - 2 ].
 	^ aThrow
 ]

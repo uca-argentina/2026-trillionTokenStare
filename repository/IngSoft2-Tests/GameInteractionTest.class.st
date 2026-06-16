@@ -146,7 +146,35 @@ GameInteractionTest >> test008TwoPlayerPlaysTwoTimesEach [
 ]
 
 { #category : 'tests' }
-GameInteractionTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
+GameInteractionTest >> test009theTurnRotatesAutomaticallyAfterPreviousPlayerThrewDices [
+
+	| preloadedDice ships dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 2 ).
+	ships := { 
+		(Spaceship withName: 'One'). 
+		(Spaceship withName: 'Two') 
+	}.
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := GameBuilder new
+	          withSpaceships: ships;
+		       withDicepool: dicePool;
+		       build.
+   
+   game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'One') at: #position) equals: 3.
+	self assert: ((game spaceshipNamed: 'Two') at: #position) equals: 1.
+	
+	game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'One') at: #position) equals: 3.
+	self assert: ((game spaceshipNamed: 'Two') at: #position) equals: 3.
+	
+	game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'One') at: #position) equals: 5.
+	self assert: ((game spaceshipNamed: 'Two') at: #position) equals: 3.
+]
+
+{ #category : 'tests' }
+GameInteractionTest >> test010IfASpaceshipGoesBeyondTheLastSquareItWins [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -167,7 +195,7 @@ GameInteractionTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 ]
 
 { #category : 'tests' }
-GameInteractionTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
+GameInteractionTest >> test011WhenTheGameIsOverThenYouCantAskForNextTurn [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -185,7 +213,7 @@ GameInteractionTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 ]
 
 { #category : 'tests' }
-GameInteractionTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
+GameInteractionTest >> test012whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -314,4 +342,63 @@ GameInteractionTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse
 			self
 				assert: ((game spaceshipNamed: lap first) at: #lap)
 				identicalTo: lap second ]
+]
+
+{ #category : 'tests' }
+GameInteractionTest >> test019playersCanUseMultiplePermanentCardsAtTheSameTime [
+
+    | ships dice game deckMock cardsToPlay |
+    deckMock := DeckMock withSequence: {
+                    Speed new.
+                    Overload new.}.
+
+    dice := DicePool withDice: { (DiceMock withSides: 4 andSequence: #( 1 2 )) }.
+
+    ships := { (Spaceship withName: 'Ship1') . (Spaceship withName: 'Ship2') }.
+
+    game := GameBuilder new
+                withDicepool: dice;
+                withSpaceships: ships;
+                withSquares: 20;
+                withDeck: deckMock;
+                build.
+    
+    cardsToPlay := { 
+        (Speed new affectsShipWithName: 'Ship1').
+        (Overload new affectsShipWithName: 'Ship2')
+        } asOrderedCollection .
+
+    game permanentCard: (cardsToPlay first) from: 'Ship1'.
+    game permanentCard: (cardsToPlay last) from: 'Ship1'.
+
+    game throwDiceNextTurn.
+    game throwDiceNextTurn.
+
+    self assert: ((game spaceshipNamed: 'Ship1') at:'position') equals: 3.
+    self assert: ((game spaceshipNamed: 'Ship2') at:'position') equals: 1.
+]
+
+{ #category : 'tests' }
+GameInteractionTest >> test020playersCannotUsePermanentCardsWhenItsNotTheirTurnInTheGame [
+    | ships dice game deckMock cardsToPlay |
+    deckMock := DeckMock withSequence: {
+                    Speed new.
+                    Overload new.}.
+
+    dice := DicePool withDice: { (DiceMock withSides: 4 andSequence: #( 1 2 )) }.
+
+    ships := { (Spaceship withName: 'Ship1') . (Spaceship withName: 'Ship2') }.
+
+    game := GameBuilder new
+                withDicepool: dice;
+                withSpaceships: ships;
+                withSquares: 20;
+                withDeck: deckMock;
+                build.
+    
+    cardsToPlay := Overload new affectsShipWithName: 'Ship1'.
+
+    self 
+        should: [ game permanentCard: cardsToPlay from: 'Ship2' ] 
+        raiseErrorWithMessageText: 'The player must have a turn in the game to use a permanent card'
 ]

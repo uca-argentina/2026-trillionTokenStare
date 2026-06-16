@@ -140,6 +140,18 @@ Game >> moveShip: certainShip forward: anAmount [
 	ships moveShip: certainShip forward: anAmount
 ]
 
+{ #category : 'as yet unclassified' }
+Game >> permanentCard: aCard from: nameOfPlayer [
+
+	| currentCard |
+	ships validateIfGameIsOverInsideBoard: board.
+	ships validatePlayerHasTurn: nameOfPlayer.
+	
+	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
+	
+   self addPermanentCardDirectly: currentCard
+]
+
 { #category : 'accessing' }
 Game >> ranking [
 
@@ -184,21 +196,6 @@ Game >> throwDiceNextTurn [
 
 	| amountToAdvance |
 	ships validateIfGameIsOverInsideBoard: board.
-
-	amountToAdvance := cards
-		                   applyPermanentEffectOnShip: ships shipInTurn
-		                   overThrow: dicePool throw.
-
-	ships shipInTurnMoves: amountToAdvance inGame: self
-]
-
-{ #category : 'behaviour' }
-Game >> throwDicePermanentCardNextTurn: aCard [
-
-	| amountToAdvance |
-	ships validateIfGameIsOverInsideBoard: board.
-
-	self addPermanentCard: aCard.
 
 	amountToAdvance := cards
 		                   applyPermanentEffectOnShip: ships shipInTurn
