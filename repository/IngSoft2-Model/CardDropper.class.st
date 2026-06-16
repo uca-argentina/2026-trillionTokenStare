@@ -1,18 +1,18 @@
 Class {
-	#name : 'Wormhole',
+	#name : 'CardDropper',
 	#superclass : 'Square',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'behavior' }
-Wormhole >> applyEffectToShip: certainShip inGame: aGame [
+CardDropper >> applyEffectToShip: certainShip inGame: aGame [
 
-	aGame moveShip: certainShip backward: 4
+	aGame cardsDrawnByShip: certainShip
 ]
 
 { #category : 'behavior' }
-Wormhole >> setLastEffectIn: aBoard [
+CardDropper >> setLastEffectIn: aBoard [
 
 	aBoard lastEffect: self
 ]

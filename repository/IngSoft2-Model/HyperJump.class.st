@@ -9,22 +9,23 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-HyperJump >> applyEffectTo: aShip in: aBoard [
+{ #category : 'behavior' }
+HyperJump >> applyEffectToShip: certainShip inGame: aGame [
 
 	| currentJump |
-	(aShip positionInBoard: aBoard) = number ifTrue: [
-			currentJump := ((jumps at: jumpIndex) / parsecs) floor.
-			jumpIndex := jumpIndex % jumps size + 1.
-			^ aShip movesForward: currentJump ].
-	^ aShip
+	currentJump := ((jumps at: jumpIndex) / parsecs) floor.
+	jumpIndex := jumpIndex % jumps size + 1.
+
+	
+	aGame moveShip: certainShip forward: currentJump 
+
 ]
 
 { #category : 'accessing' }
 HyperJump >> initialize [
 
 	super initialize.
-	number := 1.
+	position := 1.
 	parsecs := 1.
 	jumps := { 300. 200 }.
 	jumpIndex := 1.
@@ -32,9 +33,32 @@ HyperJump >> initialize [
 	^ self
 ]
 
-{ #category : 'accessing' }
-HyperJump >> withJumps: listOfJumps [
+{ #category : 'behavior' }
+HyperJump >> setLastEffectIn: aBoard [
 
+	aBoard lastEffect: self
+]
+
+{ #category : 'accessing' }
+HyperJump >> validateListOfJumps: listOfJumps [
+
+	(listOfJumps anySatisfy: [ :jump | jump <= 0 ]) ifTrue: [
+		self error: 'HyperJump distances must be greater than 0' ]
+]
+
+{ #category : 'accessing' }
+HyperJump >> withJumpsInLightYears: listOfJumps [
+
+	jumps := (listOfJumps sorted: [ :a :b | a > b ]) collect: [ :jump | jump * 3 ].
+	jumpIndex := 1.
+
+	^ self
+]
+
+{ #category : 'accessing' }
+HyperJump >> withJumpsInParsecs: listOfJumps [
+
+	self validateListOfJumps: listOfJumps.
 	jumps := listOfJumps sorted: [ :a :b | a > b ].
 	jumpIndex := 1.
 

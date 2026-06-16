@@ -4,8 +4,10 @@ Class {
 	#instVars : [
 		'ships',
 		'dicePool',
-		'playersTurn',
-		'board'
+		'board',
+		'cards',
+		'lastCardPlayed',
+		'deck'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -27,7 +29,7 @@ Game class >> validateNumberOfShips: numberOfShips [
 ]
 
 { #category : 'creation' }
-Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
+Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 	"andLaps: numberOfLaps andParsecs: parsecs"
 
 	self validateNumberOfShips: listOfShips.
@@ -37,55 +39,173 @@ Game class >> withBoard: aBoard andShips: listOfShips andDicePool: aDicePool [
 		  initializeUsingBoard: aBoard
 		  andShips: listOfShips
 		  andDicePool: aDicePool
+		  andDeck: aDeck 
+]
+
+{ #category : 'accessing' }
+Game >> activeCards [
+
+	^ cards permanentCards 
+]
+
+{ #category : 'delegating' }
+Game >> addPermanentCard: aCard [
+
+	self setLastPlayedCard: aCard.
+	cards addPermanentCard: aCard from: ships shipInTurn
+]
+
+{ #category : 'delegating' }
+Game >> addPermanentCardDirectly: aCard [
+
+	self setLastPlayedCard: aCard.
+	cards addPermanentCardDirectly: aCard
+]
+
+{ #category : 'delegating' }
+Game >> applyEffectsOf: actualShip [
+
+	board applyEffectsOf: actualShip inGame: self
+]
+
+{ #category : 'delegating' }
+Game >> cancelCard: cardToCancel [
+
+	cards cancel: cardToCancel
+]
+
+{ #category : 'delegating' }
+Game >> cardsDrawnByShip: certainShip [
+
+	ships ship: certainShip drawsCardFromDeck: deck
+]
+
+{ #category : 'private' }
+Game >> context [
+
+	^ GameContextManager
+		  withGame: self
+		  spaceships: ships
+		  cards: cards
+		  lastCardPlayed: lastCardPlayed
+		  board: board
 ]
 
 { #category : 'initialization' }
-Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool [ 
+Game >> initializeUsingBoard: aBoard andShips: listOfShips andDicePool: aDicePool andDeck: aDeck [
 
 	board := aBoard.
-	ships := listOfShips. 
+	ships := SpaceshipManager withSpaceships: listOfShips.
 	dicePool := aDicePool.
-	playersTurn := 1
-]
+	cards := CardManager withActiveCards: {  }.
+	lastCardPlayed := Card new.
 
-{ #category : 'accessing' }
-Game >> locateSpaceShip: nameOfSpaceship [
-
-	^ (ships
-		   detect: [ :ship | ship name = nameOfSpaceship ]
-		   ifNone: [ self error: 'This spaceship does not exist' ])
-		  asDictionaryInBoard: board
-]
-
-{ #category : 'accessing' }
-Game >> locateWinningSpaceShip [
-
-	^ (ships
-		   detect: [ :aShip | (board shipInsideBoard: aShip) not ]
-		   ifNone: [ self error: 'Game is not over' ]) asDictionaryInBoard:
-		  board
+	deck := aDeck.
+	ships giveTwoCardsToEachSpaceship: deck
 ]
 
 { #category : 'behaviour' }
-Game >> nextTurn [
+Game >> instantCard: aCard from: nameOfPlayer [
 
-	| diceValue updatedShips |
-	self validateIfGameIsOver.
-	diceValue := dicePool throw.
-	updatedShips := board shipInTurn: playersTurn movesForward: diceValue andAffects: ships .
-	ships := updatedShips.
+	| currentCard |
+	ships validateIfGameIsOverInsideBoard: board.
+	aCard validateIfCanBeDrawnOnGame: self.
+
+	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
+
+	currentCard applyInstantEffectOnGame: self
+]
+
+{ #category : 'delegating' }
+Game >> moveAllShipsBut: certainShip backward: anAmount [
+
+	ships moveAllShipsBut: certainShip backward: anAmount
+]
+
+{ #category : 'delegating' }
+Game >> moveAllShipsToPosition: position [
+
+	ships moveAllShipsToPosition: position inBoard: board
+]
+
+{ #category : 'delegating' }
+Game >> moveShip: certainShip backward: anAmount [
+
+	ships moveShip: certainShip backward: anAmount
+]
+
+{ #category : 'delegating' }
+Game >> moveShip: certainShip forward: anAmount [
+
+	ships moveShip: certainShip forward: anAmount
+]
+
+{ #category : 'as yet unclassified' }
+Game >> permanentCard: aCard from: nameOfPlayer [
+
+	| currentCard |
+	ships validateIfGameIsOverInsideBoard: board.
+	ships validatePlayerHasTurn: nameOfPlayer.
 	
-	playersTurn := playersTurn % ships size + 1
+	currentCard := (ships spaceshipNamed: nameOfPlayer) playCard: aCard.
+	
+   self addPermanentCardDirectly: currentCard
+]
+
+{ #category : 'accessing' }
+Game >> ranking [
+
+	^ ships ranking
+]
+
+{ #category : 'delegating' }
+Game >> repeatCardEffectForShipNamed: shipName orCardToCancel: cardToCancel [
+
+	lastCardPlayed
+		redoCardWithShipThatReceivesEffect: shipName
+		orCardToCancel: cardToCancel
+		andGame: self
+]
+
+{ #category : 'delegating' }
+Game >> repeatLastEffectsOn: actualShip [
+
+	board repeatLastEffectsOn: actualShip inGame: self
+]
+
+{ #category : 'delegating' }
+Game >> repeatSquareEffectForShipNamed: shipName [
+
+	ships shipNamed: shipName repeatsEffectInGame: self
+]
+
+{ #category : 'changing state' }
+Game >> setLastPlayedCard: aCard [
+
+	lastCardPlayed := aCard
+]
+
+{ #category : 'accessing' }
+Game >> spaceshipNamed: nameOfSpaceship [
+
+	^ ships spaceShipWithCardsAsDictionary: nameOfSpaceship in: board
 ]
 
 { #category : 'behaviour' }
-Game >> ranking [
-        ^ Ranking new bestThreeSpaceShips: ships asOrderedCollection
+Game >> throwDiceNextTurn [
+
+	| amountToAdvance |
+	ships validateIfGameIsOverInsideBoard: board.
+
+	amountToAdvance := cards
+		                   applyPermanentEffectOnShip: ships shipInTurn
+		                   overThrow: dicePool throw.
+
+	ships shipInTurnMoves: amountToAdvance inGame: self
 ]
 
-{ #category : 'validation' }
-Game >> validateIfGameIsOver [
+{ #category : 'accessing' }
+Game >> winningSpaceship [
 
-	(ships anySatisfy: [ :aShip | (board shipInsideBoard: aShip) not ])
-		ifTrue: [ self error: 'Game is over, no more turns allowed' ]
+	^ ships winningSpaceShipAsDictionaryIn: board
 ]

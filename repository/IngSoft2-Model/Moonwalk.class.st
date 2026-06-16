@@ -8,16 +8,16 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-Moonwalk >> applyEffectTo: aShip in: aBoard [
+{ #category : 'behavior' }
+Moonwalk >> applyEffectToShip: certainShip inGame: aGame [
 
-	(aShip positionInBoard: aBoard) = number ifTrue: [ ^ aShip ].
-	^ aShip movesBackward: backtrack
+	aGame moveAllShipsBut: certainShip backward: backtrack
 ]
 
 { #category : 'accessing' }
 Moonwalk >> backtrack [
-        ^ backtrack
+
+	^ backtrack
 ]
 
 { #category : 'initialization' }
@@ -25,14 +25,29 @@ Moonwalk >> initialize [
 
 	super initialize.
 	backtrack := 3.
-	number := 1.
+	position := 1.
 	parsecs := 1.
 
 	^ self
 ]
 
+{ #category : 'behavior' }
+Moonwalk >> setLastEffectIn: aBoard [
+
+	aBoard lastEffect: self
+]
+
+{ #category : 'initialization' }
+Moonwalk >> validateBacktrack: aBacktrack [
+
+	aBacktrack > 0 ifFalse: [
+		self error: 'Backtrack must be greater than 0' ]
+]
+
 { #category : 'initialization' }
 Moonwalk >> withBacktrack: aBacktrack [
+
+	self validateBacktrack: aBacktrack.
 	backtrack := aBacktrack.
 
 	^ self

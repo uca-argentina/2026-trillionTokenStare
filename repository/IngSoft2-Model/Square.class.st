@@ -2,47 +2,51 @@ Class {
 	#name : 'Square',
 	#superclass : 'Object',
 	#instVars : [
-		'number',
+		'position',
 		'parsecs'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'comparing' }
-Square >> = aSquareClass [
+{ #category : 'behavior' }
+Square >> applyEffectToShip: certainShip inGame: aGame [
 
-	^ aSquareClass = self class
-]
-
-{ #category : 'as yet unclassified' }
-Square >> applyEffectTo: aShip in: aBoard [
-
-	^ aShip
+	
 ]
 
 { #category : 'accessing' }
-Square >> atPosition: squareNumber [
+Square >> atPosition: squarePosition [
 
-	number := squareNumber.
+	position := squarePosition.
 
 	^ self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 Square >> initialize [
 
 	super initialize.
-	number := 1.
+	position := 1.
 	parsecs := 1.
 	
 	^ self
 ]
 
 { #category : 'accessing' }
+Square >> parsecs [
+
+	^ parsecs 
+]
+
+{ #category : 'accessing' }
 Square >> position [
 
-	^ number
+	^ position
+]
+
+{ #category : 'behavior' }
+Square >> setLastEffectIn: aBoard [
 ]
 
 { #category : 'accessing' }

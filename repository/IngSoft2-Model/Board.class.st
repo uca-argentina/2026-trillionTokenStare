@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'squares',
-		'laps'
+		'laps',
+		'lastEffect'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -31,11 +32,19 @@ Board class >> validateNumberOfSquares: numberOfSquares [
 ]
 
 { #category : 'as yet unclassified' }
+Board class >> validateUniformAmountOfParsecs: aListOfSquares [
+
+	aListOfSquares overlappingPairsDo: [ :current :next |
+		current parsecs = next parsecs ifFalse: [ self error: 'Squares are required to all have the same amount of parsecs' ] ]
+]
+
+{ #category : 'as yet unclassified' }
 Board class >> withSquares: aListOfSquares [
 
 	self validateNumberOfSquares: aListOfSquares size.
 	self validateContiguousSquares: aListOfSquares.
 	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+	self validateUniformAmountOfParsecs: aListOfSquares.
 
 	^ self new initializeWithSquares: aListOfSquares andLaps: 1
 ]
@@ -46,19 +55,24 @@ Board class >> withSquares: aListOfSquares andLaps: aNumberOfLaps [
 	self validateNumberOfSquares: aListOfSquares size.
 	self validateContiguousSquares: aListOfSquares.
 	self validateFirstSquareIsAtPositionOne: aListOfSquares .
+	self validateUniformAmountOfParsecs: aListOfSquares.
 
 	^ self new
 		  initializeWithSquares: aListOfSquares
 		  andLaps: aNumberOfLaps
 ]
 
-{ #category : 'as yet unclassified' }
-Board >> applyEffectsOf: certainShip to: listOfShips [
+{ #category : 'behavior' }
+Board >> applyEffectsOf: certainShip inGame: aGame [
 
 	| square |
+	(self shipInsideBoard: certainShip) ifFalse: [ ^ self ].
+	
 	square := squares at: (certainShip positionInBoard: self).
-
-	^ listOfShips collect: [ :ship | square applyEffectTo: ship in: self ]
+	square setLastEffectIn: self.
+	
+	
+	square applyEffectToShip: certainShip inGame: aGame
 ]
 
 { #category : 'initialization' }
@@ -66,33 +80,33 @@ Board >> initializeWithSquares: aListOfSquares andLaps: aNumberOfLaps [
 
 	squares := aListOfSquares.
 	laps := aNumberOfLaps.
+	lastEffect := Square new.
 	
 ]
 
+{ #category : 'accessing - editing state' }
+Board >> lastEffect: _lastEffect [
+
+	lastEffect := _lastEffect
+]
+
 { #category : 'accessing' }
-Board >> occurrencesOf: aSquareType [
+Board >> occurrencesOf: aSquareClass [
 
 	| count |
 	count := 0.
 	squares do: [ :each |
-		each = aSquareType ifTrue: [ count := count + 1 ] ].
+		each class = aSquareClass ifTrue: [ count := count + 1 ] ].
 	^ count
 ]
 
-{ #category : 'as yet unclassified' }
-Board >> shipInTurn: playerTurn movesForward: diceValue andAffects: allShips [
+{ #category : 'behavior' }
+Board >> repeatLastEffectsOn: ship inGame: aGame [
 
-	| shipInTurn updatedShips |
-	shipInTurn := (allShips at: playerTurn) movesForward: diceValue.
-	updatedShips := allShips deepCopy.
-	updatedShips at: playerTurn put: shipInTurn.
-	(self shipInsideBoard: shipInTurn) ifTrue: [
-		^ self applyEffectsOf: shipInTurn to: updatedShips ].
-
-	^ updatedShips
+	lastEffect applyEffectToShip: ship inGame: aGame
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Board >> shipInsideBoard: aShip [
 
 	^ (aShip lapsInBoard: self ) <= laps

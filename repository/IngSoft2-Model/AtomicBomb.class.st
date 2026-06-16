@@ -1,15 +1,18 @@
 Class {
 	#name : 'AtomicBomb',
 	#superclass : 'Square',
-	#instVars : [
-		'boardSize'
-	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'as yet unclassified' }
-AtomicBomb >> applyEffectTo: aShip in: aBoard [
+{ #category : 'behavior' }
+AtomicBomb >> applyEffectToShip: certainShip inGame: aGame [
 
-	^ aShip movesToPosition: 1 InBoard: aBoard
+	aGame moveAllShipsToPosition: 1
+]
+
+{ #category : 'behavior' }
+AtomicBomb >> setLastEffectIn: aBoard [
+
+	aBoard lastEffect: self
 ]

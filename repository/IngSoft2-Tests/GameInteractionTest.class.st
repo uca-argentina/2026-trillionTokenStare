@@ -1,12 +1,12 @@
 Class {
-	#name : 'GameTest',
+	#name : 'GameInteractionTest',
 	#superclass : 'ProjectTestCase',
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
-GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
+GameInteractionTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
 
 	| gameBuilder |
 	gameBuilder := GameBuilder new withParsecs: 999.
@@ -17,7 +17,7 @@ GameTest >> test001ifTheBoardHasLessThan1000ParsecsThenTheBoardIsNotValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
+GameInteractionTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 
 	| gameBuilder |
 	gameBuilder := GameBuilder new withSquares: 0.
@@ -27,7 +27,7 @@ GameTest >> test001ifTheBoardHasLessThanOneSquareThenTheBoardIsNotValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
+GameInteractionTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 
 	| gameBuilder |
 	gameBuilder := GameBuilder new withSpaceships:
@@ -39,7 +39,7 @@ GameTest >> test002whenBoardIsCreatedWithLessThanTwoShipsThenIsNotValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
+GameInteractionTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 
 	| preloadedDice dicePool gameBuilder |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
@@ -50,7 +50,7 @@ GameTest >> test003WhenLoadedWithOnlyOneDiceThenIsValid [
 ]
 
 { #category : 'tests' }
-GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
+GameInteractionTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsValid [
 
 	| preloadedDice1 preloadedDice2 dicePool gameBuilder |
 	preloadedDice1 := DiceMock withSides: 4 andSequence: #( 1 3 2 4 ).
@@ -64,7 +64,7 @@ GameTest >> test004WhenLoadedWithACertainAmountOfDiceWithDifferentFacesThenIsVal
 ]
 
 { #category : 'tests' }
-GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
+GameInteractionTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 
 	| game ships listOfShips |
 	ships := {
@@ -83,7 +83,7 @@ GameTest >> test005BoardCreatesAlistOfShipsInPosition1 [
 ]
 
 { #category : 'tests' }
-GameTest >> test006FirstPlayerShouldThrowDicesFirst [
+GameInteractionTest >> test006FirstPlayerShouldThrowDicesFirst [
 
 	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 ).
@@ -96,14 +96,14 @@ GameTest >> test006FirstPlayerShouldThrowDicesFirst [
 		               { 'one'. 5 }.
 		               { 'two'. 1 } }.
 
-	game nextTurn.
+	game throwDiceNextTurn.
 	self
 		assert: (self positionOf: #( 'one' 'two' ) in: game)
 		equals: listOfShips
 ]
 
 { #category : 'tests' }
-GameTest >> test007SecondPlayerThrowsDice [
+GameInteractionTest >> test007SecondPlayerThrowsDice [
 
 	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -116,15 +116,15 @@ GameTest >> test007SecondPlayerThrowsDice [
 		               { 'one'. 5 }.
 		               { 'two'. 3 } }.
 
-	game nextTurn.
-	game nextTurn.
+	game throwDiceNextTurn.
+	game throwDiceNextTurn.
 	self
 		assert: (self positionOf: #( 'one' 'two' ) in: game)
 		equals: listOfShips
 ]
 
 { #category : 'tests' }
-GameTest >> test008TwoPlayerPlaysTwoTimesEach [
+GameInteractionTest >> test008TwoPlayerPlaysTwoTimesEach [
 
 	| preloadedDice dicePool game listOfShips |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -133,7 +133,7 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 		        withDicepool: dicePool;
 		        build.
 
-	1 to: 4 do: [ :turn | game nextTurn ].
+	1 to: 4 do: [ :turn | game throwDiceNextTurn ].
 
 	listOfShips := {
 		               { 'one'. 9 }.
@@ -146,7 +146,35 @@ GameTest >> test008TwoPlayerPlaysTwoTimesEach [
 ]
 
 { #category : 'tests' }
-GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
+GameInteractionTest >> test009theTurnRotatesAutomaticallyAfterPreviousPlayerThrewDices [
+
+	| preloadedDice ships dicePool game |
+	preloadedDice := DiceMock withSides: 4 andSequence: #( 2 ).
+	ships := { 
+		(Spaceship withName: 'One'). 
+		(Spaceship withName: 'Two') 
+	}.
+	dicePool := DicePool withDice: { preloadedDice }.
+	game := GameBuilder new
+	          withSpaceships: ships;
+		       withDicepool: dicePool;
+		       build.
+   
+   game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'One') at: #position) equals: 3.
+	self assert: ((game spaceshipNamed: 'Two') at: #position) equals: 1.
+	
+	game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'One') at: #position) equals: 3.
+	self assert: ((game spaceshipNamed: 'Two') at: #position) equals: 3.
+	
+	game throwDiceNextTurn.
+	self assert: ((game spaceshipNamed: 'One') at: #position) equals: 5.
+	self assert: ((game spaceshipNamed: 'Two') at: #position) equals: 3.
+]
+
+{ #category : 'tests' }
+GameInteractionTest >> test010IfASpaceshipGoesBeyondTheLastSquareItWins [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -156,16 +184,18 @@ GameTest >> test009IfASpaceshipGoesBeyondTheLastSquareItWins [
 		        withDicepool: dicePool;
 		        build.
 
-	1 to: 5 do: [ :turn | game nextTurn ].
+	1 to: 5 do: [ :turn | game throwDiceNextTurn ].
 
-	self assert: game locateWinningSpaceShip equals: {
+	game winningSpaceship.
+
+	self assertDictionary: game winningSpaceship contains: {
 			(#name -> 'one').
 			(#position -> 4).
 			(#lap -> 2) } asDictionary
 ]
 
 { #category : 'tests' }
-GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
+GameInteractionTest >> test011WhenTheGameIsOverThenYouCantAskForNextTurn [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -175,15 +205,15 @@ GameTest >> test010WhenTheGameIsOverThenYouCantAskForNextTurn [
 		        withDicepool: dicePool;
 		        build.
 
-	1 to: 5 do: [ :turn | game nextTurn ].
+	1 to: 5 do: [ :turn | game throwDiceNextTurn ].
 
 	self
-		should: [ game nextTurn ]
+		should: [ game throwDiceNextTurn ]
 		raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
 
 { #category : 'tests' }
-GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
+GameInteractionTest >> test012whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 ).
@@ -194,12 +224,12 @@ GameTest >> test011whenTheGameIsntOverThenYouCantAskForTheWinningShip [
 		        build.
 
 	self
-		should: [ game locateWinningSpaceShip ]
+		should: [ game winningSpaceship ]
 		raiseErrorWithMessageText: 'Game is not over'
 ]
 
 { #category : 'tests' }
-GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
+GameInteractionTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 4 2 3 ).
@@ -212,13 +242,13 @@ GameTest >> test013whenYouAskForASpaceShipPositionThenYouGetAResponse [
 					         Spaceship withName: number asString ]);
 		        build.
 
-	1 to: 10 do: [ :turn | game nextTurn ].
+	1 to: 10 do: [ :turn | game throwDiceNextTurn ].
 
-	self assert: ((game locateSpaceShip: '1') at: #position) equals: 4
+	self assert: ((game spaceshipNamed: '1') at: #position) equals: 4
 ]
 
 { #category : 'tests' }
-GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion [
+GameInteractionTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion [
 
 	| game |
 	game := GameBuilder new
@@ -228,13 +258,13 @@ GameTest >> test014whenYouAskForASpaceshipThatDoesNotExistThenYouDontGetPosotion
 		        build.
 
 	self
-		should: [ game locateSpaceShip: '5' ]
+		should: [ game spaceshipNamed: '5' ]
 		raiseErrorWithMessageText:
-		'This spaceship does not exist'
+		'Ship not found.'
 ]
 
 { #category : 'tests' }
-GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
+GameInteractionTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondTheLastSquare [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
@@ -243,15 +273,15 @@ GameTest >> test015whenYouPlayWithLapsThenTheGameContinuesWhenAPLayerGoesBeyondT
 		        withLaps: 2;
 		        build.
 
-	5 timesRepeat: [ game nextTurn ].
+	5 timesRepeat: [ game throwDiceNextTurn ].
 
 	self
-		should: [ game locateWinningSpaceShip ]
+		should: [ game winningSpaceship ]
 		raiseErrorWithMessageText: 'Game is not over'
 ]
 
 { #category : 'tests' }
-GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
+GameInteractionTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosotion [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
@@ -262,13 +292,13 @@ GameTest >> test016whenYouPlayWithLapsThenTheGameCanLocateTheExactSpaceShipPosot
 		        withDicepool: dicePool;
 		        build.
 
-	5 timesRepeat: [ game nextTurn ].
+	5 timesRepeat: [ game throwDiceNextTurn ].
 
-	self assert: ((game locateSpaceShip: 'one') at: #position) equals: 1
+	self assert: ((game spaceshipNamed: 'one') at: #position) equals: 1
 ]
 
 { #category : 'tests' }
-GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
+GameInteractionTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreTurnsAllowed [
 
 	| preloadedDice dicePool game |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 3 1 ).
@@ -278,18 +308,18 @@ GameTest >> test017whenAPlayerReachsFinalLapThenTheGameIsOverAndThereAreNotMoreT
 		        withDicepool: dicePool;
 		        build.
 
-	11 timesRepeat: [ game nextTurn ].
+	11 timesRepeat: [ game throwDiceNextTurn ].
 	"""
 	Expected position for spaceShip 1: 2 (the game finish because it was in the last lap)
 	Expected position for spaceShip 2: 9 (it's in the first lap)
 	"""
 	self
-		should: [ game nextTurn ]
+		should: [ game throwDiceNextTurn ]
 		raiseErrorWithMessageText: 'Game is over, no more turns allowed'
 ]
 
 { #category : 'tests' }
-GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
+GameInteractionTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 
 	| preloadedDice dicePool game lapsExpected |
 	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 2 1 3 ).
@@ -303,80 +333,72 @@ GameTest >> test018whenYouAskForTheSpaceShipCurrentLapYouGetAResponse [
 					         Spaceship withName: number asString ]);
 		        build.
 
-	15 timesRepeat: [ game nextTurn ].
+	15 timesRepeat: [ game throwDiceNextTurn ].
 
 	lapsExpected := #( #( '1' 4 ) #( '2' 2 ) #( '3' 1 ) #( '4' 2 ) )
 		                asOrderedCollection.
 
 	lapsExpected do: [ :lap |
 			self
-				assert: ((game locateSpaceShip: lap first) at: #lap)
+				assert: ((game spaceshipNamed: lap first) at: #lap)
 				identicalTo: lap second ]
 ]
 
 { #category : 'tests' }
-GameTest >> test019whenAPlayerReachTheAtomicBombSquareThenAllPlayersReturnToTheFirstSquareWithoutLoosingAnyLaps [
+GameInteractionTest >> test019playersCanUseMultiplePermanentCardsAtTheSameTime [
 
-	| preloadedDice dicePool game lapsExpected positionsExpected mockSquarePool |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 1 2 3 4 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	mockSquarePool := MockBoardBuilder new withEffects: {
-			                  Square new.
-			                  AtomicBomb new.
-			                  Square new.
-			                  Square new.
-			                  Square new}.
-	game := GameBuilder new
-		        withLaps: 4;
-		        withSpaceships:
-			        ((1 to: 3) collect: [ :number |
-					         Spaceship withName: number asString ]);
-		        withDicepool: dicePool;
-		        withBoardBuilder: mockSquarePool;
-		        build.
+    | ships dice game deckMock cardsToPlay |
+    deckMock := DeckMock withSequence: {
+                    Speed new.
+                    Overload new.}.
 
+    dice := DicePool withDice: { (DiceMock withSides: 4 andSequence: #( 1 2 )) }.
 
-	9 timesRepeat: [ game nextTurn ].
+    ships := { (Spaceship withName: 'Ship1') . (Spaceship withName: 'Ship2') }.
 
-	lapsExpected := {
-		                { '1'. 2 }.
-		                { '2'. 2 }.
-		                { '3'. 2 } }.
+    game := GameBuilder new
+                withDicepool: dice;
+                withSpaceships: ships;
+                withSquares: 20;
+                withDeck: deckMock;
+                build.
+    
+    cardsToPlay := { 
+        (Speed new affectsShipWithName: 'Ship1').
+        (Overload new affectsShipWithName: 'Ship2')
+        } asOrderedCollection .
 
-	positionsExpected := {
-		                     { '1'. 1 }.
-		                     { '2'. 1 }.
-		                     { '3'. 1 } }.
+    game permanentCard: (cardsToPlay first) from: 'Ship1'.
+    game permanentCard: (cardsToPlay last) from: 'Ship1'.
 
-	self
-		assert: (self positionOf: #( '1' '2' '3' ) in: game)
-		equals: positionsExpected.
-	lapsExpected do: [ :lap |
-			self
-				assert: ((game locateSpaceShip: lap first) at: #lap)
-				identicalTo: lap second ]
+    game throwDiceNextTurn.
+    game throwDiceNextTurn.
+
+    self assert: ((game spaceshipNamed: 'Ship1') at:'position') equals: 3.
+    self assert: ((game spaceshipNamed: 'Ship2') at:'position') equals: 1.
 ]
 
 { #category : 'tests' }
-GameTest >> test020GameCanProvideTheCurrentRankingOfShips [
+GameInteractionTest >> test020playersCannotUsePermanentCardsWhenItsNotTheirTurnInTheGame [
+    | ships dice game deckMock cardsToPlay |
+    deckMock := DeckMock withSequence: {
+                    Speed new.
+                    Overload new.}.
 
-	| preloadedDice dicePool game ranking namesAt |
-	preloadedDice := DiceMock withSides: 4 andSequence: #( 4 3 2 ).
-	dicePool := DicePool withDice: { preloadedDice }.
-	game := GameBuilder new
-		        withSpaceships:
-			        ((1 to: 3) collect: [ :number |
-					         Spaceship withName: number asString ]);
-		        withDicepool: dicePool;
-		        build.
+    dice := DicePool withDice: { (DiceMock withSides: 4 andSequence: #( 1 2 )) }.
 
-	3 timesRepeat: [ game nextTurn ].
+    ships := { (Spaceship withName: 'Ship1') . (Spaceship withName: 'Ship2') }.
 
-	ranking := game ranking.
-	namesAt := [ :rank |
-	           ((ranking at: rank) collect: [ :ship | ship name ])
-		           asArray ].
-	self assert: (namesAt value: #first) equals: #( '1' ).
-	self assert: (namesAt value: #second) equals: #( '2' ).
-	self assert: (namesAt value: #third) equals: #( '3' )
+    game := GameBuilder new
+                withDicepool: dice;
+                withSpaceships: ships;
+                withSquares: 20;
+                withDeck: deckMock;
+                build.
+    
+    cardsToPlay := Overload new affectsShipWithName: 'Ship1'.
+
+    self 
+        should: [ game permanentCard: cardsToPlay from: 'Ship2' ] 
+        raiseErrorWithMessageText: 'The player must have a turn in the game to use a permanent card'
 ]

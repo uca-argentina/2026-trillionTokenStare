@@ -36,6 +36,15 @@ DiceMock >> initializeWithSides: numberOfSides andSequence: aSequence [
 { #category : 'initialization' }
 DiceMock >> throw [
 
+	"| value |
+	value := sequence at: index.
+	self validateThrowIsInsideRange: value.
+	self validateThrowIsPositive: value.
+
+	index := index + 1.
+	index > sequence size ifTrue: [ index := 1 ].
+	^ value"
+
 	| value |
 	value := sequence at: index.
 

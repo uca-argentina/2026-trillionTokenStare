@@ -6,7 +6,8 @@ Class {
 		'parsecs',
 		'ships',
 		'dicePool',
-		'boardBuilder'
+		'boardBuilder',
+		'deck'
 	],
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
@@ -21,7 +22,7 @@ GameBuilder >> build [
 		         withParsecs: parsecs;
 		         build.
 
-	^ Game withBoard: board andShips: ships andDicePool: dicePool
+	^ Game withBoard: board andShips: ships andDicePool: dicePool andDeck: deck
 ]
 
 { #category : 'initialization' }
@@ -35,13 +36,20 @@ GameBuilder >> initialize [
 	dicePool := DicePool withDice: { (Dice withSides: 4) }.
 	ships := {
 		         (Spaceship withName: 'one').
-		         (Spaceship withName: 'two') }
+		         (Spaceship withName: 'two') }.
+	deck := Deck new.
 ]
 
 { #category : 'as yet unclassified' }
 GameBuilder >> withBoardBuilder: _boardBuilder [
 
 	boardBuilder := _boardBuilder.
+	^ self
+]
+
+{ #category : 'as yet unclassified' }
+GameBuilder >> withDeck: _deck [ 
+	deck := _deck.
 	^ self
 ]
 
@@ -56,6 +64,13 @@ GameBuilder >> withDicepool: _dicepool [
 GameBuilder >> withLaps: _laps [
 
 	laps := _laps.
+	^ self
+]
+
+{ #category : 'as yet unclassified' }
+GameBuilder >> withLightYears: _lightYears [
+
+	parsecs := _lightYears * 3.
 	^ self
 ]
 

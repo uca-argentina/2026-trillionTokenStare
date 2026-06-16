@@ -22,7 +22,7 @@ Dice >> initializeWithSides: numberOfSides [
 	sides := numberOfSides.
 ]
 
-{ #category : 'initialization' }
+{ #category : 'behavior' }
 Dice >> throw [
 	^ sides atRandom.
 ]

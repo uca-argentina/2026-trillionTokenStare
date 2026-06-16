@@ -26,13 +26,19 @@ Ranking >> bestThreeSpaceShips: aSpaceShipCollection [
 
 { #category : 'private - extraction' }
 Ranking >> extractSpaceShipsByHighestPosition: aSpaceShipCollection [
-   | currentMax extractedSpaceShips |
+   | highestSpaceships |
 
-   (aSpaceShipCollection) ifNotEmpty: [
-      currentMax := (aSpaceShipCollection collect: [ :ship | ship position ]) max.
-      extractedSpaceShips := aSpaceShipCollection select: [ :ship | ship position = currentMax ].
-      aSpaceShipCollection removeAllSuchThat: [ :ship | ship position = currentMax ].
-      ^ extractedSpaceShips.
-   ].
-   ^ OrderedCollection new.
+   (aSpaceShipCollection) ifEmpty: [ ^ OrderedCollection new ].
+   highestSpaceships := OrderedCollection new.
+   aSpaceShipCollection do: [ :aSpaceship |
+	   highestSpaceships ifEmpty: [ highestSpaceships add: aSpaceship ] ifNotEmpty: [
+		   (aSpaceship isAheadOf: highestSpaceships first) ifTrue: [ highestSpaceships := OrderedCollection with: aSpaceship ]
+		   ifFalse: [ (aSpaceship isInTheSamePositionAs: highestSpaceships first) ifTrue: [ highestSpaceships add: aSpaceship ]
+			] 
+		]
+	].
+
+   aSpaceShipCollection removeAll: highestSpaceships.
+   ^ highestSpaceships.
+   
 ]
